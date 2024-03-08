@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34607.119
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skinet.API", "API\Skinet.API.csproj", "{2EE6D532-928B-4A87-940E-C90C5FE45886}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skinet.WebAPI", "API\Skinet.WebAPI.csproj", "{2EE6D532-928B-4A87-940E-C90C5FE45886}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skinet.Infrastructure", "Skinet.Infrastructure\Skinet.Infrastructure.csproj", "{D8CB87D9-D27A-43F0-8CAD-F9383F9512F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skinet.Infrastructure", "Skinet.Infrastructure\Skinet.Infrastructure.csproj", "{D8CB87D9-D27A-43F0-8CAD-F9383F9512F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skinet.Core", "Skinet.Core\Skinet.Core.csproj", "{B984C13E-79BD-45AB-A995-9C7E63AAE58C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Skinet.Core", "Skinet.Core\Skinet.Core.csproj", "{B984C13E-79BD-45AB-A995-9C7E63AAE58C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
