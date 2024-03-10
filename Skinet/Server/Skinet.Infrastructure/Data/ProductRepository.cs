@@ -12,6 +12,11 @@ namespace Skinet.Infrastructure.Data
             this.context = context;
         }
 
+        public async Task<IEnumerable<ProductBrand>> GetProductBrandsAsync()
+        {
+            return await context.ProductBrands.ToListAsync();
+        }
+
         public async Task<Product> GetProductByIdAsync(int id)
         {
             return await context.Products.FindAsync(id);
@@ -19,7 +24,13 @@ namespace Skinet.Infrastructure.Data
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            return await context.Products.ToListAsync();
+            return await context.Products.Include(x => x.ProductBrand)
+                .Include(x => x.ProductType).ToListAsync();
+        }
+
+        public async Task<IEnumerable<ProductType>> GetProductTypesAsync()
+        {
+            return await context.ProductTypes.ToListAsync();
         }
     }
 }

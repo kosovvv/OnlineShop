@@ -7,10 +7,10 @@ namespace Skinet.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController : ControllerBase
+    public class ProductsController : ControllerBase
     {
         private readonly IProductRepository productRepository;
-        public ProductController(IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository)
         {
             this.productRepository = productRepository;
         }
@@ -26,6 +26,18 @@ namespace Skinet.API.Controllers
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             return await productRepository.GetProductByIdAsync(id);
+        }
+
+        [HttpGet("brands")]
+        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
+        {
+            return Ok(await productRepository.GetProductBrandsAsync());
+        }
+
+        [HttpGet("types")]
+        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductTypes()
+        {
+            return Ok(await productRepository.GetProductTypesAsync());
         }
     }
 }

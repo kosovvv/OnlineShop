@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Skinet.Core.Interfaces;
+using Skinet.Infrastructure;
 using Skinet.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,4 +29,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+using var scope = app.Services.CreateScope();
+var context = scope.ServiceProvider.GetService<StoreContext>();
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+try
+{
+    await context.Database.MigrateAsync();
+    await StoreContextSeed.SeedAsync(context);
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "Error during migration");
+}
+
+app.Run(); 
