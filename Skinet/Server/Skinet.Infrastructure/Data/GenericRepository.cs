@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
+using Skinet.Core.Specification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,24 @@ namespace Skinet.Infrastructure.Data
             return await context.Set<T>().FindAsync(id);
         }
 
+        public async Task<T> GetEntityWithSpec(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).FirstOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<T>> LislAllAsync()
         {
             return await context.Set<T>().ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> ListAsync(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).ToListAsync();
+        }
+
+        private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+        {
+            return SpecificationEvaluator<T>.GetQuery(context.Set<T>().AsQueryable(), spec);
         }
     }
 }

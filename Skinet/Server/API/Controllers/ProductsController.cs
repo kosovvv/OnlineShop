@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
+using Skinet.Core.Specification;
+using Skinet.WebAPI.Dtos;
 
 
 namespace Skinet.API.Controllers
@@ -12,34 +15,52 @@ namespace Skinet.API.Controllers
         private readonly IGenericRepository<Product> productRepository;
         private readonly IGenericRepository<ProductBrand> brandRepository;
         private readonly IGenericRepository<ProductType> typeRepository;
+        private readonly IMapper mapper;
 
 
         public ProductsController(IGenericRepository<Product> productRepository,
             IGenericRepository<ProductBrand> brandRepository,
-            IGenericRepository<ProductType> typeRepository)
+            IGenericRepository<ProductType> typeRepository,
+            IMapper mapper)
         {
             this.productRepository = productRepository;
             this.brandRepository = brandRepository;
             this.typeRepository = typeRepository;
+            this.mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetProducts()
         {
-            var products = await productRepository.LislAllAsync();
-            return Ok(products);
+            ProductsWithTypesAndBrandsSpecification spec = new();
+            var products = await productRepository.ListAsync(spec);
+
+            return products.Select(x => new ProductToReturnDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                PictureUrl = x.PictureUrl,
+                Price = x.Price,
+                ProductBrand = x.ProductBrand.Name,
+                ProductType = x.ProductType.Name,
+            }).ToList();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
-            return await productRepository.GetByIdAsync(id);
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
+            var product = await productRepository.GetEntityWithSpec(spec);
+
+            return mapper.Map<Product,ProductToReturnDto>(product);
         }
 
         [HttpGet("brands")]
         public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
         {
-            return Ok(await brandRepository.LislAllAsync());
+
+            return Ok();
         }
 
         [HttpGet("types")]
