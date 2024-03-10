@@ -19,7 +19,8 @@ namespace Skinet.Infrastructure.Data
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await context.Products.FindAsync(id);
+            return await context.Products.Include(x => x.ProductBrand)
+                .Include(x => x.ProductType).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
