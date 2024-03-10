@@ -35,16 +35,8 @@ namespace Skinet.API.Controllers
             ProductsWithTypesAndBrandsSpecification spec = new();
             var products = await productRepository.ListAsync(spec);
 
-            return products.Select(x => new ProductToReturnDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
-                PictureUrl = x.PictureUrl,
-                Price = x.Price,
-                ProductBrand = x.ProductBrand.Name,
-                ProductType = x.ProductType.Name,
-            }).ToList();
+           var result = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
+           return Ok(result);
         }
 
         [HttpGet("{id}")]
