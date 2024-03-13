@@ -17,6 +17,12 @@ namespace Skinet.Infrastructure.Data
         {
             this.context = context;
         }
+
+        public Task<int> CountAsync(ISpecification<T> specification)
+        {
+            return ApplySpecification(specification).CountAsync();
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await context.Set<T>().FindAsync(id);

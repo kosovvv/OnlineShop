@@ -6,6 +6,7 @@ using Skinet.Core.Specification;
 using Skinet.WebAPI.Controllers;
 using Skinet.WebAPI.Dtos;
 using Skinet.WebAPI.Errors;
+using Skinet.WebAPI.Helpers;
 
 
 namespace Skinet.API.Controllers
@@ -30,13 +31,21 @@ namespace Skinet.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts
+            ([FromQuery] ProductSpecParams productParams)
         {
-            ProductsWithTypesAndBrandsSpecification spec = new();
+            ProductsWithTypesAndBrandsSpecification spec = new(productParams);
+
+            ProductWithFiltersForCountSpecification countSpec = new(productParams);
+
+            var totalItems = await productRepository.CountAsync(countSpec); 
+
             var products = await productRepository.ListAsync(spec);
 
-           var result = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
-           return Ok(result);
+            var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
+
+           return Ok(new Pagination<ProductToReturnDto>
+               (productParams.PageIndex, productParams.PageSize,totalItems, data));
         }
 
         [HttpGet("{id}")]

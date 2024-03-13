@@ -5,23 +5,23 @@ using Skinet.WebAPI.Extensions;
 using Skinet.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-
 app.UseStatusCodePagesWithRedirects("/errors/{0}");
+
 //if (app.Environment.IsDevelopment())
 //{
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-app.UseStaticFiles();
-app.UseAuthorization();
 
+app.UseStaticFiles();
+app.UseCors("CorsPolicy");
+app.UseAuthorization();
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();

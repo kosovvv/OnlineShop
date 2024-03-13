@@ -14,5 +14,6 @@ namespace Skinet.Core.Interfaces
         Task<IEnumerable<T>> LislAllAsync();
         Task<T> GetEntityWithSpec(ISpecification<T> specification);
         Task<IEnumerable<T>> ListAsync(ISpecification<T> specification);
+        Task<int> CountAsync(ISpecification<T> specification);
     }
 }

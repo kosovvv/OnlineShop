@@ -14,6 +14,21 @@ namespace Skinet.Infrastructure.Data
             {
                 query = query.Where(spec.Criteria);
             }
+
+            if (spec.OrderBy != null)
+            {
+                query = query.OrderBy(spec.OrderBy);
+            }
+
+            if (spec.OrderByDescending != null)
+            {
+                query = query.OrderByDescending(spec.OrderByDescending);
+            }
+
+            if (spec.isPagingEnabled)
+            {
+                query = query.Skip(spec.Skip).Take(spec.Take);
+            }
      
             foreach (var include in spec.Includes)
             {
