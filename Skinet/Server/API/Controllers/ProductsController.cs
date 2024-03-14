@@ -41,7 +41,7 @@ namespace Skinet.API.Controllers
             var totalItems = await productRepository.CountAsync(countSpec); 
 
             var products = await productRepository.ListAsync(spec);
-
+             
             var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
 
            return Ok(new Pagination<ProductToReturnDto>
@@ -65,7 +65,7 @@ namespace Skinet.API.Controllers
         public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
         {
 
-            return Ok();
+            return Ok(await brandRepository.LislAllAsync());
         }
 
         [HttpGet("types")]
