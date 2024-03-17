@@ -3,7 +3,6 @@ import { Product } from '../shared/models/products';
 import { ShopService } from './shop.service';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
-import { HttpParams } from '@angular/common/http';
 import { ShopParams } from '../shared/models/shopParams';
 
 @Component({
