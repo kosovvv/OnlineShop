@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Skinet.Core.Entities;
 using Skinet.WebAPI.Dtos;
-using Microsoft.Extensions.Configuration;
 
 namespace Skinet.WebAPI.Helpers
 {
