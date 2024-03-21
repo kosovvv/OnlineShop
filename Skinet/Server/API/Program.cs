@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Skinet.Core.Entities.Identity;
 using Skinet.Infrastructure;
 using Skinet.Infrastructure.Data;
 using Skinet.WebAPI.Extensions;
@@ -21,17 +23,22 @@ app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetService<StoreContext>();
+var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
 {
     await context.Database.MigrateAsync();
     await StoreContextSeed.SeedAsync(context);
+    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
 }
 catch (Exception ex)
 {
