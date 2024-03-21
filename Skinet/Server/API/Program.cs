@@ -7,19 +7,17 @@ using Skinet.WebAPI.Extensions;
 using Skinet.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddSwaggerDocumentation();
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseStatusCodePagesWithRedirects("/errors/{0}");
 
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+app.UseSwaggerDocumentation();
 
 app.UseStaticFiles();
 app.UseCors("CorsPolicy");

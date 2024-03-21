@@ -7,7 +7,6 @@ using Skinet.Core.Interfaces;
 using Skinet.WebAPI.Dtos;
 using Skinet.WebAPI.Errors;
 using Skinet.WebAPI.Extensions;
-using System.Security.Claims;
 
 namespace Skinet.WebAPI.Controllers
 {
@@ -58,6 +57,25 @@ namespace Skinet.WebAPI.Controllers
             return mapper.Map<Address, AddressDto>(user.Address);
         }
 
+        [HttpPut("address")]
+        [Authorize]
+        public async Task<ActionResult<AddressDto>> UpdateUserAdresss(AddressDto address)
+        {
+            var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
+
+            user.Address = mapper.Map<AddressDto, Address>(address);
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                return Ok(mapper.Map<Address, AddressDto>(user.Address));
+            }
+
+            return BadRequest("Problem updating user");
+        }
+
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -86,6 +104,14 @@ namespace Skinet.WebAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+            if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
+            {
+                return BadRequest(new ApiValidationErrorResponse()
+                {
+                    Errors = ["Email in use"]
+                });
+            }
+
             var user = new ApplicationUser
             {
                 DisplayName = registerDto.DisplayName,

@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using API.Dtos;
+using AutoMapper;
 using Skinet.Core.Entities;
 using Skinet.Core.Entities.Identity;
 using Skinet.WebAPI.Dtos;
@@ -14,7 +15,11 @@ namespace Skinet.WebAPI.Helpers
                 .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
                 .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
 
-            CreateMap<Address, AddressDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
+
+            CreateMap<CustomerBasketDto, CustomerBasket>()
+                .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
+            CreateMap<BasketItemDto, BasketItem>();
         }
     }
 }

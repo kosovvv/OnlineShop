@@ -17,8 +17,7 @@ namespace Skinet.WebAPI.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)
         {   
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            
             services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
