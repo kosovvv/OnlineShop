@@ -1,6 +1,4 @@
-﻿using Skinet.Core.Entities;
-
-namespace Skinet.WebAPI.Dtos
+﻿namespace Skinet.WebAPI.Dtos
 {
     public class ProductToReturnDto
     {

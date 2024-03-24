@@ -1,4 +1,5 @@
 ﻿using Skinet.Core.Entities;
+using Skinet.Core.Entities.OrderAggregate;
 using Skinet.Infrastructure.Data;
 using System.Text.Json;
 
@@ -32,7 +33,15 @@ namespace Skinet.Infrastructure
                 await context.SaveChangesAsync();
             }
 
-         
+            if (!context.DeliveryMethods.Any())
+            {
+                var deliveryData = File.ReadAllText("../Skinet.Infrastructure/Data/SeedData/delivery.json");
+                var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+                context.DeliveryMethods.AddRange(methods);
+                await context.SaveChangesAsync();
+            }
+
+
 
             if (context.ChangeTracker.HasChanges())
             {

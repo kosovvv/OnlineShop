@@ -13,9 +13,19 @@ namespace Skinet.Infrastructure.Data
             this.context = context;
         }
 
+        public void Add(T entity)
+        {
+            context.Set<T>().Add(entity); 
+        }
+
         public Task<int> CountAsync(ISpecification<T> specification)
         {
             return ApplySpecification(specification).CountAsync();
+        }
+
+        public void Delete(T entity)
+        {
+            context.Set<T>().Remove(entity);
         }
 
         public async Task<T> GetByIdAsync(int id)
@@ -36,6 +46,12 @@ namespace Skinet.Infrastructure.Data
         public async Task<IEnumerable<T>> ListAsync(ISpecification<T> specification)
         {
             return await ApplySpecification(specification).ToListAsync();
+        }
+
+        public void Update(T entity)
+        {
+            context.Set<T>().Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
         }
 
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)

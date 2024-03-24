@@ -2,6 +2,7 @@
 using AutoMapper;
 using Skinet.Core.Entities;
 using Skinet.Core.Entities.Identity;
+using Skinet.Core.Entities.OrderAggregate;
 using Skinet.WebAPI.Dtos;
 
 namespace Skinet.WebAPI.Helpers
@@ -20,6 +21,7 @@ namespace Skinet.WebAPI.Helpers
             CreateMap<CustomerBasketDto, CustomerBasket>()
                 .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
             CreateMap<BasketItemDto, BasketItem>();
+            CreateMap<AddressDto, OrderAddress>();
         }
     }
 }

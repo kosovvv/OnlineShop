@@ -1,5 +1,4 @@
-﻿
-using Skinet.WebAPI.Errors;
+﻿using Skinet.WebAPI.Errors;
 using System.Net;
 using System.Text.Json;
 

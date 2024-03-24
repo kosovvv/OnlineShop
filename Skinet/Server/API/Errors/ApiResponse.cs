@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Abstractions;
-
-namespace Skinet.WebAPI.Errors
+﻿namespace Skinet.WebAPI.Errors
 {
     public class ApiResponse
     {
