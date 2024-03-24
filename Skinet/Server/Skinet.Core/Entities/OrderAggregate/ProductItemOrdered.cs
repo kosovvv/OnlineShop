@@ -2,7 +2,6 @@
 {
     public class ProductItemOrdered
     {
-
         public ProductItemOrdered()
         {
             
@@ -13,10 +12,8 @@
             ProductName = productName;
             PictureUrl = pictureUrl;
         }
-
         public int ProductItemId { get; set; }
         public string ProductName { get; set; }
         public string PictureUrl { get; set; }
-
     }
 }

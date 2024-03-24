@@ -22,6 +22,17 @@ namespace Skinet.WebAPI.Helpers
                 .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
             CreateMap<BasketItemDto, BasketItem>();
             CreateMap<AddressDto, OrderAddress>();
+
+            CreateMap<Order, OrderToReturnDto>()
+                .ForMember(d => d.DeliveryMethod, opt => opt.MapFrom(s => s.DeliveryMethod.ShortName))
+                .ForMember(d => d.ShippingPrice, opt => opt.MapFrom(s => s.DeliveryMethod.Price));
+
+            CreateMap<OrderItem, OrderItemDto>()
+                .ForMember(d => d.ProductId, opt => opt.MapFrom(s => s.ItemOrdered.ProductItemId))
+                .ForMember(d => d.ProductName, opt => opt.MapFrom(s => s.ItemOrdered.ProductName))
+                .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ItemOrdered.PictureUrl))
+                .ForMember(d => d.PictureUrl, opt => opt.MapFrom<OrderItemUrlResolver>());
+
         }
     }
 }

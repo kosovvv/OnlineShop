@@ -6,8 +6,6 @@ using Skinet.Core.Interfaces;
 using Skinet.WebAPI.Dtos;
 using Skinet.WebAPI.Errors;
 using Skinet.WebAPI.Extensions;
-using System.Net;
-using System.Security.Claims;
 
 namespace Skinet.WebAPI.Controllers
 {
@@ -41,16 +39,16 @@ namespace Skinet.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ICollection<Order>>> GetOrdersForUser()
+        public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
             var email = User.RetrieveEmailFromPrincipal();
             var orders = await orderService.GetOrdersForUserAsync(email);
 
-            return Ok(orders);
+            return Ok(mapper.Map<ICollection<OrderToReturnDto>>(orders));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrderById(int id)
+        public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
             var email = User.RetrieveEmailFromPrincipal();
 
@@ -61,7 +59,7 @@ namespace Skinet.WebAPI.Controllers
                 return NotFound(new ApiResponse(404));
             }
 
-            return order;
+            return mapper.Map<OrderToReturnDto>(order);
         }
 
         [HttpGet("deliveryMethods")]
