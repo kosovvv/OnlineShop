@@ -1,5 +1,4 @@
 ﻿using Skinet.Core.Entities.OrderAggregate;
-using System.Linq.Expressions;
 
 namespace Skinet.Core.Specification
 {

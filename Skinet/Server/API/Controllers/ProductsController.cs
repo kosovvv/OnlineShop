@@ -64,7 +64,6 @@ namespace Skinet.API.Controllers
         [HttpGet("brands")]
         public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
         {
-
             return Ok(await brandRepository.LislAllAsync());
         }
 

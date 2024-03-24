@@ -9,10 +9,7 @@ namespace Skinet.Infrastructure.Data
 {
     public class StoreContext : IdentityDbContext<ApplicationUser>
     {
-        public StoreContext(DbContextOptions<StoreContext> options) : base(options)
-        {
-            
-        }
+        public StoreContext(DbContextOptions<StoreContext> options) : base(options) { }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductBrand> ProductBrands { get; set; }

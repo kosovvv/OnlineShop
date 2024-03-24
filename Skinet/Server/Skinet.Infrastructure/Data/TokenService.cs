@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Skinet.Infrastructure.Data
 {
-
     public class TokenService : ITokenService
     {
         private readonly IConfiguration config;
@@ -25,7 +24,7 @@ namespace Skinet.Infrastructure.Data
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.DisplayName),
+                new Claim(ClaimTypes.GivenName, user.DisplayName)
             };
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
