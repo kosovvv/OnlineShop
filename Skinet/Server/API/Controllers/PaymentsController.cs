@@ -31,7 +31,7 @@ namespace Skinet.WebAPI.Controllers
             return basket;
         }
 
-        [HttpPost]
+        [HttpPost("webhook")]
         public async Task<ActionResult> StripeWebhook()
         {
             var json = await new StreamReader(Request.Body).ReadToEndAsync();
