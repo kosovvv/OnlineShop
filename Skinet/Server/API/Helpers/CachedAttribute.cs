@@ -10,14 +10,14 @@ namespace Skinet.WebAPI.Helpers
         private readonly int timeToLiveInSeconds;
         private readonly IResponseCacheService cacheService;
 
-        public CachedAttribute(int timeToLiveInSeconds, IResponseCacheService cacheService)
+        public CachedAttribute(int timeToLiveInSeconds)
         {
             this.timeToLiveInSeconds = timeToLiveInSeconds;
-            this.cacheService = cacheService;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
             var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
             var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 

@@ -31,6 +31,7 @@ namespace Skinet.API.Controllers
         }
 
         [HttpGet]
+        [Cached(600)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts
             ([FromQuery] ProductSpecParams productParams)
         {
@@ -51,6 +52,7 @@ namespace Skinet.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+        [Cached(600)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
@@ -61,12 +63,15 @@ namespace Skinet.API.Controllers
             return mapper.Map<Product,ProductToReturnDto>(product);
         }
 
+        [Cached(600)]
         [HttpGet("brands")]
         public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
         {
             return Ok(await brandRepository.LislAllAsync());
         }
 
+
+        [Cached(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductTypes()
         {
