@@ -38,19 +38,31 @@ namespace Skinet.Infrastructure.Data
             var subTotal = items.Sum(x => x.Price * x.Quantity);
             // create order
 
-            var order = new Order(items,buyerEmail,shippingAddress,deliveryMethod,subTotal);
-            // save db
-            this.unitOfWork.Repository<Order>().Add(order); 
+            var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
+            var order = await unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (order != null)
+            {
+                order.ShipToAddress = shippingAddress;
+                order.DeliveryMethod = deliveryMethod;
+                order.SubTotal = subTotal;
+
+                unitOfWork.Repository<Order>().Update(order);
+            }
+            else
+            {
+                order = new Order(items, buyerEmail, shippingAddress,
+                deliveryMethod, subTotal, basket.PaymentIntentId);
+
+                this.unitOfWork.Repository<Order>().Add(order);
+            }
+           
             var result = await this.unitOfWork.Complete();
 
             if (result <= 0)
             {
                 return null;
             }
-
-            // delete basket
-
-            await basketRepo.DeleteBasketAsync(basketId);
 
             // return order
             return order;

@@ -16,7 +16,6 @@ export class OrderDetailedComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.activatedRoute.snapshot.params['id'];
-    console.log(id);
 
     if (id) {
       this.loadDetails(id); 

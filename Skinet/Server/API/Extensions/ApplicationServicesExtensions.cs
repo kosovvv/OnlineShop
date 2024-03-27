@@ -11,13 +11,25 @@ namespace Skinet.WebAPI.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)
-        {   
-                 
+        {
+
+            services.AddDbContext<StoreContext>(options =>
+            {
+                options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            });
+
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options);
+            });
+
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.Configure<ApiBehaviorOptions>(options =>
@@ -35,6 +47,7 @@ namespace Skinet.WebAPI.Extensions
                     return new BadRequestObjectResult(errorResponse);
                 };
             });
+
             return services;
         }
     }

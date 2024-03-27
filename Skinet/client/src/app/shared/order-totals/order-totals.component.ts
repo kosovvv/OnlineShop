@@ -8,6 +8,6 @@ import { BasketService } from 'src/app/basket/basket.service';
 })
 export class OrderTotalsComponent {
 
-  constructor(public basketService: BasketService){}
+  constructor(public basketService: BasketService) {}
 
 }

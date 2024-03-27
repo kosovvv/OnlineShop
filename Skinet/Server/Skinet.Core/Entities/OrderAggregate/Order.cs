@@ -14,13 +14,14 @@ namespace Skinet.Core.Entities.OrderAggregate
         {
             
         }
-        public Order(ICollection<OrderItem> orderItems, string buyerEmail, OrderAddress shipToAddress, DeliveryMethod deliveryMethod, decimal subTotal)
+        public Order(ICollection<OrderItem> orderItems, string buyerEmail, OrderAddress shipToAddress, DeliveryMethod deliveryMethod, decimal subTotal, string paymentIntentId)
         {
             BuyerEmail = buyerEmail;    
             ShipToAddress = shipToAddress;
             DeliveryMethod = deliveryMethod;
             OrderItems = orderItems;
             SubTotal = subTotal;
+            PaymentIntentId = paymentIntentId;
         }
 
         public string BuyerEmail { get; set; }

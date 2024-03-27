@@ -28,7 +28,6 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
           }
           if (error.status === 401) {
-            console.log("asda")
             this.toastr.error(error.error.message, error.status.toString())
           }
           if (error.status === 404) {
