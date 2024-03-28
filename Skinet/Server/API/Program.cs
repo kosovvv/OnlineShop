@@ -1,12 +1,10 @@
-using API.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Data;
+using OnlineShop.Services.Mapping;
+using OnlineShop.Web.Infrastructure;
 using Skinet.Core.Entities.Identity;
 using Skinet.Infrastructure;
-using Skinet.Infrastructure.Data;
-using Skinet.WebAPI.Extensions;
-using Skinet.WebAPI.Helpers;
-using Skinet.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 

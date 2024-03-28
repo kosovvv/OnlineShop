@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Web.ViewModels;
 using Skinet.Core.Entities;
 using Skinet.Core.Entities.OrderAggregate;
 using Skinet.Core.Interfaces;
-using Skinet.WebAPI.Errors;
 using Stripe;
 
 namespace Skinet.WebAPI.Controllers

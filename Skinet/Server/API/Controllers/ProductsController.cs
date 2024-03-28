@@ -1,30 +1,30 @@
 ﻿using AutoMapper;
+using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Web.Infrastructure;
+using OnlineShop.Web.ViewModels;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
-using Skinet.Core.Specification;
+using Skinet.Infrastructure.Data;
 using Skinet.WebAPI.Controllers;
-using Skinet.WebAPI.Dtos;
-using Skinet.WebAPI.Errors;
-using Skinet.WebAPI.Helpers;
 
 
 namespace Skinet.API.Controllers
 {
     public class ProductsController : BaseController
     {
-        private readonly IGenericRepository<Product> productRepository;
+        private readonly IProductService productService;
         private readonly IGenericRepository<ProductBrand> brandRepository;
         private readonly IGenericRepository<ProductType> typeRepository;
         private readonly IMapper mapper;
 
 
-        public ProductsController(IGenericRepository<Product> productRepository,
+        public ProductsController(IProductService productService,
             IGenericRepository<ProductBrand> brandRepository,
             IGenericRepository<ProductType> typeRepository,
             IMapper mapper)
         {
-            this.productRepository = productRepository;
+            this.productService = productService;
             this.brandRepository = brandRepository;
             this.typeRepository = typeRepository;
             this.mapper = mapper;
@@ -37,11 +37,11 @@ namespace Skinet.API.Controllers
         {
             ProductsWithTypesAndBrandsSpecification spec = new(productParams);
 
-            ProductWithFiltersForCountSpecification countSpec = new(productParams);
 
-            var totalItems = await productRepository.CountAsync(countSpec); 
+            var totalItems = await productService.GetProductsCountAsync(productParams);
 
-            var products = await productRepository.ListAsync(spec);
+            var products = await productService.GetProductsAsync(productParams);
+
              
             var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
 
@@ -56,7 +56,7 @@ namespace Skinet.API.Controllers
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsWithTypesAndBrandsSpecification(id);
-            var product = await productRepository.GetEntityWithSpec(spec);
+            var product = await productService.GetProductByIdAsync(id);
 
             if (product == null) return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
 

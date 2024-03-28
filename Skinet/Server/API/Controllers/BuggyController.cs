@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Skinet.Infrastructure.Data;
-using Skinet.WebAPI.Errors;
+using OnlineShop.Data;
+using OnlineShop.Web.ViewModels;
 
 namespace Skinet.WebAPI.Controllers
 {

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Web.ViewModels;
 using Skinet.Core.Entities;
 using Skinet.Core.Interfaces;
-using Skinet.WebAPI.Dtos;
 
 namespace Skinet.WebAPI.Controllers
 {

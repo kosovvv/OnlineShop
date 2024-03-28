@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Skinet.WebAPI.Errors;
+using OnlineShop.Web.ViewModels;
 
 namespace Skinet.WebAPI.Controllers
 {

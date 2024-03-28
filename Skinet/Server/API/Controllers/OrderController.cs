@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Web.Infrastructure;
+using OnlineShop.Web.ViewModels;
 using Skinet.Core.Entities.OrderAggregate;
 using Skinet.Core.Interfaces;
-using Skinet.WebAPI.Dtos;
-using Skinet.WebAPI.Errors;
-using Skinet.WebAPI.Extensions;
 
 namespace Skinet.WebAPI.Controllers
 {
