@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using OnlineShop.Models;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities;
 
 namespace OnlineShop.Services.Mapping
 {

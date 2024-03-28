@@ -1,4 +1,6 @@
-﻿namespace Skinet.Core.Entities.OrderAggregate
+﻿using OnlineShop.Models;
+
+namespace OnlineShop.Data.Models.OrderAggregate
 {
     public class OrderItem : BaseEntity
     {

@@ -1,4 +1,4 @@
-﻿using Skinet.Core.Entities.OrderAggregate;
+﻿using OnlineShop.Data.Models.OrderAggregate;
 
 namespace OnlineShop.Web.ViewModels
 {

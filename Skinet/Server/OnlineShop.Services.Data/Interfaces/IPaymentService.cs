@@ -1,7 +1,7 @@
-﻿using Skinet.Core.Entities;
-using Skinet.Core.Entities.OrderAggregate;
+﻿using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
 
-namespace Skinet.Core.Interfaces
+namespace OnlineShop.Services.Data.Interfaces
 {
     public interface IPaymentService
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
 
     [ApiController]

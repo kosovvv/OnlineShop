@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
+using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities.OrderAggregate;
 
 namespace OnlineShop.Services.Mapping
 {

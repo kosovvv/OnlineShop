@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Data;
-using Skinet.Core.Entities.Identity;
+using OnlineShop.Data.Models.Identity;
 
 namespace OnlineShop.Web.Infrastructure
 {

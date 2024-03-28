@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
+using OnlineShop.Data.Models.Identity;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities;
-using Skinet.Core.Entities.Identity;
-using Skinet.Core.Entities.OrderAggregate;
 
 namespace OnlineShop.Services.Mapping
 {

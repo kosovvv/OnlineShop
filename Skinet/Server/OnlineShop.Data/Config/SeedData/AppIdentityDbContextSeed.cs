@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Skinet.Core.Entities.Identity;
+using OnlineShop.Data.Models.Identity;
 
-namespace Skinet.Infrastructure
+namespace OnlineShop.Data.Config.SeedData
 {
     public class AppIdentityDbContextSeed
     {

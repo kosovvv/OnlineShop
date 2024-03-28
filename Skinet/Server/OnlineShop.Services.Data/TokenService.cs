@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Skinet.Core.Entities.Identity;
-using Skinet.Core.Interfaces;
+using OnlineShop.Data.Models.Identity;
+using OnlineShop.Services.Data.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data
 {
     public class TokenService : ITokenService
     {

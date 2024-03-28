@@ -1,6 +1,6 @@
-﻿using Skinet.Core.Entities.Identity;
+﻿using OnlineShop.Data.Models.Identity;
 
-namespace Skinet.Core.Interfaces
+namespace OnlineShop.Services.Data.Interfaces
 {
     public interface ITokenService
     {

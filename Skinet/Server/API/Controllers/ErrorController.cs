@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Web.ViewModels;
 
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
     [Route("errors/{code}")]
     [ApiExplorerSettings(IgnoreApi = true)]

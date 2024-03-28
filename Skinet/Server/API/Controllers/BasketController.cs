@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Models;
+using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities;
-using Skinet.Core.Interfaces;
 
-namespace Skinet.WebAPI.Controllers
+
+namespace OnlineShop.WebAPI.Controllers
 {
     public class BasketController : BaseController
     {
 
-        private readonly IBasketRepository basketRepository;
+        private readonly IBasketService basketRepository;
         private readonly IMapper mapper;
-        public BasketController(IBasketRepository basketRepository, IMapper mapper)
+        public BasketController(IBasketService basketRepository, IMapper mapper)
         {
             this.basketRepository = basketRepository;
             this.mapper = mapper;

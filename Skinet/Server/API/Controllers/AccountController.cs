@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Data.Models.Identity;
+using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities.Identity;
-using Skinet.Core.Interfaces;
 
-
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
     public class AccountController : BaseController
     {

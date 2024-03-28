@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Skinet.Core.Entities.OrderAggregate;
+using OnlineShop.Data.Models.OrderAggregate;
 
-namespace Skinet.Infrastructure.Data.Config
+namespace OnlineShop.Data.Config
 {
     public class DeliveryMethodConfiguration : IEntityTypeConfiguration<DeliveryMethod>
     {

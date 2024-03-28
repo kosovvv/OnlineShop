@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Skinet.Core.Entities.Identity
+namespace OnlineShop.Data.Models.Identity
 {
     public class ApplicationUser : IdentityUser
     {

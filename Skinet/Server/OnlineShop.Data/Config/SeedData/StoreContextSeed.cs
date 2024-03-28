@@ -1,10 +1,8 @@
-﻿using OnlineShop.Data;
-using Skinet.Core.Entities;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Infrastructure.Data;
+﻿using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
 using System.Text.Json;
 
-namespace Skinet.Infrastructure
+namespace OnlineShop.Data.Config.SeedData
 {
     public class StoreContextSeed
     {

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Skinet.Infrastructure.Data.Migrations
+namespace OnlineShop.Data.Migrations
 {
     /// <inheritdoc />
     public partial class IdentityFix : Migration

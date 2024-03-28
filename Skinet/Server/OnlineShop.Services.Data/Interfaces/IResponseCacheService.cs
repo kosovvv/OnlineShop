@@ -1,4 +1,4 @@
-﻿namespace Skinet.Core.Interfaces
+﻿namespace OnlineShop.Services.Data.Interfaces
 {
     public interface IResponseCacheService
     {

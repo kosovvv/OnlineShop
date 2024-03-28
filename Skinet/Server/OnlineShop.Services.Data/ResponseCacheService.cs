@@ -1,8 +1,8 @@
-﻿using Skinet.Core.Interfaces;
+﻿using OnlineShop.Services.Data.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data
 {
     public class ResponseCacheService : IResponseCacheService
     {

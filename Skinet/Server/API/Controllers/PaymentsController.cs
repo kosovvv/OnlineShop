@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
+using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Core.Interfaces;
 using Stripe;
 
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
     public class PaymentsController : BaseController
     {

@@ -1,4 +1,4 @@
-﻿namespace Skinet.Core.Entities.OrderAggregate
+﻿namespace OnlineShop.Data.Models.OrderAggregate
 {
     public class OrderAddress
     {

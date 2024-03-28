@@ -5,7 +5,7 @@ using OnlineShop.Data;
 
 #nullable disable
 
-namespace Skinet.Infrastructure.Data.Migrations
+namespace OnlineShop.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
     partial class StoreContextModelSnapshot : ModelSnapshot

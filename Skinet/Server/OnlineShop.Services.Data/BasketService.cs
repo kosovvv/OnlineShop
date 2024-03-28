@@ -1,14 +1,14 @@
-﻿using Skinet.Core.Entities;
-using Skinet.Core.Interfaces;
+﻿using OnlineShop.Models;
+using OnlineShop.Services.Data.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data
 {
-    public class BasketRepository : IBasketRepository
+    public class BasketService : IBasketService
     {
         private readonly IDatabase database;
-        public BasketRepository(IConnectionMultiplexer redis) 
+        public BasketService(IConnectionMultiplexer redis) 
         {
             database = redis.GetDatabase();   
         }

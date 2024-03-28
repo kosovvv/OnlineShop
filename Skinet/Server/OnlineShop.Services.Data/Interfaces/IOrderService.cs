@@ -1,6 +1,6 @@
-﻿using Skinet.Core.Entities.OrderAggregate;
+﻿using OnlineShop.Data.Models.OrderAggregate;
 
-namespace Skinet.Core.Interfaces
+namespace OnlineShop.Services.Data.Interfaces
 {
     public interface IOrderService
     {

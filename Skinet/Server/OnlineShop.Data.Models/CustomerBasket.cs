@@ -1,4 +1,4 @@
-﻿namespace Skinet.Core.Entities
+﻿namespace OnlineShop.Models
 {
     public class CustomerBasket
     {

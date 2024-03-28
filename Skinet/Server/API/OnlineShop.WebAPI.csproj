@@ -22,7 +22,6 @@
     <ProjectReference Include="..\OnlineShop.Data\OnlineShop.Data.csproj" />
     <ProjectReference Include="..\OnlineShop.Services.Data\OnlineShop.Services.Data.csproj" />
     <ProjectReference Include="..\OnlineShop.Services.Mapping\OnlineShop.Services.Mapping.csproj" />
-    <ProjectReference Include="..\OnlineShop.Services.Specification\OnlineShop.Services.Specification.csproj" />
     <ProjectReference Include="..\OnlineShop.Web.Infrastructure\OnlineShop.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\OnlineShop.Web.ViewModels\OnlineShop.Web.ViewModels.csproj" />
   </ItemGroup>

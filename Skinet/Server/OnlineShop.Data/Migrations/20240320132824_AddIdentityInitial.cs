@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Skinet.Infrastructure.Data.Migrations
+namespace OnlineShop.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddIdentityInitial : Migration

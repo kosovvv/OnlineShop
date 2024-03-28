@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Skinet.Core.Entities;
-using Skinet.Core.Entities.Identity;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Infrastructure.Data.Config;
+using OnlineShop.Data.Config;
+using OnlineShop.Data.Models.Identity;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
+
 
 namespace OnlineShop.Data
 {

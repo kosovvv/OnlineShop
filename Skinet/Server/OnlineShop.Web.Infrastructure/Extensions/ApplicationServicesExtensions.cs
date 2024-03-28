@@ -3,8 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShop.Data;
+using OnlineShop.Services.Data;
+using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Interfaces;
 using Skinet.Infrastructure.Data;
 using StackExchange.Redis;
 
@@ -28,12 +29,11 @@ namespace OnlineShop.Web.Infrastructure
             });
 
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
-            services.AddScoped<IBasketRepository, BasketRepository>();
+            services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

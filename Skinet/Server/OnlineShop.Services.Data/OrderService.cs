@@ -1,15 +1,15 @@
 ﻿using OnlineShop.Data;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Services.Data.Interfaces;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data
 {
     public class OrderService : IOrderService
     {
-        private readonly IBasketRepository basketRepo;
+        private readonly IBasketService basketRepo;
         private readonly StoreContext context;
-        public OrderService(IBasketRepository basketRepo, StoreContext context)
+        public OrderService(IBasketService basketRepo, StoreContext context)
         {
             this.basketRepo = basketRepo;
             this.context = context;
@@ -23,7 +23,7 @@ namespace Skinet.Infrastructure.Data
 
             foreach (var item in basket.Items) 
             {
-                var productItem = await context.Products.FirstOrDefaultAsync(x => x.Id == item.Id);
+                var productItem = await context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == item.Id);
                 var itemOrdered = 
                     new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
 
@@ -32,7 +32,8 @@ namespace Skinet.Infrastructure.Data
             }
             // get deliverymethods
 
-            var deliveryMethod = await context.DeliveryMethods.FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
+            var deliveryMethod = await context.DeliveryMethods.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
            
             // calc subtotal
 
@@ -71,12 +72,13 @@ namespace Skinet.Infrastructure.Data
 
         public async Task<IEnumerable<DeliveryMethod>> GetDeliveryMethodsAsync()
         {
-            return await context.DeliveryMethods.ToListAsync();
+            return await context.DeliveryMethods.AsNoTracking().ToListAsync();
         }
 
         public async Task<Order> GetOrderByIdAsync(int id, string buyerEmail)
-        { 
+        {
             var order = await context.Orders
+                .AsNoTracking()
                .Where(x => x.BuyerEmail == buyerEmail && x.Id == id)
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)

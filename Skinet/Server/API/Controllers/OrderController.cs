@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Core.Interfaces;
 
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
     [Authorize]
     public class OrderController : BaseController

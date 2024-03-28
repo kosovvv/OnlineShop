@@ -1,20 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OnlineShop.Data;
-using Skinet.Core.Entities;
-using Skinet.Core.Entities.OrderAggregate;
-using Skinet.Core.Interfaces;
+using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Models;
+using OnlineShop.Services.Data.Interfaces;
 using Stripe;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data
 {
     public class PaymentService : IPaymentService
     {
         private readonly StoreContext context;
-        private readonly IBasketRepository basketRepository;
+        private readonly IBasketService basketRepository;
         private readonly IConfiguration configuration;
 
-        public PaymentService(IBasketRepository basketRepository, IConfiguration config, StoreContext context)
+        public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context)
         {
             this.basketRepository = basketRepository;
             this.configuration = config;

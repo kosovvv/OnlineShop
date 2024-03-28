@@ -1,8 +1,8 @@
-﻿using Skinet.Core.Entities;
+﻿using OnlineShop.Models;
 
-namespace Skinet.Core.Interfaces
+namespace OnlineShop.Services.Data.Interfaces
 {
-    public interface IBasketRepository
+    public interface IBasketService
     {
         Task<CustomerBasket> GetBaskedAsync(string id);
         Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);

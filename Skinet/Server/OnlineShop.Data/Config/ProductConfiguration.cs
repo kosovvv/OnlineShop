@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Skinet.Core.Entities;
+using OnlineShop.Models;
 
-namespace Skinet.Infrastructure.Data.Config
+namespace OnlineShop.Data.Config
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

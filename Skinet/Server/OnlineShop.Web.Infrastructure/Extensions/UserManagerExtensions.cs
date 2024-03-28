@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Skinet.Core.Entities.Identity;
+using OnlineShop.Data.Models.Identity;
 using System.Security.Claims;
 
 namespace OnlineShop.Web.Infrastructure

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
 using OnlineShop.Web.ViewModels;
 
-namespace Skinet.WebAPI.Controllers
+namespace OnlineShop.WebAPI.Controllers
 {
     public class BuggyController : BaseController
     {

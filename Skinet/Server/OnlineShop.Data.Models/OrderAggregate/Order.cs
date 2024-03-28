@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using OnlineShop.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Skinet.Core.Entities.OrderAggregate
+namespace OnlineShop.Data.Models.OrderAggregate
 {
     public class Order : BaseEntity
     {

@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
+using OnlineShop.Data.Config.SeedData;
+using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Mapping;
 using OnlineShop.Web.Infrastructure;
-using Skinet.Core.Entities.Identity;
-using Skinet.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

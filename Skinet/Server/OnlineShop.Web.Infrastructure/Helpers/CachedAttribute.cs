@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
-using Skinet.Core.Interfaces;
+using OnlineShop.Services.Data.Interfaces;
 using System.Text;
 
 namespace OnlineShop.Web.Infrastructure

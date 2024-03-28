@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace Skinet.Core.Entities.OrderAggregate
+namespace OnlineShop.Data.Models.OrderAggregate
 {
     public enum OrderStatus
     {
