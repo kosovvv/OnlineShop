@@ -1,4 +1,5 @@
-﻿using OnlineShop.Models;
+﻿using OnlineShop.Data.Models.Enumerations;
+using OnlineShop.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShop.Data.Models.OrderAggregate

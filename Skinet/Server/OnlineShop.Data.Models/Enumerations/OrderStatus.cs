@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace OnlineShop.Data.Models.OrderAggregate
+namespace OnlineShop.Data.Models.Enumerations
 {
     public enum OrderStatus
     {

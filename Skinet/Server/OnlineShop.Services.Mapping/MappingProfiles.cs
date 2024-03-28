@@ -19,6 +19,7 @@ namespace OnlineShop.Services.Mapping
 
             CreateMap<CustomerBasketDto, CustomerBasket>()
                 .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
+
             CreateMap<BasketItemDto, BasketItem>();
             CreateMap<AddressDto, OrderAddress>();
 
