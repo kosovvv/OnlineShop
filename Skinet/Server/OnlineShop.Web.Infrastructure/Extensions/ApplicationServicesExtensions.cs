@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using OnlineShop.Data;
+using OnlineShop.Data.Models;
 using OnlineShop.Services.Data;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
@@ -17,6 +19,13 @@ namespace OnlineShop.Web.Infrastructure
             IConfiguration config)
         {
 
+            var connectionString = config.GetSection("MongoDB")["ConnectionString"];
+            var databaseName = config.GetSection("MongoDB")["DatabaseName"];
+            var client = new MongoClient(connectionString);
+            var database = client.GetDatabase(databaseName);
+
+            services.AddSingleton<IMongoDatabase>(database);
+
             services.AddDbContext<StoreContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
@@ -28,7 +37,10 @@ namespace OnlineShop.Web.Infrastructure
                 return ConnectionMultiplexer.Connect(options);
             });
 
+            services.Configure<ImageDatabaseSettings>(config.GetSection("MongoDB"));
+
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
+            services.AddSingleton<IImageService, ImageService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ITokenService, TokenService>();

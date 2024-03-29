@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OnlineShop.Data;
+using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;

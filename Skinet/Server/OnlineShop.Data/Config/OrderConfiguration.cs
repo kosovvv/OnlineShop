@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.OrderAggregate;
 
 namespace OnlineShop.Data.Config
