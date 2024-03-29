@@ -5,6 +5,7 @@ using OnlineShop.Data.Config.SeedData;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Mapping;
 using OnlineShop.Web.Infrastructure;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,7 @@ app.MapControllers();
 using var scope = app.Services.CreateScope();
 var context = scope.ServiceProvider.GetService<StoreContext>();
 var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+var roleManager = scope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 
 try
@@ -47,6 +49,7 @@ try
     await context.Database.MigrateAsync();
     await StoreContextSeed.SeedAsync(context);
     await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
+    await AppIdentityDbContextSeed.SeedRolesAsync(roleManager);
     await ImageSeeder.SeedImagesAsync();
 }
 catch (Exception ex)

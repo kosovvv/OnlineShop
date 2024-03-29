@@ -28,6 +28,7 @@ namespace Skinet.Infrastructure.Data
         {
             var query = ApplyProductFilters(context.Products, productParams);
             query = ApplyPaging(query, productParams);
+            query = query.Include(x => x.ProductBrand).Include(x => x.ProductType);
 
             return await query.ToListAsync();
         }

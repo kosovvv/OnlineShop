@@ -8,7 +8,6 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [Authorize]
     public class OrderController : BaseController
     {
         private readonly IOrderService orderService;

@@ -24,7 +24,6 @@ namespace OnlineShop.Data.Models.OrderAggregate
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         public OrderAddress ShipToAddress { get; set; }
-        public int DeliveryMethodId { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         public decimal SubTotal { get; set; }

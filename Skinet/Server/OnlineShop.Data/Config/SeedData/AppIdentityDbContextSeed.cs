@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 
 namespace OnlineShop.Data.Config.SeedData
@@ -27,6 +28,17 @@ namespace OnlineShop.Data.Config.SeedData
 
                 await userManager.CreateAsync(user, "Pa$$w0rd");
 
+            }
+        }
+        public static async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            if (!await roleManager.RoleExistsAsync(Roles.Admin))
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.Admin));
+            }
+            if (!await roleManager.RoleExistsAsync(Roles.User))
+            {
+                await roleManager.CreateAsync(new IdentityRole(Roles.User));
             }
         }
     }

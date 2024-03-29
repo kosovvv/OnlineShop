@@ -1,11 +1,14 @@
-﻿using AutoMapper;
+﻿using Amazon.Runtime.Internal;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
+using StackExchange.Redis;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -13,16 +16,19 @@ namespace OnlineShop.WebAPI.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly RoleManager<IdentityRole> roleManager;
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ITokenService tokenService,
             IMapper mapper)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.roleManager = roleManager;
             this.tokenService = tokenService;
             this.mapper = mapper;
         }
@@ -32,11 +38,14 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var user = await userManager.FindByEmailFromClaimsPrincipal(User);
+            var roles = await userManager.GetRolesAsync(user);
+
 
             return new UserDto
             {
                 Email = user.Email,
-                Token = tokenService.CreateToken(user),
+                Token = tokenService.CreateToken(user,roles.First()),
+                Role = roles.First(),
                 DisplayName = user.DisplayName,
             };
         }
@@ -48,7 +57,7 @@ namespace OnlineShop.WebAPI.Controllers
         } 
 
         [HttpGet("address")]
-        [Authorize]
+        [Authorize(Roles = "User")]
         public async Task<ActionResult<AddressDto>> GetUserAddress()
         {
             var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
@@ -78,6 +87,7 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await userManager.FindByEmailAsync(loginDto.Email);
+            var roles = await userManager.GetRolesAsync(user);
 
             if (user == null) 
             {
@@ -94,7 +104,8 @@ namespace OnlineShop.WebAPI.Controllers
             return new UserDto
             {
                 Email = user.Email,
-                Token = tokenService.CreateToken(user),
+                Token = tokenService.CreateToken(user, roles.First()),
+                Role = roles.First(),
                 DisplayName = user.DisplayName,
             };
         }
@@ -124,10 +135,14 @@ namespace OnlineShop.WebAPI.Controllers
                 return BadRequest(new ApiResponse(400));
             }
 
+            await userManager.AddToRoleAsync(user, Roles.User);
+            var roles = await userManager.GetRolesAsync(user);
+
             return new UserDto
             {
                 Email = user.DisplayName,
-                Token = tokenService.CreateToken(user),
+                Token = tokenService.CreateToken(user, roles.First()),
+                Role = roles.First(),
                 DisplayName = user.DisplayName,
             };  
         }

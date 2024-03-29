@@ -23,7 +23,7 @@ namespace OnlineShop.Services.Data
 
             foreach (var item in basket.Items) 
             {
-                var productItem = await context.Products.AsNoTracking().FirstOrDefaultAsync(x => x.Id == item.Id);
+                var productItem = await context.Products.FirstOrDefaultAsync(x => x.Id == item.Id);
                 var itemOrdered = 
                     new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
 
@@ -32,7 +32,7 @@ namespace OnlineShop.Services.Data
             }
             // get deliverymethods
 
-            var deliveryMethod = await context.DeliveryMethods.AsNoTracking()
+            var deliveryMethod = await context.DeliveryMethods
                 .FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
            
             // calc subtotal

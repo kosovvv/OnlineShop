@@ -10,9 +10,12 @@ import { Product } from 'src/app/shared/models/products';
 export class ProductItemComponent {
   @Input() product?: Product 
 
-  constructor(private basketService: BasketService) {}
+  constructor(private basketService: BasketService) {
+    console.log(this.product);
+  }
 
   addItemToBasket() {
+    console.log(this.product);
     this.product && this.basketService.addItemToBasket(this.product)    
   }
 }

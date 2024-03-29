@@ -19,13 +19,16 @@ namespace OnlineShop.Services.Data
             this.key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"]));
         }
 
-        public string CreateToken(ApplicationUser user)
+        public string CreateToken(ApplicationUser user, string role)
         {
+ 
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.DisplayName)
+                new Claim(ClaimTypes.GivenName, user.DisplayName),
+                new Claim(ClaimTypes.Role,role)
             };
+
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 

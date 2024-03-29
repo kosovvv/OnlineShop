@@ -13,11 +13,14 @@ namespace OnlineShop.Web.Infrastructure
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration config)
         {
-            var builder = services.AddIdentityCore<ApplicationUser>();
-
-            builder = new IdentityBuilder(builder.UserType, builder.Services);
-            builder.AddEntityFrameworkStores<StoreContext>();
-            builder.AddSignInManager<SignInManager<ApplicationUser>>();
+            services.AddIdentityCore<ApplicationUser>(options =>
+            {
+               
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<StoreContext>()
+            .AddSignInManager<SignInManager<ApplicationUser>>()
+            .AddRoleManager<RoleManager<IdentityRole>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

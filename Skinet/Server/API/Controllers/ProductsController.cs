@@ -23,7 +23,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Cached(600)]
+        //[Cached(600)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts
             ([FromQuery] ProductParams productParams)
         {
@@ -41,7 +41,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
-        [Cached(600)]
+        //[Cached(600)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var product = await productService.GetProductByIdAsync(id);
