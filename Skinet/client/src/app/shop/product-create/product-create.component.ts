@@ -14,14 +14,13 @@ export class ProductCreateComponent {
 
   fileName: string | null = null;
   image: File | null = null;
-
   errors: string[] | null = null;
 
   constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
 
   productForm = this.fb.group({
     name: ['', Validators.required],
-    description: ['', [Validators.required, Validators.email]],
+    description: ['', [Validators.required,]],
     price: ['', [Validators.required]],
     pictureUrl: ['', [Validators.required]],
     productType: ['', [Validators.required]],
@@ -29,22 +28,13 @@ export class ProductCreateComponent {
   })
 
   onSubmit() {
-    const formData = new FormData();
-    if (this.fileName && this.image) {
-      formData.append('Name', this.fileName);
-      formData.append('Image', this.image, this.image.name);
-    }
+    const formData = this.GenerateFormData();
 
-    if (this.productForm.valid) {
-      this.shopService.createProduct(this.productForm.value).pipe(
-        switchMap((createProductResult) => this.shopService.uploadImage(formData))
-      ).subscribe({
-        next: (uploadImageResult) => this.router.navigateByUrl('/shop'),
-        error: (error) => this.toastr.error('An error occurred while uploading image.')
-      });
-    } else {
-      this.toastr.error('Please fill out all required fields.');
-    }
+    this.shopService.createProduct(this.productForm.value).pipe(
+      switchMap((createProductResult) => this.shopService.uploadImage(formData))).subscribe({
+      next: (uploadImageResult) => this.router.navigateByUrl('/shop'),
+      error: (error) => this.toastr.error('An error occurred while uploading image.')
+    });
   }
 
   onFileSelected(event: any) {
@@ -56,4 +46,16 @@ export class ProductCreateComponent {
       this.productForm.get('pictureUrl')?.setValue(`api/images/products/${this.image.name}`)
     }
   }
+
+  private GenerateFormData(): FormData{
+    const formData = new FormData();
+
+    if (this.fileName && this.image) {
+      formData.append('Name', this.fileName);
+      formData.append('Image', this.image, this.image.name);
+    }
+    return formData;
+  }
 }
+
+
