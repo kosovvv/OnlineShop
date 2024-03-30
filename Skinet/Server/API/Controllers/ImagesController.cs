@@ -4,12 +4,11 @@ using OnlineShop.Web.ViewModels.Image;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [Route("/images")]
-    public class ImageController : BaseController
+    public class ImagesController : BaseController
     {
         private readonly IImageService imageService;
 
-        public ImageController(IImageService imageService)
+        public ImagesController(IImageService imageService)
         {
             this.imageService = imageService;
         }
@@ -32,6 +31,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadImage(ImageUploadDto model)
         {
+            var request = Request;
             using var stream = model.Image.OpenReadStream();
             var imageId = await imageService.UploadImageAsync(model.Image.FileName, stream);
             return Ok(new { ImageId = imageId });

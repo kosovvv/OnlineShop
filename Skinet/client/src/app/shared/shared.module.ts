@@ -12,7 +12,7 @@ import { StepperComponent } from './components/stepper/stepper.component'
 import { CdkStepperModule } from '@angular/cdk/stepper';
 import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 import { RouterModule } from '@angular/router';
-
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -31,7 +31,8 @@ import { RouterModule } from '@angular/router';
     BsDropdownModule.forRoot(),
     CdkStepperModule,
     RouterModule,
-    FormsModule
+    FormsModule,
+    MatIconModule
     
   ],
   exports: [
@@ -39,6 +40,7 @@ import { RouterModule } from '@angular/router';
     PagingHeaderComponent, 
     PagerComponent,
     CarouselModule,
+    MatIconModule,
     OrderTotalsComponent,
     ReactiveFormsModule,
     BsDropdownModule,

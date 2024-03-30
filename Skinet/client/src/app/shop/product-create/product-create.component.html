@@ -1,0 +1,30 @@
+<div class="d-flex justify-content-center mt-5">
+    <div class="col-3">
+        <form [formGroup]="productForm">
+            
+            <app-text-input [formControl]="productForm.controls['name']" [label]="'Product Name'"></app-text-input>
+            <app-text-input [formControl]="productForm.controls['description']" [label]="'Description'"></app-text-input>
+            <app-text-input [formControl]="productForm.controls['price']" [label]="'Price'"></app-text-input>
+            <app-text-input [formControl]="productForm.controls['productType']" [label]="'Product Type'"></app-text-input>
+            <app-text-input [formControl]="productForm.controls['productBrand']" [label]="'Product Brand'"></app-text-input>
+
+            <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+            
+            <div class="file-upload">
+                {{fileName || "Upload product image."}}
+                <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                    <mat-icon>attach_file</mat-icon>
+                </button>
+            </div>
+
+            <ul class="text-danger list-unstyled" *ngIf="errors">
+                <li *ngFor="let error of errors">
+                    {{error}}
+                </li>
+            </ul>
+            <div class="d-grid">
+                <button [disabled]="productForm.invalid" class="btn btn-lg btn-primary mt-3" type="submit" (click)="onSubmit()">Create</button>
+            </div>
+        </form>
+    </div>
+</div>

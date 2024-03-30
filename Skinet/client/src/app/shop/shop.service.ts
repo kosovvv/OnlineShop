@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../shared/models/products';
 import { Pagination } from '../shared/models/pagination';
@@ -73,6 +73,10 @@ export class ShopService {
     return this.shopParams;
   }
 
+  createProduct(data: any) {
+    return this.http.post<Product>(this.baseUrl + 'products/create', data)
+  }
+
   getProduct(id :number) {
     
     const product = [...this.productCache.values()]
@@ -110,5 +114,10 @@ export class ShopService {
         return types;
       })
     )
+  }
+
+  uploadImage(data: FormData) {
+    console.log(data);
+    return this.http.post<FormData>(this.baseUrl + 'images/upload', data)
   }
 }
