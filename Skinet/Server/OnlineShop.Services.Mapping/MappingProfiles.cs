@@ -17,10 +17,10 @@ namespace OnlineShop.Services.Mapping
                 .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
 
             CreateMap<ProductToCreateDto, Product>()
-                .ForMember(d => d.ProductType, opt => opt.Ignore())
-                .ForMember(d => d.ProductBrand, opt => opt.Ignore());
-
-
+                .ForMember(dest => dest.PictureUrl, opt =>
+                    opt.MapFrom(src => !string.IsNullOrEmpty(src.PictureUrl) ? src.PictureUrl : "api/images/products/image-placeholder.png"))
+                .ForMember(dest => dest.ProductType, opt => opt.Ignore())
+                .ForMember(dest => dest.ProductBrand, opt => opt.Ignore());
 
 
             CreateMap<Address, AddressDto>().ReverseMap();

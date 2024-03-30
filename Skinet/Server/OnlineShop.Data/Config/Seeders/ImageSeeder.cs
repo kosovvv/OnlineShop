@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using OnlineShop.Data.Models;
 
-namespace OnlineShop.Data.Config.SeedData
+namespace OnlineShop.Data.Config.Seeders
 {
     public static class ImageSeeder
     {
@@ -26,7 +26,7 @@ namespace OnlineShop.Data.Config.SeedData
         {
             if (await _imageCollection.CountDocumentsAsync(new BsonDocument()) == 0)
             {
-                var imageDirectory = @"../OnlineShop.WebAPI/wwwrooot/images/products";
+                var imageDirectory = @"../API/wwwroot/images/products";
 
                 if (Directory.Exists(imageDirectory))
                 {

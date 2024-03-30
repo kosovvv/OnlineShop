@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ShopService } from '../shop.service';
 import { Router } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -22,7 +22,7 @@ export class ProductCreateComponent {
     name: ['', Validators.required],
     description: ['', [Validators.required,]],
     price: ['', [Validators.required]],
-    pictureUrl: ['', [Validators.required]],
+    pictureUrl: [''],
     productType: ['', [Validators.required]],
     productBrand: ['', [Validators.required]],
   })
@@ -31,7 +31,12 @@ export class ProductCreateComponent {
     const formData = this.GenerateFormData();
 
     this.shopService.createProduct(this.productForm.value).pipe(
-      switchMap((createProductResult) => this.shopService.uploadImage(formData))).subscribe({
+      switchMap((createProductResult) => {
+        if (this.fileName && this.image) {
+          return this.shopService.uploadImage(formData)
+        }
+        return of(null);
+      })).subscribe({
       next: (uploadImageResult) => this.router.navigateByUrl('/shop'),
       error: (error) => this.toastr.error('An error occurred while uploading image.')
     });

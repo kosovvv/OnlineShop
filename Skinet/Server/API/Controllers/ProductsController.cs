@@ -16,7 +16,6 @@ namespace OnlineShop.WebAPI.Controllers
         private readonly IProductService productService;
         private readonly IMapper mapper;
 
-
         public ProductsController(IProductService productService,
             IMapper mapper)
         {

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Data.Config.SeedData;
+using OnlineShop.Data.Config.Seeders;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Mapping;
 using OnlineShop.Web.Infrastructure;

@@ -1,5 +1,4 @@
-﻿using MongoDB.Bson;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using OnlineShop.Data.Models;
 using OnlineShop.Services.Data.Interfaces;
 
