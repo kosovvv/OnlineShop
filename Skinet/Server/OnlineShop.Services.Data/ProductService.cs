@@ -12,6 +12,20 @@ namespace Skinet.Infrastructure.Data
         {
             this.context = context;
         }
+
+        public async Task<Product> CreateProduct(Product product)
+        {
+            var isProductExisting = await this.context.Products.SingleOrDefaultAsync(p => p.Name == product.Name);
+
+            if (isProductExisting == null)
+            {
+                await this.context.Products.AddAsync(product);
+                await this.context.SaveChangesAsync();
+                return product;
+            }
+
+            return null;
+        }
         public async Task<int> GetProductsCountAsync(ProductParams productParams)
         {
             var query = ApplyProductFilters(context.Products, productParams);
@@ -41,6 +55,15 @@ namespace Skinet.Infrastructure.Data
         {
             return await context.ProductBrands.AsNoTracking().ToListAsync();
         }
+        public async Task<ProductType> GetProductTypeByNameAsync(string name)
+        {
+            return await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
+        }
+
+        public async Task<ProductBrand> GetProductBrandByNameAsync(string name)
+        {
+            return await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
+        }
 
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
         {
@@ -57,6 +80,8 @@ namespace Skinet.Infrastructure.Data
                         .Skip(productParams.PageSize * (productParams.PageIndex - 1))
                         .Take(productParams.PageSize);
         }
+
+        
     }
 
 }

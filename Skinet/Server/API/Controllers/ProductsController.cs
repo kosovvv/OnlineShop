@@ -5,6 +5,8 @@ using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Product;
+using System.Linq;
 
 
 namespace OnlineShop.WebAPI.Controllers
@@ -49,6 +51,32 @@ namespace OnlineShop.WebAPI.Controllers
             if (product == null) return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
 
             return mapper.Map<Product,ProductToReturnDto>(product);
+        }
+
+        [HttpPost("create")]
+        public async Task<ActionResult<ProductToReturnDto>> CreateProduct(ProductToCreateDto product)
+        {
+            Product productToCreate = this.mapper.Map<Product>(product);
+
+            var productType = await productService.GetProductTypeByNameAsync(product.ProductType);
+
+            if (productType != null)
+            {
+                productToCreate.ProductType = productType;
+            }
+
+            var productBrand = await productService.GetProductBrandByNameAsync(product.ProductBrand);
+
+            if (productBrand != null)
+            {
+                productToCreate.ProductBrand = productBrand;           
+            }
+
+            var result = await productService.CreateProduct(productToCreate);
+
+            return this.mapper.Map<ProductToReturnDto>(result);
+
+
         }
 
         [Cached(600)]
