@@ -33,7 +33,7 @@ namespace OnlineShop.Services.Data
         {
             var cachedResponse = await database.StringGetAsync(cacheKey);
 
-            if (!cachedResponse.IsNullOrEmpty)
+            if (cachedResponse.IsNullOrEmpty)
             {
                 return null;
             }

@@ -24,6 +24,7 @@ namespace OnlineShop.Web.Infrastructure
 
             if (!string.IsNullOrEmpty(cachedResponse))
             {
+               
                 context.Result = new ContentResult
                 {
                     Content = cachedResponse,
@@ -38,11 +39,11 @@ namespace OnlineShop.Web.Infrastructure
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
                 await cacheService.CacheResponseAsync
-                    (cacheKey, okObjectResult.Value.ToString(), TimeSpan.FromSeconds(timeToLiveInSeconds));
+                    (cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(timeToLiveInSeconds));
             }
         }
 
-        private string GenerateCacheKeyFromRequest(HttpRequest request)
+        private static string GenerateCacheKeyFromRequest(HttpRequest request)
         {
             var keyBuilder = new StringBuilder();
             keyBuilder.Append($"{request.Path}");
