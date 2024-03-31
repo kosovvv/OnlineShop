@@ -32,7 +32,6 @@ namespace OnlineShop.WebAPI.Controllers
             {
                 return BadRequest(new ApiResponse(400, "Problem creating order"));
             }
-
             return Ok(order);
         }
 

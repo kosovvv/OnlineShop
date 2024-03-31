@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
 using OnlineShop.Models;
@@ -32,16 +33,16 @@ namespace OnlineShop.WebAPI.Controllers
 
             var products = await productService.GetProductsAsync(productParams);
 
-             
+
             var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
 
-           return Ok(new Pagination<ProductToReturnDto>
-               (productParams.PageIndex, productParams.PageSize,totalItems, data));
+            return Ok(new Pagination<ProductToReturnDto>
+                (productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResponse),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         //[Cached(600)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
@@ -49,10 +50,11 @@ namespace OnlineShop.WebAPI.Controllers
 
             if (product == null) return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
 
-            return mapper.Map<Product,ProductToReturnDto>(product);
+            return mapper.Map<Product, ProductToReturnDto>(product);
         }
 
         [HttpPost("create")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductToReturnDto>> CreateProduct(ProductToCreateDto product)
         {
             Product productToCreate = this.mapper.Map<Product>(product);
@@ -68,14 +70,47 @@ namespace OnlineShop.WebAPI.Controllers
 
             if (productBrand != null)
             {
-                productToCreate.ProductBrand = productBrand;           
+                productToCreate.ProductBrand = productBrand;
             }
 
             var result = await productService.CreateProduct(productToCreate);
 
-            return this.mapper.Map<ProductToReturnDto>(result);
+            return Ok(this.mapper.Map<ProductToReturnDto>(result));
+        }
 
+        [HttpPut("edit/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ProductToReturnDto>> EditProduct(int id, ProductToCreateDto product)
+        {
+            Product productToEdit = this.mapper.Map<Product>(product);
 
+            var productType = await productService.GetProductTypeByNameAsync(product.ProductType);
+
+            if (productType != null)
+            {
+                productToEdit.ProductType = productType;
+            }
+
+            var productBrand = await productService.GetProductBrandByNameAsync(product.ProductBrand);
+
+            if (productBrand != null)
+            {
+                productToEdit.ProductBrand = productBrand;
+            }
+            productToEdit.Id = id;
+
+            var result = await this.productService.EditProduct(id, productToEdit);
+            return Ok(this.mapper.Map<ProductToReturnDto>(result));
+        }
+
+        [HttpDelete("delete/{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            var isDeleted = await productService.DeleteProduct(id);
+            return isDeleted ? Ok() : NotFound();
         }
 
         [Cached(600)]

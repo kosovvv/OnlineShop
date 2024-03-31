@@ -92,6 +92,10 @@ export class ShopService {
     return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }
 
+  editProduct(product : Product) {
+    return this.http.put<Product>(this.baseUrl + 'products/edit/' + product.id, product)
+  }
+
   getBrands() {
     if (this.brands.length > 0) {
       return of(this.brands);

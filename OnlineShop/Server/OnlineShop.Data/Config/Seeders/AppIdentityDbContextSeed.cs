@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 
 namespace OnlineShop.Data.Config.SeedData

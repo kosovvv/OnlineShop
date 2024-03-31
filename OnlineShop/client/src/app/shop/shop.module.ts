@@ -7,6 +7,7 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { RouterModule } from '@angular/router';
 import { ShopRoutingModule } from './shop-routing.module';
 import { ProductCreateComponent } from './product-create/product-create.component';
+import { ProductEditComponent } from './product-edit/product-edit.component';
 
 
 
@@ -15,7 +16,8 @@ import { ProductCreateComponent } from './product-create/product-create.componen
     ShopComponent,
     ProductItemComponent,
     ProductDetailsComponent,
-    ProductCreateComponent
+    ProductCreateComponent,
+    ProductEditComponent
   ],
   imports: [
     CommonModule,

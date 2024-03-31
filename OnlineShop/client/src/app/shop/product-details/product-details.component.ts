@@ -5,6 +5,7 @@ import { BasketService } from 'src/app/basket/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../shop.service';
 import { Product } from 'src/app/shared/models/products';
+import { AccountService } from 'src/app/account/account.service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,7 +18,7 @@ export class ProductDetailsComponent implements OnInit {
   quantityInBasket = 0;
 
   constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, 
-    private bcService: BreadcrumbService, private basketService: BasketService) {
+    private bcService: BreadcrumbService, private basketService: BasketService, public accountService: AccountService) {
       this.bcService.set('@productDetails', ' ')
     }
 

@@ -3,7 +3,6 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;

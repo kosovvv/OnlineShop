@@ -29,6 +29,11 @@
                     <strong>Welcome {{user.displayName}}</strong>
                 </a>
                 <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+                    <li *ngIf="user.role == 'Admin'" class="py-1">
+                        <a routerLink="/shop/create" class="dropdown-item">
+                            <i class="fa fa-plus me-3"></i> Create Product
+                        </a>
+                    </li>
                     <li class="py-1">
                         <a routerLink="/basket" class="dropdown-item">
                             <i class="fa fa-shopping-cart me-3"></i> View basket

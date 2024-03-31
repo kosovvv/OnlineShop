@@ -1,4 +1,4 @@
-﻿namespace OnlineShop.Data.Models
+﻿namespace OnlineShop.Data.Models.Identity
 {
     public static class Roles
     {

@@ -12,12 +12,6 @@ namespace OnlineShop.Data.Config
             builder.Property(p => p.Description).IsRequired();
             builder.Property(p => p.Price).HasColumnType("decimal(18,2)");
             builder.Property(p => p.PictureUrl).IsRequired();
-
-            builder.HasOne(b => b.ProductBrand).WithMany()
-                .HasForeignKey(fk => fk.ProductBrandId);
-
-            builder.HasOne(t  => t.ProductType).WithMany()
-                .HasForeignKey(pk => pk.ProductTypeId);
         }
     }
 }

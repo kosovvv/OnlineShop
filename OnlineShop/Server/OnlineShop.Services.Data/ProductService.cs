@@ -2,6 +2,7 @@
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
+using System.Security.Policy;
 
 namespace Skinet.Infrastructure.Data
 {
@@ -26,6 +27,40 @@ namespace Skinet.Infrastructure.Data
 
             return null;
         }
+
+        public async Task<Product> EditProduct(int id, Product product)
+        {
+            var existingProduct = await this.GetProductByIdAsync(id);
+            existingProduct.Name = product.Name;
+            existingProduct.Description = product.Description;
+            existingProduct.Price = product.Price;
+            existingProduct.ProductBrand = product.ProductBrand;
+            existingProduct.ProductType = product.ProductType;
+ 
+            await this.context.SaveChangesAsync();
+            return product;
+        }
+
+        public async Task<bool> DeleteProduct(int id)
+        {
+            var productToDelete = await this.GetProductByIdAsync(id);
+
+            if (productToDelete == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                this.context.Products.Remove(productToDelete);
+                await this.context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public async Task<int> GetProductsCountAsync(ProductParams productParams)
         {
             var query = ApplyProductFilters(context.Products, productParams);
@@ -34,7 +69,7 @@ namespace Skinet.Infrastructure.Data
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await context.Products.AsNoTracking().Include(x => x.ProductBrand)
+            return await context.Products.Include(x => x.ProductBrand)
                 .Include(x => x.ProductType).FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -69,8 +104,8 @@ namespace Skinet.Infrastructure.Data
         {
             return query.AsNoTracking().Where(x =>
                 (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-                (!productParams.BrandId.HasValue || x.ProductBrandId == productParams.BrandId) &&
-                (!productParams.TypeId.HasValue || x.ProductTypeId == productParams.TypeId)
+                (!productParams.BrandId.HasValue || x.ProductBrand.Id == productParams.BrandId) &&
+                (!productParams.TypeId.HasValue || x.ProductType.Id == productParams.TypeId)
             );
         }
 
@@ -81,7 +116,5 @@ namespace Skinet.Infrastructure.Data
                         .Take(productParams.PageSize);
         }
 
-        
     }
-
 }
