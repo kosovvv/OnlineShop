@@ -93,7 +93,23 @@ export class ShopService {
   }
 
   editProduct(product : Product) {
-    return this.http.put<Product>(this.baseUrl + 'products/edit/' + product.id, product)
+    return this.http.put<Product>(this.baseUrl + 'products/edit/' + product.id, product).pipe(
+      map(response => {
+        const cache = this.productCache.get(Object.values(this.shopParams).join('-'))
+        if (cache) {
+          const index = cache.data.findIndex(x => x.id === product.id);
+          if (index !== -1) {
+            cache.data[index] = { ...cache.data[index], ...product };
+            this.productCache.set(Object.values(this.shopParams).join('-'), cache); 
+          }
+        }
+        return response;
+      })
+    )
+  }
+
+  deleteProduct(id : number) {
+    return this.http.delete(this.baseUrl + 'products/delete/' + id);
   }
 
   getBrands() {

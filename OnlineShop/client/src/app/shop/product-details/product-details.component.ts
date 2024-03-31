@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 import { BasketService } from 'src/app/basket/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../shop.service';
 import { Product } from 'src/app/shared/models/products';
 import { AccountService } from 'src/app/account/account.service';
+import { ToastrService } from 'ngx-toastr';
+import { Basket } from 'src/app/shared/models/basket';
 
 @Component({
   selector: 'app-product-details',
@@ -17,8 +19,9 @@ export class ProductDetailsComponent implements OnInit {
   quantity = 1;
   quantityInBasket = 0;
 
-  constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, 
-    private bcService: BreadcrumbService, private basketService: BasketService, public accountService: AccountService) {
+  constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private router : Router,
+    private bcService: BreadcrumbService, private basketService: BasketService,
+     public accountService: AccountService, private toastr: ToastrService) {
       this.bcService.set('@productDetails', ' ')
     }
 
@@ -66,6 +69,26 @@ export class ProductDetailsComponent implements OnInit {
         this.basketService.removeItemFromBasket(this.product.id, itemsToRemove);
       }
     }
+  }
+
+  deleteItem(id : number) {
+    this.shopService.deleteProduct(id).subscribe({
+      next: (response) => {
+        this.router.navigateByUrl('/shop')
+        this.toastr.success("Product deleted successfully.")
+        this.basketService.basketSource$.pipe(take(1)).subscribe({
+          next: (basket) => {
+            if (basket) {
+              basket.items = basket.items.filter(x => x.id !== id);
+              this.basketService.setBasket(basket);
+            }
+          }
+        })
+      },
+      error: (error) => {
+        this.toastr.error("Error deleting product.")
+      }
+    });
   }
 
   get buttonText() {

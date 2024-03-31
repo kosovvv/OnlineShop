@@ -66,7 +66,7 @@ export class ProductEditComponent implements OnInit {
            
           }
         })
-        this.router.navigateByUrl(`/shop/details/${product.id}`);
+        this.router.navigateByUrl(`/shop/${product.id}`);
       }
     })
     

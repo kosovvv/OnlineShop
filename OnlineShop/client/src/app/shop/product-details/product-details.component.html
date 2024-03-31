@@ -15,7 +15,8 @@
                     <span class="font-weight-bold" style="font-size: 1.5em;">{{quantity}}</span>
                     <i (click)="incrementQuantity()" class="fa fa-plus-circle text-warning ms-2" style="cursor: pointer; font-size: 2em;"></i>
                     <button class="btn btn-outline-primary ms-4" (click)="updateBasket()" [disabled]="quantity === quantityInBasket">{{buttonText}}</button>
-                    <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}" class="btn btn-outline-primary ms-4">Edit</button>
+                    <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}" class="btn btn-outline-primary ms-2">Edit</button>
+                    <button *ngIf="user.role == 'Admin'" (click)="deleteItem(product.id)" class="btn btn-outline-primary ms-2">Delete</button>
                 </div>
                 <div class="row mt-4">
                     <h4>Description</h4>
