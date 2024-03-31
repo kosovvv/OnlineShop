@@ -56,7 +56,7 @@ namespace OnlineShop.WebAPI.Controllers
         } 
 
         [HttpGet("address")]
-        [Authorize(Roles = "User")]
+        [Authorize]
         public async Task<ActionResult<AddressDto>> GetUserAddress()
         {
             var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);

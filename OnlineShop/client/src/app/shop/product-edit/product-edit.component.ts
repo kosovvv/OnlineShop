@@ -7,7 +7,7 @@ import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
 import { BasketService } from 'src/app/basket/basket.service';
 import { take } from 'rxjs';
-import { BasketItem } from 'src/app/shared/models/basket';
+import { Basket, BasketItem } from 'src/app/shared/models/basket';
 
 @Component({
   selector: 'app-product-edit',
@@ -56,10 +56,14 @@ export class ProductEditComponent implements OnInit {
       next: (product : Product) => {
         this.basketService.basketSource$.pipe(take(1)).subscribe({
           next: basket => {
-            const item = basket?.items.find(x => x.id === product.id);
-            if (item) {
-              this.updateBasket(item, product);
+            if (basket) {
+              const item = basket.items.find(x => x.id === product.id);
+              if (item) {
+                this.updateBasket(item, product);
+                this.basketService.setBasket(basket);
+              }
             }
+           
           }
         })
         this.router.navigateByUrl(`/shop/details/${product.id}`);
