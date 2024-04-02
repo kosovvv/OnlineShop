@@ -18,13 +18,13 @@ namespace OnlineShop.Web.Infrastructure
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
+            //before executed action
             var cacheService = context.HttpContext.RequestServices.GetRequiredService<IResponseCacheService>();
             var cacheKey = GenerateCacheKeyFromRequest(context.HttpContext.Request);
             var cachedResponse = await cacheService.GetCachedResponseAsync(cacheKey);
 
             if (!string.IsNullOrEmpty(cachedResponse))
-            {
-               
+            {  
                 context.Result = new ContentResult
                 {
                     Content = cachedResponse,
@@ -33,13 +33,13 @@ namespace OnlineShop.Web.Infrastructure
                 };
                 return;
             }
-
+            
             var executedContext = await next();
 
+            //after executed aciton
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
-                await cacheService.CacheResponseAsync
-                    (cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(timeToLiveInSeconds));
+                await cacheService.CacheResponseAsync(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(timeToLiveInSeconds));
             }
         }
 

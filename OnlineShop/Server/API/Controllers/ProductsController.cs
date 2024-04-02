@@ -43,7 +43,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [Cached(40)]
+        [Cached(300)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var product = await productService.GetProductByIdAsync(id);

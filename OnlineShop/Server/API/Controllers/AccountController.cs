@@ -1,5 +1,4 @@
-﻿using Amazon.Runtime.Internal;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
-using StackExchange.Redis;
 
 namespace OnlineShop.WebAPI.Controllers
 {
