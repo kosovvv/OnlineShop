@@ -10,18 +10,18 @@ namespace OnlineShop.WebAPI.Controllers
     public class BasketController : BaseController
     {
 
-        private readonly IBasketService basketRepository;
+        private readonly IBasketService basketService;
         private readonly IMapper mapper;
         public BasketController(IBasketService basketRepository, IMapper mapper)
         {
-            this.basketRepository = basketRepository;
+            this.basketService = basketRepository;
             this.mapper = mapper;
         }
 
         [HttpGet]
         public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
         {
-            var basket = await basketRepository.GetBaskedAsync(id);
+            var basket = await basketService.GetBaskedAsync(id);
             return Ok(basket ?? new CustomerBasket(id));
         }
 
@@ -30,7 +30,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             var customerBasket = this.mapper.Map<CustomerBasketDto, CustomerBasket>(basket);
 
-            var updatedBasket = await basketRepository.UpdateBasketAsync(customerBasket);
+            var updatedBasket = await basketService.UpdateBasketAsync(customerBasket);
 
             return Ok(updatedBasket);
         }
@@ -38,7 +38,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpDelete]
         public async Task DeleteBasketAsync(string id)
         {
-            await basketRepository.DeleteBasketAsync(id);
+            await basketService.DeleteBasketAsync(id);
         }
 
     }
