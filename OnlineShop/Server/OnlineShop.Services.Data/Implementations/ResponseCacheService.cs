@@ -2,7 +2,7 @@
 using StackExchange.Redis;
 using System.Text.Json;
 
-namespace OnlineShop.Services.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class ResponseCacheService : IResponseCacheService
     {
@@ -39,6 +39,6 @@ namespace OnlineShop.Services.Data
             }
 
             return cachedResponse;
-        } 
+        }
     }
 }

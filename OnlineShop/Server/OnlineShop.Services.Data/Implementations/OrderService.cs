@@ -8,7 +8,7 @@ using OnlineShop.Web.ViewModels.Address;
 using AutoMapper;
 using OnlineShop.Data.Models.Identity;
 
-namespace OnlineShop.Services.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class OrderService : IOrderService
     {
@@ -24,24 +24,24 @@ namespace OnlineShop.Services.Data
         public async Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, ReturnAddressDto shippingAddress)
         {
             // get basket from repo
-            var basket = await this.basketRepo.GetBaskedAsync(basketId);
+            var basket = await basketRepo.GetBasketAsync(basketId);
             // get items from product repo
             var items = new List<OrderItem>();
 
-            foreach (var item in basket.Items) 
+            foreach (var item in basket.Items)
             {
                 var productItem = await context.Products.FirstOrDefaultAsync(x => x.Id == item.Id);
-                var itemOrdered = 
+                var itemOrdered =
                     new ProductItemOrdered((int)productItem.Id, productItem.Name, productItem.PictureUrl);
 
-                var orderItem = new OrderItem(itemOrdered,productItem.Price, item.Quantity);
+                var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
             // get deliverymethods
 
             var deliveryMethod = await context.DeliveryMethods
                 .FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
-           
+
             // calc subtotal
 
             var subTotal = items.Sum(x => x.Price * x.Quantity);
@@ -69,7 +69,7 @@ namespace OnlineShop.Services.Data
 
                 await context.Orders.AddAsync(order);
             }
-           
+
             var result = await context.SaveChangesAsync();
 
             if (result <= 0)
@@ -77,13 +77,13 @@ namespace OnlineShop.Services.Data
                 return null;
             }
 
-            return this.mapper.Map<Order, OrderToReturnDto>(order);
+            return mapper.Map<Order, OrderToReturnDto>(order);
         }
 
         public async Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync()
         {
             var methods = await context.DeliveryMethods.AsNoTracking().ToListAsync();
-            return this.mapper.Map<ICollection<DeliveryMethod>, ICollection<ReturnDeliveryMethodDto>>(methods);
+            return mapper.Map<ICollection<DeliveryMethod>, ICollection<ReturnDeliveryMethodDto>>(methods);
         }
 
         public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string buyerEmail)
@@ -96,7 +96,7 @@ namespace OnlineShop.Services.Data
                .OrderByDescending(x => x.OrderDate)
                .FirstOrDefaultAsync();
 
-            return this.mapper.Map<Order, OrderToReturnDto>(order);
+            return mapper.Map<Order, OrderToReturnDto>(order);
         }
 
         public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
@@ -108,7 +108,7 @@ namespace OnlineShop.Services.Data
                 .OrderByDescending(x => x.OrderDate)
                 .ToListAsync();
 
-            return this.mapper.Map<ICollection<Order>, ICollection<OrderToReturnDto>>(orders);
+            return mapper.Map<ICollection<Order>, ICollection<OrderToReturnDto>>(orders);
         }
     }
 }

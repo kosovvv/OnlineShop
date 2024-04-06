@@ -35,9 +35,9 @@ namespace OnlineShop.Services.Mapping
             CreateMap<ProductType,  ProductTypeDto>().ReverseMap();
 
             CreateMap<CustomerBasketDto, CustomerBasket>()
-                .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
+                .ForMember(d => d.Items, o => o.MapFrom(s => s.Items)).ReverseMap();
 
-            CreateMap<BasketItemDto, BasketItem>();
+            CreateMap<BasketItemDto, BasketItem>().ReverseMap();
             CreateMap<CreateAddressDto, OrderAddress>();
             CreateMap<ReturnAddressDto, OrderAddress>();
 

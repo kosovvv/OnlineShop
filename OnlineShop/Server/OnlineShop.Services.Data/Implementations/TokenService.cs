@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OnlineShop.Services.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class TokenService : ITokenService
     {
@@ -16,12 +16,12 @@ namespace OnlineShop.Services.Data
         public TokenService(IConfiguration config)
         {
             this.config = config;
-            this.key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"]));
+            key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"]));
         }
 
         public string CreateToken(ApplicationUser user, string role)
         {
- 
+
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email, user.Email),
@@ -42,7 +42,7 @@ namespace OnlineShop.Services.Data
 
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var token = tokenHandler.CreateToken(tokenDiscriptor);  
+            var token = tokenHandler.CreateToken(tokenDiscriptor);
 
             return tokenHandler.WriteToken(token);
         }

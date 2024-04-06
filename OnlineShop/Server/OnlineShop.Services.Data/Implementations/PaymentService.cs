@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using OnlineShop.Data;
 using OnlineShop.Data.Models.Enumerations;
@@ -8,26 +9,28 @@ using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using Stripe;
 
-namespace OnlineShop.Services.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class PaymentService : IPaymentService
     {
         private readonly StoreContext context;
         private readonly IBasketService basketService;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context)
+        public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context, IMapper mapper)
         {
-            this.basketService = basketRepository;
-            this.configuration = config;
+            basketService = basketRepository;
+            configuration = config;
             this.context = context;
+            this.mapper = mapper;
         }
 
-        public async Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
+        public async Task<CustomerBasketDto> CreateOrUpdatePaymentIntent(string basketId)
         {
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
 
-            var basket = await basketService.GetBaskedAsync(basketId);
+            var basket = await basketService.GetBasketAsync(basketId);
 
             if (basket == null)
             {
@@ -36,7 +39,7 @@ namespace OnlineShop.Services.Data
 
             var shippingPrice = 0m;
 
-            if (basket.DeliveryMethodId.HasValue)   
+            if (basket.DeliveryMethodId.HasValue)
             {
                 var deliveryMethod = await context.DeliveryMethods
                     .FirstOrDefaultAsync(x => x.Id == basket.DeliveryMethodId);
@@ -78,11 +81,12 @@ namespace OnlineShop.Services.Data
                 {
                     Amount = (long)basket.Items.Sum(x => x.Quantity * (x.Price * 100)) + (long)shippingPrice * 100,
                 };
-                await service.UpdateAsync(basket.PaymentIntentId, options); 
+                await service.UpdateAsync(basket.PaymentIntentId, options);
             }
 
-            await basketService.UpdateBasketAsync(basket);
-            return basket;
+
+            await basketService.UpdateBasketAsync(mapper.Map<CustomerBasket, CustomerBasketDto>(basket));
+            return mapper.Map<CustomerBasket, CustomerBasketDto>(basket);
         }
 
         public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)

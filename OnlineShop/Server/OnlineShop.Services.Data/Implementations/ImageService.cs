@@ -2,7 +2,7 @@
 using OnlineShop.Data.Models;
 using OnlineShop.Services.Data.Interfaces;
 
-namespace OnlineShop.Services.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class ImageService : IImageService
     {

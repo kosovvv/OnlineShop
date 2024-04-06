@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data.Models.OrderAggregate;
-using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using Stripe;
@@ -20,7 +19,7 @@ namespace OnlineShop.WebAPI.Controllers
 
         [Authorize]
         [HttpPost("{basketId}")]
-        public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
+        public async Task<ActionResult<CustomerBasketDto>> CreateOrUpdatePaymentIntent(string basketId)
         {
             var basket = await paymentService.CreateOrUpdatePaymentIntent(basketId);
 

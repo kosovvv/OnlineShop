@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Models.Identity;
 using System.Security.Claims;
 
-namespace OnlineShop.Web.Infrastructure
+namespace OnlineShop.Services.Data.Extensions
 {
     public static class UserManagerExtensions
     {
@@ -13,7 +13,7 @@ namespace OnlineShop.Web.Infrastructure
             var email = user.FindFirstValue(ClaimTypes.Email);
 
             return await userManager.Users.Include(x => x.Address)
-                .SingleOrDefaultAsync(x =>  x.Email == email);
+                .SingleOrDefaultAsync(x => x.Email == email);
         }
 
         public static async Task<ApplicationUser> FindByEmailFromClaimsPrincipal

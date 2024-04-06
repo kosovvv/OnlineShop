@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
-using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
@@ -27,9 +26,6 @@ namespace OnlineShop.WebAPI.Controllers
             var totalItems = await productService.GetProductsCountAsync(productParams);
 
             var products = await productService.GetProductsAsync(productParams);
-
-
-            //var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
 
             return Ok(new Pagination<ProductToReturnDto>
                 (productParams.PageIndex, productParams.PageSize, totalItems, products));

@@ -6,7 +6,7 @@ using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
 
-namespace Skinet.Infrastructure.Data
+namespace OnlineShop.Services.Data.Implementations
 {
     public class ProductService : IProductService
     {
@@ -20,14 +20,14 @@ namespace Skinet.Infrastructure.Data
 
         public async Task<ProductToReturnDto> CreateProduct(ProductToCreateDto product)
         {
-            var isProductExisting = await this.context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
-            var productToCreate = this.mapper.Map<ProductToCreateDto, Product>(product);
+            var isProductExisting = await context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
+            var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);
 
             if (isProductExisting == null)
             {
-                await this.context.Products.AddAsync(productToCreate);
-                await this.context.SaveChangesAsync();
-                return this.mapper.Map<Product, ProductToReturnDto>(productToCreate);
+                await context.Products.AddAsync(productToCreate);
+                await context.SaveChangesAsync();
+                return mapper.Map<Product, ProductToReturnDto>(productToCreate);
             }
 
             return null;
@@ -39,11 +39,11 @@ namespace Skinet.Infrastructure.Data
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
-            existingProduct.ProductBrand = await this.context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.Name);
-            existingProduct.ProductType = await this.context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.Name);
+            existingProduct.ProductBrand = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.Name);
+            existingProduct.ProductType = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.Name);
 
-            await this.context.SaveChangesAsync();
-            return this.mapper.Map<Product, ProductToReturnDto>(existingProduct);
+            await context.SaveChangesAsync();
+            return mapper.Map<Product, ProductToReturnDto>(existingProduct);
         }
 
         public async Task<bool> DeleteProduct(int id)
@@ -57,8 +57,8 @@ namespace Skinet.Infrastructure.Data
 
             try
             {
-                this.context.Products.Remove(productToDelete);
-                await this.context.SaveChangesAsync();
+                context.Products.Remove(productToDelete);
+                await context.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -103,13 +103,13 @@ namespace Skinet.Infrastructure.Data
         public async Task<ProductTypeDto> GetProductTypeByNameAsync(string name)
         {
             var types = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
-            return this.mapper.Map<ProductType, ProductTypeDto>(types);
+            return mapper.Map<ProductType, ProductTypeDto>(types);
         }
 
         public async Task<ProductBrandDto> GetProductBrandByNameAsync(string name)
         {
             var brands = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
-            return this.mapper.Map<ProductBrand, ProductBrandDto>(brands);
+            return mapper.Map<ProductBrand, ProductBrandDto>(brands);
         }
 
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)

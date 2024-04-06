@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
@@ -10,7 +9,7 @@ namespace OnlineShop.WebAPI.Controllers
     public class OrderController : BaseController
     {
         private readonly IOrderService orderService;
-        public OrderController(IOrderService orderService, IMapper mapper)
+        public OrderController(IOrderService orderService)
         {
             this.orderService = orderService;
         }
