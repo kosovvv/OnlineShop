@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
 using OnlineShop.Models;
@@ -7,7 +6,6 @@ using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
-using System.Linq;
 
 
 namespace OnlineShop.WebAPI.Controllers
@@ -15,13 +13,10 @@ namespace OnlineShop.WebAPI.Controllers
     public class ProductsController : BaseController
     {
         private readonly IProductService productService;
-        private readonly IMapper mapper;
 
-        public ProductsController(IProductService productService,
-            IMapper mapper)
+        public ProductsController(IProductService productService)
         {
             this.productService = productService;
-            this.mapper = mapper;
         }
 
         [HttpGet]
@@ -34,10 +29,10 @@ namespace OnlineShop.WebAPI.Controllers
             var products = await productService.GetProductsAsync(productParams);
 
 
-            var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
+            //var data = mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
 
             return Ok(new Pagination<ProductToReturnDto>
-                (productParams.PageIndex, productParams.PageSize, totalItems, data));
+                (productParams.PageIndex, productParams.PageSize, totalItems, products));
         }
 
         [HttpGet("{id}")]
@@ -50,57 +45,24 @@ namespace OnlineShop.WebAPI.Controllers
 
             if (product == null) return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
 
-            return Ok(mapper.Map<Product, ProductToReturnDto>(product));
+            return Ok(product);
         }
 
         [HttpPost("create")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductToReturnDto>> CreateProduct(ProductToCreateDto product)
-        {
-            Product productToCreate = this.mapper.Map<Product>(product);
+        {        
+            var result = await productService.CreateProduct(product);
 
-            var productType = await productService.GetProductTypeByNameAsync(product.ProductType);
-
-            if (productType != null)
-            {
-                productToCreate.ProductType = productType;
-            }
-
-            var productBrand = await productService.GetProductBrandByNameAsync(product.ProductBrand);
-
-            if (productBrand != null)
-            {
-                productToCreate.ProductBrand = productBrand;
-            }
-
-            var result = await productService.CreateProduct(productToCreate);
-
-            return Ok(this.mapper.Map<ProductToReturnDto>(result));
+            return Ok(result);
         }
 
         [HttpPut("edit/{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductToReturnDto>> EditProduct(int id, ProductToCreateDto product)
         {
-            Product productToEdit = this.mapper.Map<Product>(product);
-
-            var productType = await productService.GetProductTypeByNameAsync(product.ProductType);
-
-            if (productType != null)
-            {
-                productToEdit.ProductType = productType;
-            }
-
-            var productBrand = await productService.GetProductBrandByNameAsync(product.ProductBrand);
-
-            if (productBrand != null)
-            {
-                productToEdit.ProductBrand = productBrand;
-            }
-            productToEdit.Id = id;
-
-            var result = await this.productService.EditProduct(id, productToEdit);
-            return Ok(this.mapper.Map<ProductToReturnDto>(result));
+            var result = await this.productService.EditProduct(id, product);
+            return Ok(result);
         }
 
         [HttpDelete("delete/{id}")]
@@ -115,7 +77,7 @@ namespace OnlineShop.WebAPI.Controllers
 
         [Cached(10)]
         [HttpGet("brands")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductBrands()
+        public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
         {
             return Ok(await productService.GetProductBrandsAsync());
         }
@@ -123,7 +85,7 @@ namespace OnlineShop.WebAPI.Controllers
 
         [Cached(10)]
         [HttpGet("types")]
-        public async Task<ActionResult<IEnumerable<ProductBrand>>> GetProductTypes()
+        public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
         {
             return Ok(await productService.GetProductTypesAsync());
         }

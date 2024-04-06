@@ -6,7 +6,6 @@ using OnlineShop.Data.Config.Seeders;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Mapping;
 using OnlineShop.Web.Infrastructure;
-using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 

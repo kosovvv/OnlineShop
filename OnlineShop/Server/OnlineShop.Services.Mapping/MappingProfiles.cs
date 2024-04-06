@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
 using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Address;
+using OnlineShop.Web.ViewModels.Order;
 using OnlineShop.Web.ViewModels.Product;
+using OnlineShop.Web.ViewModels.Review;
 
 namespace OnlineShop.Services.Mapping
 {
@@ -22,14 +26,20 @@ namespace OnlineShop.Services.Mapping
                 .ForMember(dest => dest.ProductType, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductBrand, opt => opt.Ignore());
 
+            CreateMap<Review, ReturnReviewDto>();
+            CreateMap<DeliveryMethod, ReturnDeliveryMethodDto>().ReverseMap();
 
-            CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<Address, ReturnAddressDto>().ReverseMap();
+            CreateMap<Address, OrderAddress>().ReverseMap();
+            CreateMap<ProductBrand, ProductBrandDto>().ReverseMap();
+            CreateMap<ProductType,  ProductTypeDto>().ReverseMap();
 
             CreateMap<CustomerBasketDto, CustomerBasket>()
                 .ForMember(d => d.Items, o => o.MapFrom(s => s.Items));
 
             CreateMap<BasketItemDto, BasketItem>();
-            CreateMap<AddressDto, OrderAddress>();
+            CreateMap<CreateAddressDto, OrderAddress>();
+            CreateMap<ReturnAddressDto, OrderAddress>();
 
             CreateMap<Order, OrderToReturnDto>()
                 .ForMember(d => d.DeliveryMethod, opt => opt.MapFrom(s => s.DeliveryMethod.ShortName))

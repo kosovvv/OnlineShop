@@ -5,6 +5,7 @@ using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.ViewModels;
 using Stripe;
 
 namespace OnlineShop.Services.Data
@@ -12,12 +13,12 @@ namespace OnlineShop.Services.Data
     public class PaymentService : IPaymentService
     {
         private readonly StoreContext context;
-        private readonly IBasketService basketRepository;
+        private readonly IBasketService basketService;
         private readonly IConfiguration configuration;
 
         public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context)
         {
-            this.basketRepository = basketRepository;
+            this.basketService = basketRepository;
             this.configuration = config;
             this.context = context;
         }
@@ -26,7 +27,7 @@ namespace OnlineShop.Services.Data
         {
             StripeConfiguration.ApiKey = configuration["StripeSettings:SecretKey"];
 
-            var basket = await basketRepository.GetBaskedAsync(basketId);
+            var basket = await basketService.GetBaskedAsync(basketId);
 
             if (basket == null)
             {
@@ -80,7 +81,7 @@ namespace OnlineShop.Services.Data
                 await service.UpdateAsync(basket.PaymentIntentId, options); 
             }
 
-            await basketRepository.UpdateBasketAsync(basket);
+            await basketService.UpdateBasketAsync(basket);
             return basket;
         }
 

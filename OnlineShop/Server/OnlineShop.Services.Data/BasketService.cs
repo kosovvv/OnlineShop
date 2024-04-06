@@ -1,4 +1,5 @@
-﻿using OnlineShop.Models;
+﻿
+using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;
@@ -8,9 +9,9 @@ namespace OnlineShop.Services.Data
     public class BasketService : IBasketService
     {
         private readonly IDatabase database;
-        public BasketService(IConnectionMultiplexer redis) 
+        public BasketService(IConnectionMultiplexer redis)
         {
-            database = redis.GetDatabase();   
+            database = redis.GetDatabase();
         }
         public async Task<bool> DeleteBasketAsync(string id)
         {

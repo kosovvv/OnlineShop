@@ -1,17 +1,19 @@
-﻿using OnlineShop.Data.Models.OrderAggregate;
+﻿using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Address;
+using OnlineShop.Web.ViewModels.Order;
 
 namespace OnlineShop.Services.Data.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrderAsync(string buyerEmail, int deliveryMethod, string basketId,
-            OrderAddress shippingAddress);
+        Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, int deliveryMethod, string basketId,
+            ReturnAddressDto shippingAddress);
 
-        Task<IEnumerable<Order>> GetOrdersForUserAsync(string buyerEmail);
+        Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail);
 
-        Task<Order> GetOrderByIdAsync(int id, string buyerEmail);
+        Task<OrderToReturnDto> GetOrderByIdAsync(int id, string buyerEmail);
 
-        Task<IEnumerable<DeliveryMethod>> GetDeliveryMethodsAsync();
+        Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync();
 
 
     } 

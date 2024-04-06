@@ -6,6 +6,7 @@ using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Address;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -13,19 +14,16 @@ namespace OnlineShop.WebAPI.Controllers
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly RoleManager<IdentityRole> roleManager;
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            RoleManager<IdentityRole> roleManager,
             ITokenService tokenService,
             IMapper mapper)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.roleManager = roleManager;
             this.tokenService = tokenService;
             this.mapper = mapper;
         }
@@ -55,26 +53,26 @@ namespace OnlineShop.WebAPI.Controllers
 
         [HttpGet("address")]
         [Authorize]
-        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        public async Task<ActionResult<ReturnAddressDto>> GetUserAddress()
         {
             var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
              
-            return mapper.Map<Address, AddressDto>(user.Address);
+            return mapper.Map<Address, ReturnAddressDto>(user.Address);
         }
 
         [HttpPut("address")]
         [Authorize]
-        public async Task<ActionResult<AddressDto>> UpdateUserAdresss(AddressDto address)
+        public async Task<ActionResult<ReturnAddressDto>> UpdateUserAdresss(ReturnAddressDto address)
         {
             var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
 
-            user.Address = mapper.Map<AddressDto, Address>(address);
+            user.Address = mapper.Map<ReturnAddressDto, Address>(address);
 
             var result = await userManager.UpdateAsync(user);
 
             if (result.Succeeded)
             {
-                return Ok(mapper.Map<Address, AddressDto>(user.Address));
+                return Ok(mapper.Map<Address, ReturnAddressDto>(user.Address));
             }
 
             return BadRequest("Problem updating user");

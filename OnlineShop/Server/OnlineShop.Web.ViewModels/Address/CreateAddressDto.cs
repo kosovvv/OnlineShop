@@ -2,7 +2,7 @@
 
 namespace OnlineShop.Web.ViewModels
 {
-    public class AddressDto
+    public class CreateAddressDto
     {
         [Required]
         public string FirstName { get; set; }

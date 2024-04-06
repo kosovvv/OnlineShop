@@ -1,49 +1,54 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
-using System.Security.Policy;
+using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Product;
 
 namespace Skinet.Infrastructure.Data
 {
     public class ProductService : IProductService
     {
         private readonly StoreContext context;
-        public ProductService(StoreContext context)
+        private readonly IMapper mapper;
+        public ProductService(StoreContext context, IMapper mapper)
         {
             this.context = context;
+            this.mapper = mapper;
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public async Task<ProductToReturnDto> CreateProduct(ProductToCreateDto product)
         {
-            var isProductExisting = await this.context.Products.SingleOrDefaultAsync(p => p.Name == product.Name);
+            var isProductExisting = await this.context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
+            var productToCreate = this.mapper.Map<ProductToCreateDto, Product>(product);
 
             if (isProductExisting == null)
             {
-                await this.context.Products.AddAsync(product);
+                await this.context.Products.AddAsync(productToCreate);
                 await this.context.SaveChangesAsync();
-                return product;
+                return this.mapper.Map<Product, ProductToReturnDto>(productToCreate);
             }
 
             return null;
         }
 
-        public async Task<Product> EditProduct(int id, Product product)
+        public async Task<ProductToReturnDto> EditProduct(int id, ProductToCreateDto product)
         {
-            var existingProduct = await this.GetProductByIdAsync(id);
+            var existingProduct = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
-            existingProduct.ProductBrand = product.ProductBrand;
-            existingProduct.ProductType = product.ProductType;
- 
+            existingProduct.ProductBrand = await this.context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.Name);
+            existingProduct.ProductType = await this.context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.Name);
+
             await this.context.SaveChangesAsync();
-            return product;
+            return this.mapper.Map<Product, ProductToReturnDto>(existingProduct);
         }
 
         public async Task<bool> DeleteProduct(int id)
         {
-            var productToDelete = await this.GetProductByIdAsync(id);
+            var productToDelete = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
 
             if (productToDelete == null)
             {
@@ -67,37 +72,44 @@ namespace Skinet.Infrastructure.Data
             return await query.CountAsync();
         }
 
-        public async Task<Product> GetProductByIdAsync(int id)
+        public async Task<ProductToReturnDto> GetProductByIdAsync(int id)
         {
-            return await context.Products.Include(x => x.ProductBrand)
+            var product = await context.Products.Include(x => x.ProductBrand)
                 .Include(x => x.ProductType).FirstOrDefaultAsync(x => x.Id == id);
+
+            return mapper.Map<Product, ProductToReturnDto>(product);
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync(ProductParams productParams)
+        public async Task<IEnumerable<ProductToReturnDto>> GetProductsAsync(ProductParams productParams)
         {
             var query = ApplyProductFilters(context.Products, productParams);
             query = ApplyPaging(query, productParams);
             query = query.Include(x => x.ProductBrand).Include(x => x.ProductType);
+            var products = await query.ToListAsync();
 
-            return await query.ToListAsync();
-        }
-
-        public async Task<IEnumerable<ProductType>> GetProductTypesAsync()
-        {
-            return await context.ProductTypes.AsNoTracking().ToListAsync();
-        }
-        public async Task<IEnumerable<ProductBrand>> GetProductBrandsAsync()
-        {
-            return await context.ProductBrands.AsNoTracking().ToListAsync();
-        }
-        public async Task<ProductType> GetProductTypeByNameAsync(string name)
-        {
-            return await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
+            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
         }
 
-        public async Task<ProductBrand> GetProductBrandByNameAsync(string name)
+        public async Task<IEnumerable<ProductTypeDto>> GetProductTypesAsync()
         {
-            return await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
+            var productTypes = await context.ProductTypes.AsNoTracking().ToListAsync();
+            return mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>>(productTypes);
+        }
+        public async Task<IEnumerable<ProductBrandDto>> GetProductBrandsAsync()
+        {
+            var productTypes = await context.ProductBrands.AsNoTracking().ToListAsync();
+            return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(productTypes);
+        }
+        public async Task<ProductTypeDto> GetProductTypeByNameAsync(string name)
+        {
+            var types = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
+            return this.mapper.Map<ProductType, ProductTypeDto>(types);
+        }
+
+        public async Task<ProductBrandDto> GetProductBrandByNameAsync(string name)
+        {
+            var brands = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
+            return this.mapper.Map<ProductBrand, ProductBrandDto>(brands);
         }
 
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
@@ -115,6 +127,5 @@ namespace Skinet.Infrastructure.Data
                         .Skip(productParams.PageSize * (productParams.PageIndex - 1))
                         .Take(productParams.PageSize);
         }
-
     }
 }

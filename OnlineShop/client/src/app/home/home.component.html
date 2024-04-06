@@ -1,6 +1,8 @@
+
+
 <carousel [isAnimated]="true">
     <slide>
-        <img src="assets/images/hero1.jpg" alt="slide" style="display: block; width: 100%;">
+        <img src="assets/images/hero1.jpg" class="d-block mx-auto" alt="slide" style="display: block; width: 100%;">
     </slide>
     <slide>
         <img src="assets/images/hero2.jpg" alt="slide" style="display: block; width: 100%;">
@@ -15,3 +17,52 @@
         <h1>Welcome to the shop!</h1>
     </div>
 </section>
+
+<section class="categories bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Shop by Category</h2>
+        <div class="row">
+            <!-- Add your category links or images here -->
+            <div class="col-md-4 text-center">
+                <a href="#" class="btn btn-primary btn-lg">Smartphones</a>
+            </div>
+            <div class="col-md-4 text-center">
+                <a href="#" class="btn btn-primary btn-lg">Accessories</a>
+            </div>
+            <div class="col-md-4 text-center">
+                <a href="#" class="btn btn-primary btn-lg">Tablets</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="best-selling py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Best Selling Products</h2>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <img src="assets/images/best_selling_product1.jpg" alt="Best Selling Product 1" class="img-fluid mb-3">
+                <p class="fw-bold">Product Name</p>
+                <p>$XX.XX</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="assets/images/best_selling_product2.jpg" alt="Best Selling Product 2" class="img-fluid mb-3">
+                <p class="fw-bold">Product Name</p>
+                <p>$XX.XX</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="assets/images/best_selling_product3.jpg" alt="Best Selling Product 3" class="img-fluid mb-3">
+                <p class="fw-bold">Product Name</p>
+                <p>$XX.XX</p>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container">
+    <app-brands-slider></app-brands-slider>
+</div>
+<footer class="bg-light text-light text-center py-4">
+    <div class="container">
+        <p style="color: black">&copy; 2024 OnlineShop. All rights reserved.</p>
+    </div>
+</footer>
