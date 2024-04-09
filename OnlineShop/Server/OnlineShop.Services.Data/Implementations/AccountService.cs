@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using OnlineShop.Data.Models.Identity;
-using OnlineShop.Services.Data.Extensions;
+using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
@@ -122,5 +122,6 @@ namespace OnlineShop.Services.Data.Implementations
 
             return null;
         }
+
     }
 }

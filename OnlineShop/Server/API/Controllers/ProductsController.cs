@@ -6,7 +6,6 @@ using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
 
-
 namespace OnlineShop.WebAPI.Controllers
 {
     public class ProductsController : BaseController
@@ -19,7 +18,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Cached(40)]
+        //[Cached(40)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts
             ([FromQuery] ProductParams productParams)
         {
@@ -34,12 +33,15 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        [Cached(300)]
+        //[Cached(300)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var product = await productService.GetProductByIdAsync(id);
 
-            if (product == null) return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
+            if (product == null)
+            {
+                return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
+            }
 
             return Ok(product);
         }
@@ -71,15 +73,14 @@ namespace OnlineShop.WebAPI.Controllers
             return isDeleted ? Ok() : NotFound();
         }
 
-        [Cached(10)]
+        //[Cached(10)]
         [HttpGet("brands")]
         public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
         {
             return Ok(await productService.GetProductBrandsAsync());
         }
 
-
-        [Cached(10)]
+        //[Cached(10)]
         [HttpGet("types")]
         public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
         {

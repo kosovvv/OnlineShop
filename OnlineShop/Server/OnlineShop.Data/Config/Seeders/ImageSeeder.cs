@@ -6,12 +6,12 @@ namespace OnlineShop.Data.Config.Seeders
 {
     public static class ImageSeeder
     {
-        private static readonly IMongoCollection<Image> _imageCollection;
+        private static readonly IMongoCollection<Image> imageCollection;
 
         static ImageSeeder()
         {
             var database = GetMongoDatabase();
-            _imageCollection = database.GetCollection<Image>("images");
+            imageCollection = database.GetCollection<Image>("images");
         }
 
         private static IMongoDatabase GetMongoDatabase()
@@ -24,7 +24,7 @@ namespace OnlineShop.Data.Config.Seeders
 
         public static async Task SeedImagesAsync()
         {
-            if (await _imageCollection.CountDocumentsAsync(new BsonDocument()) == 0)
+            if (await imageCollection.CountDocumentsAsync(new BsonDocument()) == 0)
             {
                 var imageDirectory = @"../API/wwwroot/images/products";
 
@@ -43,7 +43,7 @@ namespace OnlineShop.Data.Config.Seeders
                             Data = imageData
                         };
 
-                        await _imageCollection.InsertOneAsync(image);
+                        await imageCollection.InsertOneAsync(image);
                     }
                 }
                 else

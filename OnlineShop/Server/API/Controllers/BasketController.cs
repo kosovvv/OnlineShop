@@ -3,7 +3,6 @@ using OnlineShop.Models;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 
-
 namespace OnlineShop.WebAPI.Controllers
 {
     public class BasketController : BaseController

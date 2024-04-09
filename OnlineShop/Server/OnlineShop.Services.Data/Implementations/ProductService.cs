@@ -21,26 +21,44 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<ProductToReturnDto> CreateProduct(ProductToCreateDto product)
         {
             var isProductExisting = await context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
-            var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);
 
-            if (isProductExisting == null)
+            if (isProductExisting != null)
             {
-                await context.Products.AddAsync(productToCreate);
-                await context.SaveChangesAsync();
-                return mapper.Map<Product, ProductToReturnDto>(productToCreate);
+                return null;
             }
 
-            return null;
+            var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);
+
+            var productType = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
+            var productBrand = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.ProductType);
+
+            if (productType == null || productBrand == null)
+            {
+                return null;
+            }
+
+            productToCreate.ProductBrand = productType;
+            productToCreate.ProductType = productBrand;
+
+            await context.Products.AddAsync(productToCreate);
+            await context.SaveChangesAsync();
+            return mapper.Map<Product, ProductToReturnDto>(productToCreate);
         }
 
         public async Task<ProductToReturnDto> EditProduct(int id, ProductToCreateDto product)
         {
             var existingProduct = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (existingProduct == null)
+            {
+                return null;
+            }
+
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
-            existingProduct.ProductBrand = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.Name);
-            existingProduct.ProductType = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.Name);
+            existingProduct.ProductBrand = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
+            existingProduct.ProductType = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.ProductType);
 
             await context.SaveChangesAsync();
             return mapper.Map<Product, ProductToReturnDto>(existingProduct);
@@ -80,14 +98,15 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<Product, ProductToReturnDto>(product);
         }
 
-        public async Task<IEnumerable<ProductToReturnDto>> GetProductsAsync(ProductParams productParams)
+        public async Task<ICollection<ProductToReturnDto>> GetProductsAsync(ProductParams productParams)
         {
             var query = ApplyProductFilters(context.Products, productParams);
             query = ApplyPaging(query, productParams);
             query = query.Include(x => x.ProductBrand).Include(x => x.ProductType);
             var products = await query.ToListAsync();
 
-            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products);
+            var result = mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
+            return result;
         }
 
         public async Task<IEnumerable<ProductTypeDto>> GetProductTypesAsync()
@@ -100,16 +119,14 @@ namespace OnlineShop.Services.Data.Implementations
             var productTypes = await context.ProductBrands.AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(productTypes);
         }
-        public async Task<ProductTypeDto> GetProductTypeByNameAsync(string name)
+        private async Task<ProductType> GetProductTypeByNameAsync(string name)
         {
-            var types = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
-            return mapper.Map<ProductType, ProductTypeDto>(types);
+            return await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
         }
 
-        public async Task<ProductBrandDto> GetProductBrandByNameAsync(string name)
+        private async Task<ProductBrand> GetProductBrandByNameAsync(string name)
         {
-            var brands = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
-            return mapper.Map<ProductBrand, ProductBrandDto>(brands);
+            return await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
         }
 
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)

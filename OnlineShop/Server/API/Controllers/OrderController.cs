@@ -59,6 +59,5 @@ namespace OnlineShop.WebAPI.Controllers
 
             return Ok(methods);
         }
-
     }
 }

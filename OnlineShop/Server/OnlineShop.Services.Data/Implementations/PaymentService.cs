@@ -20,8 +20,8 @@ namespace OnlineShop.Services.Data.Implementations
 
         public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context, IMapper mapper)
         {
-            basketService = basketRepository;
-            configuration = config;
+            this.basketService = basketRepository;
+            this.configuration = config;
             this.context = context;
             this.mapper = mapper;
         }
@@ -84,15 +84,13 @@ namespace OnlineShop.Services.Data.Implementations
                 await service.UpdateAsync(basket.PaymentIntentId, options);
             }
 
-
             await basketService.UpdateBasketAsync(mapper.Map<CustomerBasket, CustomerBasketDto>(basket));
             return mapper.Map<CustomerBasket, CustomerBasketDto>(basket);
         }
 
         public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
         {
-            var order = await context.Orders.FirstOrDefaultAsync
-                (x => x.PaymentIntentId == paymentIntentId);
+            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
 
             if (order == null)
             {
@@ -106,8 +104,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<Order> UpdateOrderPaymentSucceded(string paymentIntentId)
         {
-            var order = await context.Orders.FirstOrDefaultAsync
-                (x => x.PaymentIntentId == paymentIntentId);
+            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
 
             if (order == null)
             {

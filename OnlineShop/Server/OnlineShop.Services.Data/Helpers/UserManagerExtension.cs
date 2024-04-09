@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Models.Identity;
 using System.Security.Claims;
 
-namespace OnlineShop.Services.Data.Extensions
+namespace OnlineShop.Services.Data.Helpers
 {
     public static class UserManagerExtensions
     {

@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -26,8 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OnlineShop.Data.Models\OnlineShop.Data.Models.csproj" />
-    <ProjectReference Include="..\OnlineShop.Data\OnlineShop.Data.csproj" />
     <ProjectReference Include="..\OnlineShop.Services.Data\OnlineShop.Services.Data.csproj" />
     <ProjectReference Include="..\OnlineShop.Services.Mapping\OnlineShop.Services.Mapping.csproj" />
     <ProjectReference Include="..\OnlineShop.Web.Infrastructure\OnlineShop.Web.Infrastructure.csproj" />

@@ -15,6 +15,7 @@ namespace OnlineShop.Services.Data.Interfaces
 
         Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync();
 
+        Task<bool> HasUserBoughtProduct(string buyerEmail, int productId);
 
     } 
 }

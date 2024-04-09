@@ -1,13 +1,13 @@
 ﻿using OnlineShop.Web.ViewModels.Review;
+using System.Security.Claims;
 
 namespace OnlineShop.Services.Data.Interfaces
 {
-    internal interface IReviewService
+    public interface IReviewService
     {
-        Task<ReturnReviewDto> CreateReview(CreateReviewDto review);
+        Task<ReturnReviewDto> CreateReview(ClaimsPrincipal user, CreateReviewDto review);
         Task<ReturnReviewDto> EditReview(int id, CreateReviewDto review);
         Task<bool> DeleteReview(int id);
-        Task<ICollection<ReturnReviewDto>> GetReviewsByProduct(int id);
-        Task<bool> CheckIsReviewVerified(int id);
+        Task<ICollection<ReturnReviewDto>> GetReviewsByProduct(int productId);
     }
 }

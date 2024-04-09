@@ -110,5 +110,14 @@ namespace OnlineShop.Services.Data.Implementations
 
             return mapper.Map<ICollection<Order>, ICollection<OrderToReturnDto>>(orders);
         }
+
+        public async Task<bool> HasUserBoughtProduct(string buyerEmail, int productId)
+        {
+            var orders = await context.Orders
+                .Where(x => x.BuyerEmail == buyerEmail && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
+                .ToListAsync();
+
+            return orders.Count > 0;
+        }
     }
 }

@@ -26,7 +26,12 @@ namespace OnlineShop.Services.Mapping
                 .ForMember(dest => dest.ProductType, opt => opt.Ignore())
                 .ForMember(dest => dest.ProductBrand, opt => opt.Ignore());
 
-            CreateMap<Review, ReturnReviewDto>();
+            CreateMap<CreateReviewDto, Review>()
+                .ForMember(dest => dest.ReviewedProduct, opt => opt.Ignore());
+
+            CreateMap<Review, ReturnReviewDto>()
+                .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ReviewedProduct.Name))
+                .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.Email));
             CreateMap<DeliveryMethod, ReturnDeliveryMethodDto>().ReverseMap();
 
             CreateMap<Address, ReturnAddressDto>().ReverseMap();

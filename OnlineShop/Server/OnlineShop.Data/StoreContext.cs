@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Config;
+using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
@@ -19,6 +20,7 @@ namespace OnlineShop.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
         public DbSet<Address> Address { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

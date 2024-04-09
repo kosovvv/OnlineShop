@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using OnlineShop.Data;
-using OnlineShop.Data.Models;
+using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Implementations;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
@@ -46,6 +46,7 @@ namespace OnlineShop.Web.Infrastructure
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IReviewService, ReviewService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

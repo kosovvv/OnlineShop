@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,11 @@ using OnlineShop.Data;
 namespace OnlineShop.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240409141941_AddReviews")]
+    partial class AddReviews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,21 @@ namespace OnlineShop.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ApplicationUserProduct", b =>
+                {
+                    b.Property<int>("FavouriteProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsersFavouringTheProductId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FavouriteProductsId", "UsersFavouringTheProductId");
+
+                    b.HasIndex("UsersFavouringTheProductId");
+
+                    b.ToTable("ApplicationUserProduct");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -238,9 +256,6 @@ namespace OnlineShop.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,8 +275,6 @@ namespace OnlineShop.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -455,6 +468,21 @@ namespace OnlineShop.Data.Migrations
                     b.ToTable("ProductTypes");
                 });
 
+            modelBuilder.Entity("ApplicationUserProduct", b =>
+                {
+                    b.HasOne("OnlineShop.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("FavouriteProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OnlineShop.Data.Models.Identity.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersFavouringTheProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -515,13 +543,6 @@ namespace OnlineShop.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
-                });
-
-            modelBuilder.Entity("OnlineShop.Data.Models.Identity.ApplicationUser", b =>
-                {
-                    b.HasOne("OnlineShop.Models.Product", null)
-                        .WithMany("UsersFavouringTheProduct")
-                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("OnlineShop.Data.Models.OrderAggregate.Order", b =>
@@ -602,7 +623,7 @@ namespace OnlineShop.Data.Migrations
             modelBuilder.Entity("OnlineShop.Data.Models.Review", b =>
                 {
                     b.HasOne("OnlineShop.Data.Models.Identity.ApplicationUser", "Author")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("AuthorId");
 
                     b.HasOne("OnlineShop.Models.Product", "ReviewedProduct")
@@ -632,6 +653,8 @@ namespace OnlineShop.Data.Migrations
             modelBuilder.Entity("OnlineShop.Data.Models.Identity.ApplicationUser", b =>
                 {
                     b.Navigation("Address");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("OnlineShop.Data.Models.OrderAggregate.Order", b =>
@@ -642,8 +665,6 @@ namespace OnlineShop.Data.Migrations
             modelBuilder.Entity("OnlineShop.Models.Product", b =>
                 {
                     b.Navigation("Reviews");
-
-                    b.Navigation("UsersFavouringTheProduct");
                 });
 #pragma warning restore 612, 618
         }
