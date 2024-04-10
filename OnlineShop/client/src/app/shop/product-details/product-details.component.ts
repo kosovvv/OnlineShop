@@ -8,6 +8,7 @@ import { Product } from 'src/app/shared/models/products';
 import { AccountService } from 'src/app/account/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Basket } from 'src/app/shared/models/basket';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-product-details',
@@ -19,6 +20,8 @@ export class ProductDetailsComponent implements OnInit {
   quantity = 1;
   quantityInBasket = 0;
 
+  newReview = { description: 'da' };
+
   constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private router : Router,
     private bcService: BreadcrumbService, private basketService: BasketService,
      public accountService: AccountService, private toastr: ToastrService) {
@@ -27,6 +30,10 @@ export class ProductDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProduct();
+  }
+
+  submitReview(event : FormGroup) {
+    console.log(event);
   }
 
   loadProduct() {
@@ -48,6 +55,8 @@ export class ProductDetailsComponent implements OnInit {
       error: error => console.log(error)
     })
   }
+
+  
 
   incrementQuantity() {
     this.quantity++;
@@ -90,6 +99,11 @@ export class ProductDetailsComponent implements OnInit {
       }
     });
   }
+
+  onReviewSubmit() {
+    // Send the newReview object to your server to save the review
+    // ... (implement logic to send data to server)
+}
 
   get buttonText() {
     return this.quantityInBasket === 0 ? 'Add to basket' : 'Update basket';

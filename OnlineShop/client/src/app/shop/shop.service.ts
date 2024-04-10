@@ -39,6 +39,7 @@ export class ShopService {
         }
       }
     }
+
     let params = new HttpParams();
 
     if (this.shopParams.brandId > 0) {
@@ -77,8 +78,7 @@ export class ShopService {
     return this.http.post<Product>(this.baseUrl + 'products/create', data)
   }
 
-  getProduct(id :number) {
-    
+  getProduct(id :number) { 
     const product = [...this.productCache.values()]
     .reduce((acc, paginatedResult) => {
       return {...acc, ...paginatedResult.data.find(x => x.id === id)}
@@ -137,7 +137,6 @@ export class ShopService {
   }
 
   uploadImage(data: FormData) {
-    console.log(data);
     return this.http.post<FormData>(this.baseUrl + 'images/upload', data)
   }
 }

@@ -6,6 +6,10 @@
             </div>
             <div class="col-6 mt-5">
                 <h2>{{product.name}}</h2>
+                <app-rating [score]="product.averageScore" [isReadonly]="true"></app-rating>
+                <p class="card-block card-header" style="margin:10px 0;">
+                    <b><i>Average rating:</i> {{product.averageScore}}</b>
+                  </p>
                 <p style="font-size: 2em;">{{product.price | currency}}</p>
                 <h5 class="text-primary mb-3" *ngIf="quantityInBasket > 0">
                     You have {{quantityInBasket}} of this item in your basket
@@ -17,13 +21,15 @@
                     <button class="btn btn-outline-primary ms-4" (click)="updateBasket()" [disabled]="quantity === quantityInBasket">{{buttonText}}</button>
                     <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}" class="btn btn-outline-primary ms-2">Edit</button>
                     <button *ngIf="user.role == 'Admin'" (click)="deleteItem(product.id)" class="btn btn-outline-primary ms-2">Delete</button>
+                    <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Review</button>
                 </div>
                 <div class="row mt-4">
                     <h4>Description</h4>
                     <p>{{product.description}}</p>
                 </div>
             </div>
+            <app-add-review (onReviewSubmitted)="submitReview($event)"></app-add-review>
         </div>
     </div>
-    
 </ng-container>
+

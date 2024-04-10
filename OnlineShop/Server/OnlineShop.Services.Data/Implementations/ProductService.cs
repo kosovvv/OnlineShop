@@ -73,16 +73,9 @@ namespace OnlineShop.Services.Data.Implementations
                 return false;
             }
 
-            try
-            {
-                context.Products.Remove(productToDelete);
-                await context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
+            context.Products.Remove(productToDelete);
+            await context.SaveChangesAsync();
+            return true;
         }
         public async Task<int> GetProductsCountAsync(ProductParams productParams)
         {
@@ -93,7 +86,7 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<ProductToReturnDto> GetProductByIdAsync(int id)
         {
             var product = await context.Products.Include(x => x.ProductBrand)
-                .Include(x => x.ProductType).FirstOrDefaultAsync(x => x.Id == id);
+                .Include(x => x.ProductType).Include(x => x.Reviews).FirstOrDefaultAsync(x => x.Id == id);
 
             return mapper.Map<Product, ProductToReturnDto>(product);
         }
@@ -102,7 +95,7 @@ namespace OnlineShop.Services.Data.Implementations
         {
             var query = ApplyProductFilters(context.Products, productParams);
             query = ApplyPaging(query, productParams);
-            query = query.Include(x => x.ProductBrand).Include(x => x.ProductType);
+            query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
             var products = await query.ToListAsync();
 
             var result = mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
@@ -119,16 +112,6 @@ namespace OnlineShop.Services.Data.Implementations
             var productTypes = await context.ProductBrands.AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(productTypes);
         }
-        private async Task<ProductType> GetProductTypeByNameAsync(string name)
-        {
-            return await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == name);
-        }
-
-        private async Task<ProductBrand> GetProductBrandByNameAsync(string name)
-        {
-            return await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == name);
-        }
-
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
         {
             return query.AsNoTracking().Where(x =>
@@ -140,7 +123,8 @@ namespace OnlineShop.Services.Data.Implementations
 
         private static IQueryable<Product> ApplyPaging(IQueryable<Product> query, ProductParams productParams)
         {
-            return query.AsNoTracking().OrderBy(x => x.Name)
+            return query.AsNoTracking()
+                        .OrderBy(x => x.Name)
                         .Skip(productParams.PageSize * (productParams.PageIndex - 1))
                         .Take(productParams.PageSize);
         }

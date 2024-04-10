@@ -7,7 +7,7 @@ namespace OnlineShop.Web.ViewModels.Review
         public int Score { get; set; }
         public ProductToReturnDto ReviewedProduct { get; set; }
         public string Description { get; set; }
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
         public bool IsVerified { get; set; }
     }
 }

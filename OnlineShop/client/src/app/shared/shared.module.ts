@@ -13,6 +13,8 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
 import { BasketSummaryComponent } from './basket-summary/basket-summary.component';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { RatingComponent } from './rating/rating.component';
+import { RatingModule } from 'ngx-bootstrap/rating';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
     OrderTotalsComponent,
     TextInputComponent,
     StepperComponent,
-    BasketSummaryComponent
+    BasketSummaryComponent,
+    RatingComponent
   ],
   imports: [
     CommonModule,
@@ -29,11 +32,11 @@ import { MatIconModule } from '@angular/material/icon';
     CarouselModule.forRoot(),
     ReactiveFormsModule,
     BsDropdownModule.forRoot(),
+    RatingModule.forRoot(),
     CdkStepperModule,
     RouterModule,
     FormsModule,
-    MatIconModule
-    
+    MatIconModule,
   ],
   exports: [
     PaginationModule,
@@ -47,7 +50,8 @@ import { MatIconModule } from '@angular/material/icon';
     TextInputComponent,
     StepperComponent,
     CdkStepperModule,
-    BasketSummaryComponent
+    BasketSummaryComponent,
+    RatingComponent
   ]
 })
 export class SharedModule { }

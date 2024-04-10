@@ -19,7 +19,7 @@ import { BrandsSliderComponent } from './brands-slider/brands-slider.component';
     NotFoundComponent,
     ServerErrorComponent,
     SectionHeaderComponent,
-    BrandsSliderComponent
+    BrandsSliderComponent,
   ],
   imports: [
     CommonModule,

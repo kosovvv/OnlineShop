@@ -25,11 +25,9 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<string> UploadImageAsync(string fileName, Stream stream)
         {
             byte[] imageData;
-            using (var memoryStream = new MemoryStream())
-            {
-                await stream.CopyToAsync(memoryStream);
-                imageData = memoryStream.ToArray();
-            }
+            using var memoryStream = new MemoryStream();
+            await stream.CopyToAsync(memoryStream);
+            imageData = memoryStream.ToArray();
 
             var image = new Image
             {

@@ -7,7 +7,6 @@ using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels.Review;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
 namespace OnlineShop.Services.Data.Implementations
@@ -32,13 +31,19 @@ namespace OnlineShop.Services.Data.Implementations
             var reviewToCreate = this.mapper.Map<CreateReviewDto, Review>(review);
             //to fix later
             var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == review.ReviewedProduct.Id);
+            var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
 
-            if (product == null)
+            if (product == null || author == null)
+            {
+                return null;
+            }
+            var hasUserAlreadyReviewed = await this.HasUserAlreadyReviewedProduct(user, (int)product.Id);
+
+            if (hasUserAlreadyReviewed)
             {
                 return null;
             }
 
-            var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
             reviewToCreate.Author = author;
             reviewToCreate.ReviewedProduct = product;
             reviewToCreate.IsVerified = await this.orderService.HasUserBoughtProduct(author.Email, review.ReviewedProduct.Id);
@@ -81,10 +86,17 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<ICollection<ReturnReviewDto>> GetReviewsByProduct(int productId)
         {
-            var reviews = await this.context.Reviews.Include(x => x.ReviewedProduct)
+            var reviews = await this.context.Reviews.Include(x => x.ReviewedProduct).Include(x => x.Author)
                 .Where(x => x.ReviewedProduct.Id == productId).ToListAsync();
 
             return this.mapper.Map<ICollection<Review>, ICollection<ReturnReviewDto>>(reviews);
+        }
+
+        public async Task<bool> HasUserAlreadyReviewedProduct(ClaimsPrincipal user, int productId)
+        {
+            var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
+            return await context.Reviews
+                .Where(x => x.ReviewedProduct.Id == productId && x.Author.Email == author.Email).AnyAsync();
         }
     }
 }

@@ -9,5 +9,6 @@ namespace OnlineShop.Services.Data.Interfaces
         Task<ReturnReviewDto> EditReview(int id, CreateReviewDto review);
         Task<bool> DeleteReview(int id);
         Task<ICollection<ReturnReviewDto>> GetReviewsByProduct(int productId);
+        Task<bool> HasUserAlreadyReviewedProduct(ClaimsPrincipal user, int productId);
     }
 }

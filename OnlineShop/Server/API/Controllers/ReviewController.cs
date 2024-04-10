@@ -14,7 +14,6 @@ namespace OnlineShop.WebAPI.Controllers
         {
             this.reviewService = reviewService;
             this.productService = productService;
-
         }
 
         [HttpPost("create")]
@@ -41,8 +40,13 @@ namespace OnlineShop.WebAPI.Controllers
             }
 
             var reviews = await this.reviewService.GetReviewsByProduct(productId);
-
             return Ok(reviews);
+        }
+
+        [HttpGet("isReviewed/{productId}")]
+        public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
+        {
+            return await this.reviewService.HasUserAlreadyReviewedProduct(User, productId);
         }
     }
 }

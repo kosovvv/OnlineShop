@@ -111,7 +111,7 @@ export class ShopComponent implements OnInit {
     }
     const params = new ShopParams();
     this.shopService.setShopParams(params);
-    //this.shopParams = params;
+    this.shopParams = params;
     this.getProducts();
   }
 }
