@@ -22,7 +22,12 @@ namespace OnlineShop.Services.Data.Implementations
         {
             var data = await database.StringGetAsync(id);
 
-            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
+            if (data.IsNullOrEmpty)
+            {
+                return null;
+            }
+
+            return JsonSerializer.Deserialize<CustomerBasket>(data);
         }
 
         public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasketDto basket)
@@ -35,7 +40,7 @@ namespace OnlineShop.Services.Data.Implementations
                 return null;
             }
 
-            return await GetBasketAsync(basket.Id);
+            return await this.GetBasketAsync(basket.Id);
         }
     }
 }

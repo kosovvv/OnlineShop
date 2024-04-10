@@ -1,4 +1,4 @@
-<ng-container *ngIf="(score > 0)">
+<ng-container *ngIf="(score > 0 || isReadonly == false)">
     <div>
         <rating [max]="10" [(ngModel)]="score" [readonly]="isReadonly" [customTemplate]="tt"></rating>
         <ng-template #tt let-i="index" let-v="value">

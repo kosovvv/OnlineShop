@@ -48,8 +48,7 @@ namespace OnlineShop.Services.Data.Implementations
             // create order
 
 
-            var order = await context.Orders.FirstOrDefaultAsync
-                (x => x.PaymentIntentId == basket.PaymentIntentId);
+            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == basket.PaymentIntentId);
 
             var addressToSet = mapper.Map<Address, OrderAddress>
                 (await context.Address.FirstOrDefaultAsync(x => x.Id == shippingAddress.Id));
@@ -113,11 +112,9 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<bool> HasUserBoughtProduct(string buyerEmail, int productId)
         {
-            var orders = await context.Orders
+            return await context.Orders
                 .Where(x => x.BuyerEmail == buyerEmail && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
-                .ToListAsync();
-
-            return orders.Count > 0;
+                .AnyAsync();
         }
     }
 }
