@@ -95,6 +95,7 @@ namespace OnlineShop.Services.Data.Implementations
         {
             var query = ApplyProductFilters(context.Products, productParams);
             query = ApplyPaging(query, productParams);
+            query = ApplySorting(query, productParams);
             query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
             var products = await query.ToListAsync();
 
@@ -127,6 +128,26 @@ namespace OnlineShop.Services.Data.Implementations
                         .OrderBy(x => x.Name)
                         .Skip(productParams.PageSize * (productParams.PageIndex - 1))
                         .Take(productParams.PageSize);
+        }
+
+        private static IQueryable<Product> ApplySorting(IQueryable<Product> query, ProductParams productParams)
+        {
+            switch (productParams.Sort)
+            {
+                case "priceAsc":
+                    query = query.OrderBy(x => x.Price);
+                    break;
+                case "priceDesc":
+                    query = query.OrderByDescending(x => x.Price);
+                    break;
+                case "name":
+                    query = query.OrderBy(x => x.Name);
+                    break;
+                default:
+                    query = query.OrderBy(x => x.Id);
+                    break;
+            }
+            return query;
         }
     }
 }
