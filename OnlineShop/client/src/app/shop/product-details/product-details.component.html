@@ -6,10 +6,10 @@
             </div>
             <div class="col-6 mt-5">
                 <h2>{{product.name}}</h2>
-                <app-rating [score]="product.averageScore" [isReadonly]="true"></app-rating>
                 <p class="card-block card-header" style="margin:10px 0;">
                     <b><i>Average rating:</i> {{product.averageScore}}</b>
                   </p>
+                <app-rating [isReadonly]="true" [score]="product.averageScore"></app-rating>
                 <p style="font-size: 2em;">{{product.price | currency}}</p>
                 <h5 class="text-primary mb-3" *ngIf="quantityInBasket > 0">
                     You have {{quantityInBasket}} of this item in your basket
@@ -28,7 +28,7 @@
                     <p>{{product.description}}</p>
                 </div>
             </div>
-            <app-add-review (onReviewSubmitted)="submitReview($event)"></app-add-review>
+            <app-add-review [product]="product"></app-add-review>
         </div>
     </div>
 </ng-container>

@@ -1,7 +1,14 @@
-<div *ngIf="(score > 0 || isReadonly == false)">
-    <rating [max]="10" [(ngModel)]="score" [readonly]="isReadonly" [customTemplate]="tt"></rating>
-    <ng-template #tt let-i="index" let-v="value">
-        <button class="btn btn-{{i < score ? 'warning' : 'default'}}" (click)="setScore(i + 1)">
-            {{i < score ? '&#9733;' : '&#9734;' }} </button>
-    </ng-template>
-</div>
+<ng-container *ngIf="(score > 0)">
+    <div>
+        <rating [max]="10" [(ngModel)]="score" [readonly]="isReadonly" [customTemplate]="tt"></rating>
+        <ng-template #tt let-i="index" let-v="value">
+          <button *ngIf="isReadonly" class="btn btn-{{i < v ? 'warning' : 'default'}}">
+            {{i < v ? '&#9733;' : '&#9734;'}}
+          </button>
+          <button *ngIf="!isReadonly" (click)="setScore(i + 1)" class="btn btn-{{i < v ? 'warning' : 'default'}}">
+            {{i < v ? '&#9733;' : '&#9734;'}}
+          </button>
+
+        </ng-template>
+      </div>
+</ng-container>

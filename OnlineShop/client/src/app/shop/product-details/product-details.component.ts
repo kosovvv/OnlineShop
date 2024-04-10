@@ -20,7 +20,6 @@ export class ProductDetailsComponent implements OnInit {
   quantity = 1;
   quantityInBasket = 0;
 
-  newReview = { description: 'da' };
 
   constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private router : Router,
     private bcService: BreadcrumbService, private basketService: BasketService,
@@ -32,9 +31,6 @@ export class ProductDetailsComponent implements OnInit {
     this.loadProduct();
   }
 
-  submitReview(event : FormGroup) {
-    console.log(event);
-  }
 
   loadProduct() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');

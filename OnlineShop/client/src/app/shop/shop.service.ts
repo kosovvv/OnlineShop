@@ -6,6 +6,7 @@ import { Observable, map, of } from 'rxjs';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
+import { Review } from '../shared/models/review';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class ShopService {
   productCache = new Map<string,Pagination<Product[]>>();
 
   constructor(private http:HttpClient) { }
+
 
   getProducts(useCache = true) : Observable<Pagination<Product[]>> { 
 
@@ -76,6 +78,10 @@ export class ShopService {
 
   createProduct(data: any) {
     return this.http.post<Product>(this.baseUrl + 'products/create', data)
+  }
+
+  createReview(data : any) {
+    return this.http.post<Review>(this.baseUrl + 'review/create', data)
   }
 
   getProduct(id :number) { 
