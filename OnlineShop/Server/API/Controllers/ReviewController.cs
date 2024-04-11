@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Review;
@@ -17,6 +18,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost("create")]
+        [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> CreateReviewForProduct(CreateReviewDto reviewToCreate)
         {
             var createdReview = await this.reviewService.CreateReview(User,reviewToCreate);
@@ -44,6 +46,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPut("{reviewId}")]
+        [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> EditReview(int reviewId, CreateReviewDto reviewToEdit)
         {
             var editedReview = await this.reviewService.EditReview(reviewId, reviewToEdit);
@@ -56,6 +59,7 @@ namespace OnlineShop.WebAPI.Controllers
             return Ok(editedReview);
         }
         [HttpDelete("{reviewId}")]
+        [Authorize]
         public async Task<ActionResult> DeleteReview(int reviewId)
         {
             var isDeleted = await reviewService.DeleteReview(reviewId);

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
@@ -15,6 +16,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
             var email = User.RetrieveEmailFromPrincipal();
@@ -29,6 +31,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
             var email = User.RetrieveEmailFromPrincipal();
@@ -38,6 +41,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
             var email = User.RetrieveEmailFromPrincipal();
