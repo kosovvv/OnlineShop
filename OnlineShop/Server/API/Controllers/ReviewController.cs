@@ -46,7 +46,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpPut("{reviewId}")]
         public async Task<ActionResult<ReturnReviewDto>> EditReview(int reviewId, CreateReviewDto reviewToEdit)
         {
-            var editedReview = this.reviewService.EditReview(reviewId, reviewToEdit);
+            var editedReview = await this.reviewService.EditReview(reviewId, reviewToEdit);
 
             if (editedReview == null)
             {
