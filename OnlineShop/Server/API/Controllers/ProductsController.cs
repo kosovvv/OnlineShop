@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
 using OnlineShop.Services.Data.Exceptions;
@@ -7,8 +6,6 @@ using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OnlineShop.WebAPI.Controllers
 {

@@ -99,8 +99,9 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<bool> HasUserAlreadyReviewedProduct(ClaimsPrincipal user, int productId)
         {
             var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
-            return await context.Reviews.Include(x => x.Author).Include(x => x.ReviewedProduct)
+            var result = await context.Reviews.Include(x => x.Author).Include(x => x.ReviewedProduct)
                 .Where(x => x.ReviewedProduct.Id == productId && x.Author.Email == author.Email).AnyAsync();
+            return result;
         }
     }
 }

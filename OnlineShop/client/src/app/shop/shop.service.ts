@@ -120,7 +120,7 @@ export class ShopService {
   }
 
   editProduct(product: Product) {
-    return this.http.put<Product>(this.baseUrl + 'products/edit/' + product.id, product).pipe(
+    return this.http.put<Product>(this.baseUrl + 'products/' + product.id, product).pipe(
       tap(response => {
         const cache = this.productCache.get(Object.values(this.shopParams).join('-'));
         if (cache) {
@@ -155,7 +155,7 @@ export class ShopService {
   
 
   deleteProduct(id : number) {
-    return this.http.delete(this.baseUrl + 'products/delete/' + id).pipe();
+    return this.http.delete(this.baseUrl + 'products/' + id).pipe();
   }
 
   deleteReview(id: number): Observable<any> {
