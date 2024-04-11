@@ -43,6 +43,9 @@ export class ShopService {
     }
   
     let params = new HttpParams();
+    params = params.append("sort", this.shopParams.sort);
+    params = params.append("pageIndex", this.shopParams.pageNumber);
+    params = params.append("pageSize", this.shopParams.pageSize);
   
     if (this.shopParams.brandId > 0) {
       params = params.append("brandId", this.shopParams.brandId);
@@ -50,13 +53,9 @@ export class ShopService {
     if (this.shopParams.typeId > 0) {
       params = params.append("typeId", this.shopParams.typeId);
     }
-    params = params.append("sort", this.shopParams.sort);
-    params = params.append("pageIndex", this.shopParams.pageNumber);
-    params = params.append("pageSize", this.shopParams.pageSize);
-  
     if (this.shopParams.search) {
       params = params.append("search", this.shopParams.search);
-    }
+    }    
   
     return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products', { params }).pipe(
       tap(response => {
