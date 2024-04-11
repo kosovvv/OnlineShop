@@ -55,6 +55,12 @@ namespace OnlineShop.WebAPI.Controllers
 
             return Ok(editedReview);
         }
+        [HttpDelete("{reviewId}")]
+        public async Task<ActionResult> DeleteReview(int reviewId)
+        {
+            var isDeleted = await reviewService.DeleteReview(reviewId);
+            return isDeleted ? Ok() : NotFound();
+        }
 
         [HttpGet("isReviewed/{productId}")]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)

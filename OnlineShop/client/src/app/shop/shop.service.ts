@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../shared/models/products';
 import { Pagination } from '../shared/models/pagination';
-import { Observable, map, of } from 'rxjs';
+import { Observable, map, of, tap } from 'rxjs';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
@@ -22,6 +22,7 @@ export class ShopService {
   pagination?: Pagination<Product[]>;
   shopParams = new ShopParams();
   productCache = new Map<string,Pagination<Product[]>>();
+  reviewCache = new Map<number, Review[]>();
 
   constructor(private http:HttpClient) { }
 
@@ -80,12 +81,30 @@ export class ShopService {
     return this.http.post<Product>(this.baseUrl + 'products/create', data)
   }
 
-  createReview(data : any) {
-    return this.http.post<Review>(this.baseUrl + 'review/create', data)
+  createReview(data: any): Observable<Review> {
+    return this.http.post<Review>(this.baseUrl + 'review/create', data).pipe(
+      tap(review => {
+        const productId = data.reviewedProduct.id;
+        if (productId) {
+          const reviews = this.reviewCache.get(productId)!;
+          reviews.unshift(review);
+          this.reviewCache.set(productId, reviews);
+        }
+      })
+    );
   }
+  
+  getReviewsByProduct(productId: number, useCache = true): Observable<Review[]> {
+    if (useCache && this.reviewCache.has(productId)) {
+      return of(this.reviewCache.get(productId)!); 
+    }
 
-  getReviewsByProduct(productId: number) {
-    return this.http.get<Review[]>(this.baseUrl + `review/${productId}`)
+    return this.http.get<Review[]>(this.baseUrl + `review/${productId}`).pipe(
+      map(reviews => {
+        this.reviewCache.set(productId, reviews); 
+        return reviews;
+      })
+    );
   }
 
   getProduct(id :number) { 
@@ -118,13 +137,39 @@ export class ShopService {
     )
   }
 
-  editReview(id: number, data : any) {
-    return this.http.put<Review>(this.baseUrl + `review/${id}`, data);
+  editReview(id: number, data: any): Observable<Review> {
+    return this.http.put<Review>(this.baseUrl + `review/${id}`, data).pipe(
+      tap(updatedReview => {
+        this.reviewCache.forEach((reviews, productId) => {
+          const index = reviews.findIndex(review => review.id === id);
+          if (index !== -1) {
+            reviews[index] = updatedReview;
+            this.reviewCache.set(productId, reviews);
+          }
+        });
+      })
+    );
   }
+  
 
   deleteProduct(id : number) {
-    return this.http.delete(this.baseUrl + 'products/delete/' + id);
+    return this.http.delete(this.baseUrl + 'products/delete/' + id).pipe();
   }
+
+  deleteReview(id: number): Observable<any> {
+    return this.http.delete(this.baseUrl + `review/${id}`).pipe(
+      tap(() => {
+        this.reviewCache.forEach((reviews, productId) => {
+          const index = reviews.findIndex(review => review.id === id);
+          if (index !== -1) {
+            reviews.splice(index, 1);
+            this.reviewCache.set(productId, reviews);
+          }
+        });
+      })
+    );
+  }
+  
 
   getBrands() {
     if (this.brands.length > 0) {

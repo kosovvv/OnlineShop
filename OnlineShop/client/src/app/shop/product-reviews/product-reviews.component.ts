@@ -24,6 +24,7 @@ export class ProductReviewsComponent implements OnInit {
       this.shopService.getReviewsByProduct(productId).subscribe({
         next: (reviews) => {
           this.reviews = reviews;
+          console.log(reviews);
         } 
       })
     }
