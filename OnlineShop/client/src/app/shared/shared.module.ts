@@ -15,6 +15,7 @@ import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { RatingComponent } from './rating/rating.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
+import { ElapsedTimePipe } from './pipes/elapsed-time';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RatingModule } from 'ngx-bootstrap/rating';
     TextInputComponent,
     StepperComponent,
     BasketSummaryComponent,
-    RatingComponent
+    RatingComponent,
+    ElapsedTimePipe
   ],
   imports: [
     CommonModule,
@@ -51,7 +53,8 @@ import { RatingModule } from 'ngx-bootstrap/rating';
     StepperComponent,
     CdkStepperModule,
     BasketSummaryComponent,
-    RatingComponent
+    RatingComponent,
+    ElapsedTimePipe
   ]
 })
 export class SharedModule { }

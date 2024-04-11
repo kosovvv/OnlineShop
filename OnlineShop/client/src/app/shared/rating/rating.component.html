@@ -1,6 +1,6 @@
 <ng-container *ngIf="(score > 0 || isReadonly == false)">
     <div>
-        <rating [max]="10" [(ngModel)]="score" [readonly]="isReadonly" [customTemplate]="tt"></rating>
+        <rating [max]="10" [(ngModel)]="score" style="font-size: 20px;" [readonly]="isReadonly" [customTemplate]="tt"></rating>
         <ng-template #tt let-i="index" let-v="value">
           <button *ngIf="isReadonly" class="btn btn-{{i < v ? 'warning' : 'default'}}">
             {{i < v ? '&#9733;' : '&#9734;'}}

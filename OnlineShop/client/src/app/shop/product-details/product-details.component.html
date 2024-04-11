@@ -7,7 +7,7 @@
             <div class="col-6 mt-5">
                 <h2>{{product.name}}</h2>
                 <p class="card-block card-header" style="margin:10px 0;">
-                    <b><i>Average rating:</i> {{ product.averageScore | number:'1.2-2' }}</b>
+                    <b><i>Average rating:</i> {{ product.averageScore | number:'1.2-2' }} <i>({{product.reviewsCount}} reviews)</i></b>
                   </p>
                 <app-rating [isReadonly]="true" [score]="product.averageScore"></app-rating>
                 <p style="font-size: 2em;">{{product.price | currency}}</p>
