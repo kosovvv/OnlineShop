@@ -5,6 +5,7 @@ using OnlineShop.Data;
 using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using Stripe;
@@ -94,7 +95,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (order == null)
             {
-                return null;
+                throw new UpdateOrderFailedException("Order to update not found.");
             }
 
             order.Status = OrderStatus.PaymentFailed;
@@ -108,7 +109,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (order == null)
             {
-                return null;
+                throw new UpdateOrderFailedException("Order to update not found.");
             }
 
             order.Status = OrderStatus.PaymentRecieved;

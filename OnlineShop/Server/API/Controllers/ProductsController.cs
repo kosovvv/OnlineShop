@@ -1,89 +1,126 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class ProductsController : BaseController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ProductsController : ControllerBase
     {
-        private readonly IProductService productService;
+        private readonly IProductService _productService;
+
         public ProductsController(IProductService productService)
         {
-            this.productService = productService;
+            _productService = productService;
         }
 
         [HttpGet]
-        //[Cached(40)]
-        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts
-            ([FromQuery] ProductParams productParams)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
+            [FromQuery] ProductParams productParams)
         {
-            var totalItems = await productService.GetProductsCountAsync(productParams);
-
-            var products = await productService.GetProductsAsync(productParams);
-
-            return Ok(new Pagination<ProductToReturnDto>
-                (productParams.PageIndex, productParams.PageSize, totalItems, products));
+            var totalItems = await _productService.GetProductsCountAsync(productParams);
+            var products = await _productService.GetProductsAsync(productParams);
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, products));
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        //[Cached(300)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
-            var product = await productService.GetProductByIdAsync(id);
-
-            if (product == null)
+            try
             {
-                return NotFound(new ApiResponse(StatusCodes.Status404NotFound));
+                var product = await _productService.GetProductByIdAsync(id);
+                return Ok(product);
             }
-
-            return Ok(product);
+            catch (ProductNotExistingException ex)
+            {
+                return NotFound(new ApiResponse(404, ex.Message));
+            }
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ProductToReturnDto>> CreateProduct(ProductToCreateDto product)
-        {        
-            var result = await productService.CreateProduct(product);
-
-            return Ok(result);
-        }
-
-        [HttpPut("edit/{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ProductToReturnDto>> EditProduct(int id, ProductToCreateDto product)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<ProductToReturnDto>> AddProduct(ProductToCreateDto product)
         {
-            var result = await this.productService.EditProduct(id, product);
-            return Ok(result);
+            try
+            {
+                var createdProduct = await _productService.CreateProduct(product);
+                return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
+            }
+            catch (CreateExistringProductException ex)
+            {   
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+            catch (InvalidProductException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteProduct(int id)
+        public async Task<ActionResult<ProductToReturnDto>> UpdateProduct(int id, [FromBody] ProductToCreateDto product)
         {
-            var isDeleted = await productService.DeleteProduct(id);
-            return isDeleted ? Ok() : NotFound();
+            try
+            {
+                var updatedProduct = await _productService.EditProduct(id, product);
+                return Ok(updatedProduct);
+            }
+            catch (ProductNotExistingException ex)
+            {
+                return NotFound(new ApiResponse(404, ex.Message));
+            }
+            catch (InvalidProductException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
         }
 
-        //[Cached(10)]
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> RemoveProduct(int id)
+        {
+            var isDeleted = await _productService.DeleteProduct(id);
+            if (isDeleted)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound(new ApiResponse(404, "Product not found."));
+            }
+        }
+
         [HttpGet("brands")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
         {
-            return Ok(await productService.GetProductBrandsAsync());
+            return Ok(await _productService.GetProductBrandsAsync());
         }
 
-        //[Cached(10)]
         [HttpGet("types")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
         {
-            return Ok(await productService.GetProductTypesAsync());
+            return Ok(await _productService.GetProductTypesAsync());
         }
     }
 }

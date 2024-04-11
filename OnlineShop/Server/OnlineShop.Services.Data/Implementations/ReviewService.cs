@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels.Review;
@@ -35,13 +36,13 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (product == null || author == null)
             {
-                return null;
+                throw new InvalidReviewException("Error creating review");
             }
             var hasUserAlreadyReviewed = await this.HasUserAlreadyReviewedProduct(user, (int)product.Id);
 
             if (hasUserAlreadyReviewed)
             {
-                return null;
+                throw new ReviewAlreadyExistsException("The user already reviewed this product");
             }
 
             reviewToCreate.Author = author;
@@ -77,7 +78,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (reviewToEdit == null) 
             {
-                return null;
+                throw new InvalidReviewException("Invalid review to edit.");
             }
 
             reviewToEdit.Description = review.Description;

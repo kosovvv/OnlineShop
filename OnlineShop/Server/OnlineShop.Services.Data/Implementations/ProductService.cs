@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
 using OnlineShop.Models;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Product;
@@ -24,7 +25,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (isProductExisting != null)
             {
-                return null;
+                throw new CreateExistringProductException("Product with that name already exists.");
             }
 
             var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);
@@ -34,7 +35,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (productType == null || productBrand == null)
             {
-                return null;
+                throw new InvalidProductException("Invalid type or brand.");
             }
 
             productToCreate.ProductBrand = productType;
@@ -51,7 +52,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (existingProduct == null)
             {
-                return null;
+                throw new ProductNotExistingException("Product not found.");
             }
 
             existingProduct.Name = product.Name;
@@ -87,6 +88,11 @@ namespace OnlineShop.Services.Data.Implementations
         {
             var product = await context.Products.Include(x => x.ProductBrand)
                 .Include(x => x.ProductType).Include(x => x.Reviews).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (product == null)
+            {
+                throw new ProductNotExistingException("The product you want to review is not existing");
+            }
 
             return mapper.Map<Product, ProductToReturnDto>(product);
         }

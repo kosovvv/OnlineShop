@@ -7,6 +7,7 @@ using OnlineShop.Web.ViewModels.Order;
 using OnlineShop.Web.ViewModels.Address;
 using AutoMapper;
 using OnlineShop.Data.Models.Identity;
+using OnlineShop.Services.Data.Exceptions;
 
 namespace OnlineShop.Services.Data.Implementations
 {
@@ -72,7 +73,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (result <= 0)
             {
-                return null;
+                throw new CreateOrderFailedException("Error creating order.");
             }
 
             return mapper.Map<Order, OrderToReturnDto>(order);

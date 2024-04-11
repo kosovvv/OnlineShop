@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Models;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using StackExchange.Redis;
@@ -37,7 +38,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (!created)
             {
-                return null;
+                throw new CreateBasketException("Error creating basket.");
             }
 
             return await this.GetBasketAsync(basket.Id);

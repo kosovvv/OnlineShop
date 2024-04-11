@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Models;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 
@@ -24,9 +25,15 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
         {
-            var updatedBasket = await basketService.UpdateBasketAsync(basket);
-
-            return Ok(updatedBasket);
+            try
+            {
+                var updatedBasket = await basketService.UpdateBasketAsync(basket);
+                return Ok(updatedBasket);
+            }
+            catch (CreateBasketException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
         }
 
         [HttpDelete]

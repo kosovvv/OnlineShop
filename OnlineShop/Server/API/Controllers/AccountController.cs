@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
@@ -38,26 +39,35 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ReturnAddressDto>> UpdateUserAdresss(ReturnAddressDto address)
         {
-            var updatedUser = await this.accountService.UpdateUserAdresss(User, address);
-
-            if (updatedUser == null)
+            try
             {
-                return BadRequest("Problem updating user");
+                var updatedUser = await this.accountService.UpdateUserAdresss(User, address);
+                return Ok(updatedUser);
             }
-
-            return Ok(updatedUser);
+            catch (SavingUserAddressException ex)
+            {
+                return BadRequest(new ApiResponse(404, ex.Message));
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var loggedUser = await this.accountService.Login(loginDto);
-
-            if (loggedUser == null)
+            try
             {
-                return Unauthorized(new ApiResponse(401));
+                var loggedUser = await this.accountService.Login(loginDto);
+                return Ok(loggedUser);
             }
-            return Ok(loggedUser);
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(new ApiResponse(404, ex.Message));
+                throw;
+            }
+            catch (LoginFailedException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+                throw;
+            }
         }
 
         [HttpPost("register")]
@@ -71,13 +81,16 @@ namespace OnlineShop.WebAPI.Controllers
                 });
             }
 
-            var registeredUser = await this.accountService.Register(registerDto);
-
-            if (registeredUser == null)
+            try
             {
-                return BadRequest(new ApiResponse(400));
+                var registeredUser = await this.accountService.Register(registerDto);
+                return Ok(registeredUser);
             }
-            return Ok(registeredUser);
+            catch (SignUpFailedException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+                throw;
+            }
         }
     }
 }

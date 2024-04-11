@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using OnlineShop.Data.Models.Identity;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
@@ -60,14 +61,14 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (user == null)
             {
-                return null;
+                throw new UserNotFoundException("User not found.");
             }
 
             var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded)
             {
-                return null;
+                throw new LoginFailedException("Error logging in.");
             }
 
             return new UserDto
@@ -92,7 +93,8 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (!result.Succeeded)
             {
-                return null;
+                var errorMessages = result.Errors.Select(e => e.Description);
+                throw new SignUpFailedException("Error signing up: " + string.Join(", ", errorMessages));
             }
 
             await userManager.AddToRoleAsync(user, Roles.User);
@@ -115,12 +117,12 @@ namespace OnlineShop.Services.Data.Implementations
 
             var result = await userManager.UpdateAsync(user);
 
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                return mapper.Map<Address, ReturnAddressDto>(user.Address);
+                throw new SavingUserAddressException("Error saving email address");
             }
 
-            return null;
+            return mapper.Map<Address, ReturnAddressDto>(user.Address);
         }
 
     }

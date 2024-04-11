@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Review;
@@ -21,42 +22,56 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> CreateReviewForProduct(CreateReviewDto reviewToCreate)
         {
-            var createdReview = await this.reviewService.CreateReview(User,reviewToCreate);
-
-            if (createdReview == null)
+            try
             {
-                return BadRequest(new ApiResponse(400, "Error creating review"));
+                var createdReview = await this.reviewService.CreateReview(User, reviewToCreate);
+                return Ok(createdReview);
             }
-
-            return Ok(createdReview);
+            catch (InvalidReviewException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+            catch (ReviewAlreadyExistsException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
         }
 
         [HttpGet("{productId}")]
         public async Task<ActionResult<ICollection<ReturnReviewDto>>> GetReviewsByProduct(int productId)
         {
-            var product = await this.productService.GetProductByIdAsync(productId);
-
-            if (product == null)
+            try
             {
-                return BadRequest(new ApiResponse(400, "No such product"));
+                var product = await this.productService.GetProductByIdAsync(productId);
+                var reviews = await this.reviewService.GetReviewsByProduct(productId);
+                return Ok(reviews);
             }
-
-            var reviews = await this.reviewService.GetReviewsByProduct(productId);
-            return Ok(reviews);
+            catch (ProductNotExistingException ex)
+            {
+                return NotFound(new ApiResponse(404, ex.Message));
+            }
         }
 
         [HttpPut("{reviewId}")]
         [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> EditReview(int reviewId, CreateReviewDto reviewToEdit)
         {
-            var editedReview = await this.reviewService.EditReview(reviewId, reviewToEdit);
-
-            if (editedReview == null)
+            try
             {
-                return BadRequest(new ApiResponse(400, "Failed to edit product"));
-            }
+                var editedReview = await this.reviewService.EditReview(reviewId, reviewToEdit);
 
-            return Ok(editedReview);
+                if (editedReview == null)
+                {
+                    return BadRequest(new ApiResponse(400, "Failed to edit review"));
+                }
+
+                return Ok(editedReview);
+            }
+            catch (InvalidReviewException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+            
         }
         [HttpDelete("{reviewId}")]
         [Authorize]

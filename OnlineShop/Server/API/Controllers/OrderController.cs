@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Data.Models.OrderAggregate;
+using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
@@ -20,14 +21,17 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
             var email = User.RetrieveEmailFromPrincipal();
-            var order = await orderService.
-                CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
-
-            if (order == null)
+            try
             {
-                return BadRequest(new ApiResponse(400, "Problem creating order"));
+                var order = await orderService.
+                CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
+                return Ok(order);
             }
-            return Ok(order);
+            catch (CreateOrderFailedException ex)
+            {
+                return BadRequest(new ApiResponse(400, ex.Message));
+            }
+            
         }
 
         [HttpGet]
