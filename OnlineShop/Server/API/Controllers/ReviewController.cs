@@ -43,6 +43,19 @@ namespace OnlineShop.WebAPI.Controllers
             return Ok(reviews);
         }
 
+        [HttpPut("{reviewId}")]
+        public async Task<ActionResult<ReturnReviewDto>> EditReview(int reviewId, CreateReviewDto reviewToEdit)
+        {
+            var editedReview = this.reviewService.EditReview(reviewId, reviewToEdit);
+
+            if (editedReview == null)
+            {
+                return BadRequest(new ApiResponse(400, "Failed to edit product"));
+            }
+
+            return Ok(editedReview);
+        }
+
         [HttpGet("isReviewed/{productId}")]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
         {
