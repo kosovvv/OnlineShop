@@ -1,0 +1,15 @@
+<section style="background-color: #f5f5f5;">
+    <div class="container my-5 py-5">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-12 col-lg-10">
+          <div *ngIf="reviews && reviews.length > 0; else noReviews" class="card text-dark">
+            <app-review-card [reviews]="reviews"></app-review-card>
+          </div>
+        </div>
+        <ng-template #noReviews>
+            <h1>No reviews available.</h1>
+        </ng-template>
+      </div>
+    </div>
+  </section>
+  

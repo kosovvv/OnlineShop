@@ -97,10 +97,9 @@ namespace OnlineShop.Services.Data.Implementations
             query = ApplyPaging(query, productParams);
             query = ApplySorting(query, productParams);
             query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
-            var products = await query.ToListAsync();
 
-            var result = mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
-            return result;
+            var products = await query.ToListAsync();
+            return mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
         }
 
         public async Task<IEnumerable<ProductTypeDto>> GetProductTypesAsync()
@@ -132,21 +131,13 @@ namespace OnlineShop.Services.Data.Implementations
 
         private static IQueryable<Product> ApplySorting(IQueryable<Product> query, ProductParams productParams)
         {
-            switch (productParams.Sort)
+            query = productParams.Sort switch
             {
-                case "priceAsc":
-                    query = query.OrderBy(x => x.Price);
-                    break;
-                case "priceDesc":
-                    query = query.OrderByDescending(x => x.Price);
-                    break;
-                case "name":
-                    query = query.OrderBy(x => x.Name);
-                    break;
-                default:
-                    query = query.OrderBy(x => x.Id);
-                    break;
-            }
+                "priceAsc" => query.OrderBy(x => x.Price),
+                "priceDesc" => query.OrderByDescending(x => x.Price),
+                "name" => query.OrderBy(x => x.Name),
+                _ => query.OrderBy(x => x.Id),
+            };
             return query;
         }
     }

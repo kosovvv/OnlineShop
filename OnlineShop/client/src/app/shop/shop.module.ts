@@ -9,6 +9,8 @@ import { ShopRoutingModule } from './shop-routing.module';
 import { ProductCreateComponent } from './product-create/product-create.component';
 import { ProductEditComponent } from './product-edit/product-edit.component';
 import { AddReviewComponent } from './add-review/add-review.component';
+import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
+import { ReviewCardComponent } from './review-card/review-card.component';
 
 
 
@@ -19,7 +21,9 @@ import { AddReviewComponent } from './add-review/add-review.component';
     ProductDetailsComponent,
     ProductCreateComponent,
     ProductEditComponent,
-    AddReviewComponent
+    AddReviewComponent,
+    ProductReviewsComponent,
+    ReviewCardComponent
   ],
   imports: [
     CommonModule,

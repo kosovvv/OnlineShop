@@ -84,6 +84,10 @@ export class ShopService {
     return this.http.post<Review>(this.baseUrl + 'review/create', data)
   }
 
+  getReviewsByProduct(productId: number) {
+    return this.http.get<Review[]>(this.baseUrl + `review/${productId}`)
+  }
+
   getProduct(id :number) { 
     const product = [...this.productCache.values()]
     .reduce((acc, paginatedResult) => {

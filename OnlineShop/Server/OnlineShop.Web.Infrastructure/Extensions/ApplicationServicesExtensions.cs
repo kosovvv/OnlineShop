@@ -7,6 +7,7 @@ using OnlineShop.Data;
 using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Implementations;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Services.Mapping;
 using OnlineShop.Web.ViewModels;
 using StackExchange.Redis;
 
@@ -23,6 +24,8 @@ namespace OnlineShop.Web.Infrastructure
             var client = new MongoClient(connectionString);
             var database = client.GetDatabase(databaseName);
 
+            services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddControllers();
             services.AddSingleton<IMongoDatabase>(database);
 
             services.AddDbContext<StoreContext>(options =>
@@ -62,6 +65,14 @@ namespace OnlineShop.Web.Infrastructure
 
                     return new BadRequestObjectResult(errorResponse);
                 };
+            });
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200");
+                });
             });
 
             return services;

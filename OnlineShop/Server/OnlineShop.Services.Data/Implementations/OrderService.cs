@@ -39,8 +39,7 @@ namespace OnlineShop.Services.Data.Implementations
             }
             // get deliverymethods
 
-            var deliveryMethod = await context.DeliveryMethods
-                .FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
+            var deliveryMethod = await context.DeliveryMethods.FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
 
             // calc subtotal
 
@@ -64,7 +63,7 @@ namespace OnlineShop.Services.Data.Implementations
             else
             {
                 order = new Order(items, buyerEmail, addressToSet,
-                deliveryMethod, subTotal, basket.PaymentIntentId);
+                    deliveryMethod, subTotal, basket.PaymentIntentId);
 
                 await context.Orders.AddAsync(order);
             }
