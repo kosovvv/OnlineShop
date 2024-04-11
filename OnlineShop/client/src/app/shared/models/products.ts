@@ -6,5 +6,6 @@ export interface Product {
     pictureUrl: string
     productType: string
     productBrand: string
-    averageScore: number;
+    averageScore: number
+    reviewsCount: number;
 } 

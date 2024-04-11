@@ -1,16 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-rating',
   templateUrl: './rating.component.html',
   styleUrls: ['./rating.component.scss']
 })
-export class RatingComponent {
+export class RatingComponent  {
   
   @Output('emitOutput') emitOutput = new EventEmitter<number>();
   @Input() score! :number
   @Input() isReadonly! : boolean
-
 
   setScore(score: number) {
     this.score = score;

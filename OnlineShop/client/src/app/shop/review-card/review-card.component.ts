@@ -10,6 +10,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ReviewCardComponent {
  @Input() reviews : Review[] = [];
+ @Output() reviewDeletedEvent = new EventEmitter<boolean>();
+ @Output() reviewEdittedEvent = new EventEmitter<Review>();
 
   constructor(private shopService: ShopService, private toastr: ToastrService) {}
 
@@ -17,7 +19,12 @@ export class ReviewCardComponent {
   this.shopService.deleteReview(reviewId).subscribe({
     next: () => {
       this.toastr.success('Successfully deleted review');
+      this.reviewDeletedEvent.emit(true);
     }
   });
+ }
+
+ onReviewEdit($event : Review) {
+    this.reviewEdittedEvent.emit($event);
  }
 }

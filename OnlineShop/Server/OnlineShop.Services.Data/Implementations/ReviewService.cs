@@ -70,7 +70,10 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<ReturnReviewDto> EditReview(int id, CreateReviewDto review)
         {
-            var reviewToEdit = await this.context.Reviews.FirstOrDefaultAsync(x => x.Id == id);
+            var reviewToEdit = await this.context.Reviews
+                .Include(x => x.Author)
+                .Include(x => x.ReviewedProduct)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (reviewToEdit == null) 
             {
@@ -95,7 +98,7 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<bool> HasUserAlreadyReviewedProduct(ClaimsPrincipal user, int productId)
         {
             var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
-            return await context.Reviews
+            return await context.Reviews.Include(x => x.Author).Include(x => x.ReviewedProduct)
                 .Where(x => x.ReviewedProduct.Id == productId && x.Author.Email == author.Email).AnyAsync();
         }
     }

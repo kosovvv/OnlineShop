@@ -18,7 +18,7 @@
                     <span class="me-2" data-bs-toggle="modal" data-bs-target="#editModal" style="cursor: pointer;">
                         <i class="bi bi-pencil-fill ms-2"></i>
                     </span> 
-                    <app-edit-review [review]="review"></app-edit-review>
+                    <app-edit-review (onReviewEdit)="onReviewEdit($event)" [review]="review"></app-edit-review>
 
                     <span (click)="deleteReview(review.id)" style="cursor: pointer;">
                         <i class="bi bi-trash-fill"></i>

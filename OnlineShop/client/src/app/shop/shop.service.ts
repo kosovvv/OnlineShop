@@ -27,46 +27,45 @@ export class ShopService {
   constructor(private http:HttpClient) { }
 
 
-  getProducts(useCache = true) : Observable<Pagination<Product[]>> { 
-
+  getProducts(useCache = true): Observable<Pagination<Product[]>> {
     if (!useCache) {
       this.productCache = new Map();
     }
-
+  
     if (this.productCache.size > 0 && useCache) {
       if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
-        this.pagination = this.productCache.get(Object.values(this.shopParams).join('-'))
-
+        this.pagination = this.productCache.get(Object.values(this.shopParams).join('-'));
+  
         if (this.pagination) {
           return of(this.pagination);
         }
       }
     }
-
+  
     let params = new HttpParams();
-
+  
     if (this.shopParams.brandId > 0) {
       params = params.append("brandId", this.shopParams.brandId);
     }
-    if (this.shopParams.typeId > 0) { 
+    if (this.shopParams.typeId > 0) {
       params = params.append("typeId", this.shopParams.typeId);
     }
-    params = params.append("sort", this.shopParams.sort)
-    params = params.append("pageIndex", this.shopParams.pageNumber)
-    params = params.append("pageSize", this.shopParams.pageSize)
-
+    params = params.append("sort", this.shopParams.sort);
+    params = params.append("pageIndex", this.shopParams.pageNumber);
+    params = params.append("pageSize", this.shopParams.pageSize);
+  
     if (this.shopParams.search) {
-      params = params.append("search",this.shopParams.search)
+      params = params.append("search", this.shopParams.search);
     }
-
-    return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products', {params}).pipe(
-      map(response => {
-        this.productCache.set(Object.values(this.shopParams).join('-'), response)
+  
+    return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products', { params }).pipe(
+      tap(response => {
+        this.productCache.set(Object.values(this.shopParams).join('-'), response);
         this.pagination = response;
-        return response;
       })
     );
   }
+  
 
 
   setShopParams(params: ShopParams) {
@@ -87,7 +86,7 @@ export class ShopService {
         const productId = data.reviewedProduct.id;
         if (productId) {
           const reviews = this.reviewCache.get(productId)!;
-          reviews.unshift(review);
+          reviews.push(review);
           this.reviewCache.set(productId, reviews);
         }
       })
@@ -98,14 +97,14 @@ export class ShopService {
     if (useCache && this.reviewCache.has(productId)) {
       return of(this.reviewCache.get(productId)!); 
     }
-
+  
     return this.http.get<Review[]>(this.baseUrl + `review/${productId}`).pipe(
-      map(reviews => {
+      tap(reviews => {
         this.reviewCache.set(productId, reviews); 
-        return reviews;
       })
     );
   }
+  
 
   getProduct(id :number) { 
     const product = [...this.productCache.values()]
@@ -121,10 +120,10 @@ export class ShopService {
     return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }
 
-  editProduct(product : Product) {
+  editProduct(product: Product) {
     return this.http.put<Product>(this.baseUrl + 'products/edit/' + product.id, product).pipe(
-      map(response => {
-        const cache = this.productCache.get(Object.values(this.shopParams).join('-'))
+      tap(response => {
+        const cache = this.productCache.get(Object.values(this.shopParams).join('-'));
         if (cache) {
           const index = cache.data.findIndex(x => x.id === product.id);
           if (index !== -1) {
@@ -132,9 +131,13 @@ export class ShopService {
             this.productCache.set(Object.values(this.shopParams).join('-'), cache); 
           }
         }
-        return response;
       })
-    )
+    );
+  }
+  
+  isProductAlreadyReviewdByUser(productId : number) {
+    console.log("asdsa")
+    return this.http.get<boolean>(this.baseUrl + `review/isReviewed/${productId}`)
   }
 
   editReview(id: number, data: any): Observable<Review> {
@@ -176,24 +179,23 @@ export class ShopService {
       return of(this.brands);
     }
     return this.http.get<Brand[]>(this.baseUrl + 'products/brands').pipe(
-      map(brands => {
+      tap(brands => {
         this.brands = brands;
-        return brands;
       })
-    )
+    );
   }
-
+  
   getTypes() {
     if (this.types.length > 0) {
       return of(this.types);
     }
     return this.http.get<Type[]>(this.baseUrl + 'products/types').pipe(
-      map(types => {
+      tap(types => {
         this.types = types;
-        return types;
       })
-    )
+    );
   }
+  
 
   uploadImage(data: FormData) {
     return this.http.post<FormData>(this.baseUrl + 'images/upload', data)

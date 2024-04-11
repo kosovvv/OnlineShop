@@ -7,7 +7,7 @@
             <div class="col-6 mt-5">
                 <h2>{{product.name}}</h2>
                 <p class="card-block card-header" style="margin:10px 0;">
-                    <b><i>Average rating:</i> {{product.averageScore}}</b>
+                    <b><i>Average rating:</i> {{ product.averageScore | number:'1.2-2' }}</b>
                   </p>
                 <app-rating [isReadonly]="true" [score]="product.averageScore"></app-rating>
                 <p style="font-size: 2em;">{{product.price | currency}}</p>
@@ -21,18 +21,18 @@
                     <button class="btn btn-outline-primary ms-4" (click)="updateBasket()" [disabled]="quantity === quantityInBasket">{{buttonText}}</button>
                     <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}" class="btn btn-outline-primary ms-2">Edit</button>
                     <button *ngIf="user.role == 'Admin'" (click)="deleteItem(product.id)" class="btn btn-outline-primary ms-2">Delete</button>
-                    <button type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Review</button>
+                    <button *ngIf="isReviewButtonActive" type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Review</button>
                 </div>
                 <div class="row mt-4">
                     <h4>Description</h4>
                     <p>{{product.description}}</p>
                 </div>
             </div>
-            <app-add-review [product]="product"></app-add-review>
+            <app-add-review (addReviewEvent)="updateButton($event)" [product]="product"></app-add-review>
         </div>
     </div>
     <ng-container *ngIf="product">
-        <app-product-reviews [productId]="product.id"></app-product-reviews>
+        <app-product-reviews (reviewEdited)="updateProduct($event)" (reviewDeleted)="updateButton($event)" [productId]="product.id"></app-product-reviews>
     </ng-container>
 </ng-container>
 

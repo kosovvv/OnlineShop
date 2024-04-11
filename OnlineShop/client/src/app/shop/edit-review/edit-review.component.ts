@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ShopService } from '../shop.service';
@@ -12,6 +12,7 @@ import { Review } from 'src/app/shared/models/review';
 export class EditReviewComponent {
   
   @Input() review!: Review
+  @Output() onReviewEdit = new EventEmitter<Review>();
   reviewForm!: FormGroup;
   @ViewChild("closeButton") closeButton!: ElementRef
 
@@ -29,9 +30,9 @@ export class EditReviewComponent {
   editReview() {
     this.shopService.editReview(this.review.id,this.reviewForm.value).subscribe({
       next: (updatedReview) => {
-        console.log(updatedReview)
         this.toastr.success("Successfully edited review!")
         this.closeButton.nativeElement.click();
+        this.onReviewEdit.emit(updatedReview);
       }
     })
   }

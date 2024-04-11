@@ -9,7 +9,7 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Rating</label>
-                        <app-rating (emitOutput)="setScore($event)" [isReadonly]="false"></app-rating>
+                        <app-rating (emitOutput)="setScore($event)" formControlName="description" [isReadonly]="false"></app-rating>
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlTextarea1" class="form-label">Description</label>

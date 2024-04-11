@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { of, switchMap, take } from 'rxjs';
 import { BasketService } from 'src/app/basket/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { ShopService } from '../shop.service';
@@ -9,6 +9,7 @@ import { AccountService } from 'src/app/account/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Basket } from 'src/app/shared/models/basket';
 import { FormGroup } from '@angular/forms';
+import { Review } from 'src/app/shared/models/review';
 
 @Component({
   selector: 'app-product-details',
@@ -16,9 +17,10 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent implements OnInit {
-  product?: Product;
+  product!: Product;
   quantity = 1;
   quantityInBasket = 0;
+  isReviewButtonActive = false;
 
 
   constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private router : Router,
@@ -31,28 +33,66 @@ export class ProductDetailsComponent implements OnInit {
     this.loadProduct();
   }
 
+  updateProduct($event: Review) {
+    if (this.product.reviewsCount == 1) {
+      this.product.averageScore = $event.score;
+    } else {
+      let sumRating = this.product.reviewsCount * this.product.averageScore;
+      sumRating += $event.score;
+      this.product.reviewsCount += 1;
+      this.product.averageScore = sumRating / this.product.reviewsCount;
+    }
+}
 
   loadProduct() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if (id) this.shopService.getProduct(+id).subscribe({
+    this.activatedRoute.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        const id = params.get('id');
+        if (id !== null && id !== undefined) {
+          return this.shopService.getProduct(+id);
+        } else {
+          return of(null);
+        }
+      })
+    ).subscribe({
       next: product => {
-        this.product = product;
-        this.bcService.set('@productDetails', product.name);
-        this.basketService.basketSource$.pipe(take(1)).subscribe({
-          next: basket => {
-            const item = basket?.items.find(x => x.id === +id);
-            if (item) {
-              this.quantity = item.quantity;
-              this.quantityInBasket = item.quantity;
+        if (product !== null) {
+          this.product = product;
+          this.checkIfIsUserReviewedProduct();
+          this.bcService.set('@productDetails', product.name);
+          this.basketService.basketSource$.pipe(take(1)).subscribe({
+            next: basket => {
+              if (this.product && this.product.id) {
+                const item = basket?.items.find(x => x.id === this.product?.id);
+                if (item) {
+                  this.quantity = item.quantity;
+                  this.quantityInBasket = item.quantity;
+                }
+              }
             }
-          }
-        })
+          });
+        } else {
+          console.log("No 'id' parameter found in the URL");
+        }
       },
       error: error => console.log(error)
-    })
+    });
+  }
+  
+  checkIfIsUserReviewedProduct() {
+    if (this.product) {
+      this.shopService.isProductAlreadyReviewdByUser(this.product.id).subscribe({
+        next: (isReviewed) => {
+          console.log(isReviewed)
+          this.isReviewButtonActive = !isReviewed
+        }
+      })
+    }
   }
 
-  
+  updateButton($event : boolean) {
+    this.isReviewButtonActive = $event;
+  }
 
   incrementQuantity() {
     this.quantity++;
@@ -95,11 +135,6 @@ export class ProductDetailsComponent implements OnInit {
       }
     });
   }
-
-  onReviewSubmit() {
-    // Send the newReview object to your server to save the review
-    // ... (implement logic to send data to server)
-}
 
   get buttonText() {
     return this.quantityInBasket === 0 ? 'Add to basket' : 'Update basket';

@@ -10,5 +10,6 @@
         public string ProductType { get; set; }
         public string ProductBrand { get; set; }
         public double AverageScore {get; set;}
+        public double ReviewsCount { get; set;}
     }
 }
