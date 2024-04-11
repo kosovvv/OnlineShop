@@ -15,9 +15,10 @@
             <div class="d-flex align-items-center mb-3">
                 <p class="mb-0">
                     {{ review.createdOn | date }}
-                    <span class="me-2" (click)="editReview()" style="cursor: pointer;">
+                    <span class="me-2" data-bs-toggle="modal" data-bs-target="#editModal" style="cursor: pointer;">
                         <i class="bi bi-pencil-fill ms-2"></i>
-                    </span>
+                    </span> 
+                    <app-edit-review [review]="review"></app-edit-review>
 
                     <span (click)="editReview()" style="cursor: pointer;">
                         <i class="bi bi-trash-fill"></i>

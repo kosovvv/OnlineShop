@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/shared/models/products';
 import { ShopService } from '../shop.service';
@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './add-review.component.html',
   styleUrls: ['./add-review.component.scss']
 })
-export class AddReviewComponent {
+export class AddReviewComponent implements OnInit {
   constructor(private fb: FormBuilder, private shopService: ShopService, private toastr: ToastrService) {}
 
   reviewForm!: FormGroup;

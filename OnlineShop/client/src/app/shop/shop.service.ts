@@ -118,6 +118,10 @@ export class ShopService {
     )
   }
 
+  editReview(id: number, data : any) {
+    return this.http.put<Review>(this.baseUrl + `review/${id}`, data);
+  }
+
   deleteProduct(id : number) {
     return this.http.delete(this.baseUrl + 'products/delete/' + id);
   }

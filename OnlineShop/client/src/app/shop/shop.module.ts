@@ -11,6 +11,7 @@ import { ProductEditComponent } from './product-edit/product-edit.component';
 import { AddReviewComponent } from './add-review/add-review.component';
 import { ProductReviewsComponent } from './product-reviews/product-reviews.component';
 import { ReviewCardComponent } from './review-card/review-card.component';
+import { EditReviewComponent } from './edit-review/edit-review.component';
 
 
 
@@ -23,7 +24,8 @@ import { ReviewCardComponent } from './review-card/review-card.component';
     ProductEditComponent,
     AddReviewComponent,
     ProductReviewsComponent,
-    ReviewCardComponent
+    ReviewCardComponent,
+    EditReviewComponent
   ],
   imports: [
     CommonModule,
