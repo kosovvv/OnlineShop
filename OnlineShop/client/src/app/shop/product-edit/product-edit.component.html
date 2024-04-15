@@ -1,12 +1,18 @@
 <div class="d-flex justify-content-center mt-5">
     <div class="col-6"> <!-- Adjusted the column size to accommodate wider inputs -->
         <form [formGroup]="productForm">
-            
+
             <app-text-input [formControl]="productForm.controls['name']" [label]="'Product Name'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['description']" [label]="'Description'" class="wider-input"></app-text-input> <!-- Added a class for wider input -->
+            <app-text-input [formControl]="productForm.controls['description']" [label]="'Description'"
+                class="wider-input"></app-text-input> <!-- Added a class for wider input -->
             <app-text-input [formControl]="productForm.controls['price']" [label]="'Price'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['productType']" [label]="'Product Type'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['productBrand']" [label]="'Product Brand'"></app-text-input>
+
+            <app-select-input [formControl]="productForm.controls['productType']" [label]="'Product Type'"
+                [options]="types" [defaultValue]="this.getDefaultProductTypeValue()"></app-select-input>
+
+
+            <app-select-input [formControl]="productForm.controls['productBrand']" [label]="'Product Brand'"
+                [options]="brands" [defaultValue]="this.getDefaultProdtyBrandValue()"></app-select-input>
 
             <ul class="text-danger list-unstyled" *ngIf="errors">
                 <li *ngFor="let error of errors">
@@ -14,7 +20,8 @@
                 </li>
             </ul>
             <div class="d-grid">
-                <button [disabled]="productForm.invalid" class="btn btn-lg btn-primary mt-3" type="submit" (click)="onSubmit()">Edit</button>
+                <button [disabled]="productForm.invalid" class="btn btn-lg btn-primary mt-3" type="submit"
+                    (click)="onSubmit()">Edit</button>
             </div>
         </form>
     </div>

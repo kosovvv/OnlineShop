@@ -1,23 +1,24 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ShopService } from '../shop.service';
 import { Router } from '@angular/router';
-import { of, switchMap } from 'rxjs';
+import { forkJoin, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { Type } from 'src/app/shared/models/type';
+import { Brand } from 'src/app/shared/models/brand';
 
 @Component({
   selector: 'app-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss']
 })
-export class ProductCreateComponent {
+export class ProductCreateComponent implements OnInit {
 
   fileName: string | null = null;
   image: File | null = null;
   errors: string[] | null = null;
-
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
-
+  types: Type[] = [];
+  brands : Brand[] = [];
   productForm = this.fb.group({
     name: ['', Validators.required],
     description: ['', [Validators.required,]],
@@ -26,6 +27,27 @@ export class ProductCreateComponent {
     productType: ['', [Validators.required]],
     productBrand: ['', [Validators.required]],
   })
+
+  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  
+  ngOnInit(): void {
+    this.getProductsAndTypes();
+  }
+
+  getProductsAndTypes() {
+    forkJoin([
+      this.shopService.getTypes(),
+      this.shopService.getBrands()
+    ]).subscribe({
+      next: ([types, brands]) => {
+        this.types = types;
+        this.brands = brands;
+      },
+      error: (error) => {
+        this.toastr.error(error);
+      }
+    });
+  }
 
   onSubmit() {
     const formData = this.GenerateFormData();

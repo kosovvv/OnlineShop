@@ -7,8 +7,6 @@ import { ShopService } from '../shop.service';
 import { Product } from 'src/app/shared/models/products';
 import { AccountService } from 'src/app/account/account.service';
 import { ToastrService } from 'ngx-toastr';
-import { Basket } from 'src/app/shared/models/basket';
-import { FormGroup } from '@angular/forms';
 import { Review } from 'src/app/shared/models/review';
 
 @Component({
@@ -58,6 +56,7 @@ export class ProductDetailsComponent implements OnInit {
       next: product => {
         if (product !== null) {
           this.product = product;
+          console.log(product);
           this.checkIfIsUserReviewedProduct();
           this.bcService.set('@productDetails', product.name);
           this.basketService.basketSource$.pipe(take(1)).subscribe({
@@ -72,7 +71,7 @@ export class ProductDetailsComponent implements OnInit {
             }
           });
         } else {
-          console.log("No 'id' parameter found in the URL");
+          this.toastr.error("No 'id' parameter found in the URL");
         }
       },
       error: error => console.log(error)

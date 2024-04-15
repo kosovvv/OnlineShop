@@ -26,6 +26,7 @@ export class EditReviewComponent {
     this.loadScoreAndDescription();
   }
 
+  
 
   editReview() {
     this.shopService.editReview(this.review.id,this.reviewForm.value).subscribe({

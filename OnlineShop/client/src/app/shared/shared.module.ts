@@ -16,6 +16,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RatingComponent } from './rating/rating.component';
 import { RatingModule } from 'ngx-bootstrap/rating';
 import { ElapsedTimePipe } from './pipes/elapsed-time';
+import { SelectInputComponent } from './components/select-input/select-input.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ElapsedTimePipe } from './pipes/elapsed-time';
     StepperComponent,
     BasketSummaryComponent,
     RatingComponent,
-    ElapsedTimePipe
+    ElapsedTimePipe,
+    SelectInputComponent
   ],
   imports: [
     CommonModule,
@@ -50,6 +52,7 @@ import { ElapsedTimePipe } from './pipes/elapsed-time';
     ReactiveFormsModule,
     BsDropdownModule,
     TextInputComponent,
+    SelectInputComponent,
     StepperComponent,
     CdkStepperModule,
     BasketSummaryComponent,

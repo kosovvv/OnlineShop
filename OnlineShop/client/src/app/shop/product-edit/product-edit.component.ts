@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ShopService } from '../shop.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
 import { BasketService } from 'src/app/basket/basket.service';
-import { take } from 'rxjs';
+import { forkJoin, of, switchMap, take } from 'rxjs';
 import { Basket, BasketItem } from 'src/app/shared/models/basket';
+import { Type } from 'src/app/shared/models/type';
+import { Brand } from 'src/app/shared/models/brand';
 
 @Component({
   selector: 'app-product-edit',
@@ -16,6 +18,8 @@ import { Basket, BasketItem } from 'src/app/shared/models/basket';
 })
 export class ProductEditComponent implements OnInit {
   errors: string[] | null = null;
+  types: Type[] = [];
+  brands : Brand[] = [];
 
   productForm = this.fb.group({
     id: [0, Validators.required],
@@ -35,21 +39,51 @@ export class ProductEditComponent implements OnInit {
   
   ngOnInit(): void {
     this.loadProduct();
+    this.getProductsAndTypes();
+  }
+
+  getProductsAndTypes() {
+    forkJoin([
+      this.shopService.getTypes(),
+      this.shopService.getBrands()
+    ]).subscribe({
+      next: ([types, brands]) => {
+        this.types = types;
+        this.brands = brands;
+      },
+      error: (error) => {
+        this.toastr.error(error);
+      }
+    });
   }
 
   loadProduct() {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    if (id) {
-      this.shopService.getProduct(+id).subscribe({
-        next: (product : Product) => {
-          this.productForm.patchValue(product);
-          console.log(product);
-          this.bcService.set('@editProduct', `Edit ${product.name}`);
-        },
-        error: error => this.toastr.error(error)
+    this.activatedRoute.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        const id = params.get('id');
+        console.log(id);
+        if (id !== null && id !== undefined) {
+          return this.shopService.getProduct(+id);
+        } else {
+          return of(null);
+        }
       })
-    }
+    ).subscribe({
+      next: (product: Product | null) => {
+        console.log(product);
+        if (product) {
+          console.log("in the next")
+          this.productForm.patchValue(product, {emitEvent: false});
+          this.bcService.set('@editProduct', `Edit ${product.name}`); 
+          console.log("in the next")
+        }
+      },
+      error: error => this.toastr.error(error)
+    })
+
   }
+
+  
 
   onSubmit() {
     this.shopService.editProduct(this.productForm.value as Product).subscribe({
@@ -76,6 +110,13 @@ export class ProductEditComponent implements OnInit {
     item.price = product.price;
     item.brand = product.productBrand;
     item.type = product.productType;
+  }
+
+  getDefaultProductTypeValue(): any {
+    return this.productForm.controls['productType'].value;
+  }
+  getDefaultProdtyBrandValue(): any {
+    return this.productForm.controls['productBrand'].value;
   }
 }
 

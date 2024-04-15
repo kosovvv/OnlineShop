@@ -1,12 +1,14 @@
 <div class="d-flex justify-content-center mt-5">
-    <div class="col-6"> <!-- Adjusted the column size to accommodate wider inputs -->
+    <div class="col-6">
         <form [formGroup]="productForm">
             
             <app-text-input [formControl]="productForm.controls['name']" [label]="'Product Name'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['description']" [label]="'Description'" class="wider-input"></app-text-input> <!-- Added a class for wider input -->
+            <app-text-input [formControl]="productForm.controls['description']" [label]="'Description'" class="wider-input"></app-text-input>
             <app-text-input [formControl]="productForm.controls['price']" [label]="'Price'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['productType']" [label]="'Product Type'"></app-text-input>
-            <app-text-input [formControl]="productForm.controls['productBrand']" [label]="'Product Brand'"></app-text-input>
+            
+            <app-select-input [formControl]="productForm.controls['productType']" controlName="productType" label="Product Type" [options]="types"></app-select-input>
+            <app-select-input [formControl]="productForm.controls['productBrand']" controlName="productBrand" label="Product Brand" [options]="brands"></app-select-input>
+            
 
             <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
             
