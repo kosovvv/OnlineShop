@@ -45,7 +45,7 @@ namespace OnlineShop.WebAPI.Controllers
                 var product = await this.productService.GetProductByIdAsync(id);
                 return Ok(product);
             }
-            catch (ProductNotExistingException ex)
+            catch (EntityNotExistingException ex)
             {
                 return NotFound(new ApiResponse(404, ex.Message));
             }
@@ -84,7 +84,7 @@ namespace OnlineShop.WebAPI.Controllers
                 var updatedProduct = await this.productService.EditProduct(id, product);
                 return Ok(updatedProduct);
             }
-            catch (ProductNotExistingException ex)
+            catch (EntityNotExistingException ex)
             {
                 return NotFound(new ApiResponse(404, ex.Message));
             }

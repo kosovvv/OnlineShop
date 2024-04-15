@@ -52,7 +52,7 @@ namespace OnlineShop.WebAPI.Controllers
                 var reviews = await this.reviewService.GetReviewsByProduct(productId);
                 return Ok(reviews);
             }
-            catch (ProductNotExistingException ex)
+            catch (EntityNotExistingException ex)
             {
                 return NotFound(new ApiResponse(404, ex.Message));
             }

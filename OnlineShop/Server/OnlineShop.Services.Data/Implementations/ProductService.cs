@@ -52,7 +52,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (existingProduct == null)
             {
-                throw new ProductNotExistingException("Product not found.");
+                throw new EntityNotExistingException("Product not found.");
             }
 
             existingProduct.Name = product.Name;
@@ -91,7 +91,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (product == null)
             {
-                throw new ProductNotExistingException("The product you want to review is not existing");
+                throw new EntityNotExistingException("The product you want to review is not existing");
             }
 
             return mapper.Map<Product, ProductToReturnDto>(product);
