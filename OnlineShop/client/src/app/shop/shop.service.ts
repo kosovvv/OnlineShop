@@ -177,7 +177,7 @@ export class ShopService {
     if (this.brands.length > 0) {
       return of(this.brands);
     }
-    return this.http.get<Brand[]>(this.baseUrl + 'products/brands').pipe(
+    return this.http.get<Brand[]>(this.baseUrl + 'brands').pipe(
       tap(brands => {
         this.brands = brands;
       })
@@ -188,7 +188,7 @@ export class ShopService {
     if (this.types.length > 0) {
       return of(this.types);
     }
-    return this.http.get<Type[]>(this.baseUrl + 'products/types').pipe(
+    return this.http.get<Type[]>(this.baseUrl + 'types').pipe(
       tap(types => {
         this.types = types;
       })
