@@ -50,6 +50,8 @@ namespace OnlineShop.Web.Infrastructure
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ITypeService, TypeService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

@@ -13,11 +13,15 @@ namespace OnlineShop.WebAPI.Controllers
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IProductService productService;
+        private readonly IBrandService brandService;
+        private readonly ITypeService typeService;
 
-        public ProductsController(IProductService productService)
+        public ProductsController(IProductService productService, IBrandService brandService, ITypeService typeService)
         {
-            _productService = productService;
+            this.productService = productService;
+            this.brandService = brandService;
+            this.typeService = typeService;
         }
 
         [HttpGet]
@@ -25,8 +29,8 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
             [FromQuery] ProductParams productParams)
         {
-            var totalItems = await _productService.GetProductsCountAsync(productParams);
-            var products = await _productService.GetProductsAsync(productParams);
+            var totalItems = await this.productService.GetProductsCountAsync(productParams);
+            var products = await this.productService.GetProductsAsync(productParams);
             return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, products));
         }
 
@@ -37,7 +41,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var product = await _productService.GetProductByIdAsync(id);
+                var product = await this.productService.GetProductByIdAsync(id);
                 return Ok(product);
             }
             catch (ProductNotExistingException ex)
@@ -54,7 +58,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var createdProduct = await _productService.CreateProduct(product);
+                var createdProduct = await this.productService.CreateProduct(product);
                 return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
             }
             catch (CreateExistringProductException ex)
@@ -76,7 +80,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var updatedProduct = await _productService.EditProduct(id, product);
+                var updatedProduct = await this.productService.EditProduct(id, product);
                 return Ok(updatedProduct);
             }
             catch (ProductNotExistingException ex)
@@ -95,7 +99,7 @@ namespace OnlineShop.WebAPI.Controllers
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult> RemoveProduct(int id)
         {
-            var isDeleted = await _productService.DeleteProduct(id);
+            var isDeleted = await this.productService.DeleteProduct(id);
             if (isDeleted)
             {
                 return NoContent();
@@ -110,14 +114,14 @@ namespace OnlineShop.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
         {
-            return Ok(await _productService.GetProductBrandsAsync());
+            return Ok(await this.brandService.GetProductBrandsAsync());
         }
 
         [HttpGet("types")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
         {
-            return Ok(await _productService.GetProductTypesAsync());
+            return Ok(await this.typeService.GetProductTypesAsync());
         }
     }
 }

@@ -7,6 +7,8 @@ using OnlineShop.Web.ViewModels.Address;
 
 namespace OnlineShop.WebAPI.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class AccountController : BaseController
     {
         private readonly IAccountService accountService;

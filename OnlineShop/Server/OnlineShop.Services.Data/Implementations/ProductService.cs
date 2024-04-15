@@ -107,17 +107,6 @@ namespace OnlineShop.Services.Data.Implementations
             var products = await query.ToListAsync();
             return mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
         }
-
-        public async Task<IEnumerable<ProductTypeDto>> GetProductTypesAsync()
-        {
-            var productTypes = await context.ProductTypes.AsNoTracking().ToListAsync();
-            return mapper.Map<IEnumerable<ProductType>, IEnumerable<ProductTypeDto>>(productTypes);
-        }
-        public async Task<IEnumerable<ProductBrandDto>> GetProductBrandsAsync()
-        {
-            var productTypes = await context.ProductBrands.AsNoTracking().ToListAsync();
-            return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ProductBrandDto>>(productTypes);
-        }
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
         {
             return query.AsNoTracking().Where(x =>

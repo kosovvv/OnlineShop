@@ -11,10 +11,6 @@ namespace OnlineShop.Services.Data.Interfaces
         Task<bool> DeleteProduct(int id);
         Task<ProductToReturnDto> GetProductByIdAsync(int id);
         Task<ICollection<ProductToReturnDto>> GetProductsAsync(ProductParams productParams);
-        Task<IEnumerable<ProductBrandDto>> GetProductBrandsAsync();
-        Task<IEnumerable<ProductTypeDto>> GetProductTypesAsync();
-        //Task<ProductTypeDto> GetProductTypeByNameAsync(string name);
-        //Task<ProductBrandDto> GetProductBrandByNameAsync(string name);
         Task<int> GetProductsCountAsync(ProductParams productParams);
     }
 }
