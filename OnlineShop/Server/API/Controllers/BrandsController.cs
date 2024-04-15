@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Interfaces;
-using OnlineShop.Web.ViewModels.Product;
+using OnlineShop.Web.ViewModels.Brand;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -18,7 +18,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
+        public async Task<ActionResult<IEnumerable<ReturnProductBrandDto>>> GetProductBrands()
         {
             var brands = await this.brandService.GetProductBrandsAsync();
 

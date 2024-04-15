@@ -14,14 +14,10 @@ namespace OnlineShop.WebAPI.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService productService;
-        private readonly IBrandService brandService;
-        private readonly ITypeService typeService;
 
-        public ProductsController(IProductService productService, IBrandService brandService, ITypeService typeService)
+        public ProductsController(IProductService productService)
         {
             this.productService = productService;
-            this.brandService = brandService;
-            this.typeService = typeService;
         }
 
         [HttpGet]
@@ -66,7 +62,7 @@ namespace OnlineShop.WebAPI.Controllers
                 var createdProduct = await this.productService.CreateProduct(product);
                 return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
             }
-            catch (CreateExistringProductException ex)
+            catch (CreateExistringEntityException ex)
             {   
                 return BadRequest(new ApiResponse(400, ex.Message));
             }

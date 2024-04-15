@@ -25,7 +25,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (isProductExisting != null)
             {
-                throw new CreateExistringProductException("Product with that name already exists.");
+                throw new CreateExistringEntityException("Product with that name already exists.");
             }
 
             var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);

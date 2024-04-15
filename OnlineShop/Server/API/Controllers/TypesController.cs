@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Interfaces;
-using OnlineShop.Web.ViewModels.Product;
+using OnlineShop.Web.ViewModels.Type;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -17,7 +17,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
+        public async Task<ActionResult<IEnumerable<ReturnProductTypeDto>>> GetProductTypes()
         {
             var types = await this.typeService.GetProductTypesAsync();
             

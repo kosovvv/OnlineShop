@@ -5,9 +5,11 @@ using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
+using OnlineShop.Web.ViewModels.Brand;
 using OnlineShop.Web.ViewModels.Order;
 using OnlineShop.Web.ViewModels.Product;
 using OnlineShop.Web.ViewModels.Review;
+using OnlineShop.Web.ViewModels.Type;
 
 namespace OnlineShop.Services.Mapping
 {
@@ -33,19 +35,27 @@ namespace OnlineShop.Services.Mapping
             CreateMap<Review, ReturnReviewDto>()
                 .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.ReviewedProduct.Name))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author.Email));
+
             CreateMap<DeliveryMethod, ReturnDeliveryMethodDto>().ReverseMap();
 
             CreateMap<Address, ReturnAddressDto>().ReverseMap();
             CreateMap<Address, OrderAddress>().ReverseMap();
-            CreateMap<ProductBrand, ProductBrandDto>().ReverseMap();
-            CreateMap<ProductType,  ProductTypeDto>().ReverseMap();
+            CreateMap<ProductBrand, ReturnProductBrandDto>().ReverseMap();
+            CreateMap<ProductType,  ReturnProductTypeDto>().ReverseMap();
 
             CreateMap<CustomerBasketDto, CustomerBasket>()
                 .ForMember(d => d.Items, o => o.MapFrom(s => s.Items)).ReverseMap();
 
             CreateMap<BasketItemDto, BasketItem>().ReverseMap();
+
             CreateMap<CreateAddressDto, OrderAddress>();
             CreateMap<ReturnAddressDto, OrderAddress>();
+
+            CreateMap<ProductType, ReturnProductTypeDto>();
+            CreateMap<CreateProductTypeDto, ProductType>();
+
+            CreateMap<ProductBrand, ReturnProductBrandDto>();
+            CreateMap<CreateProductBrandDto, ProductBrand>();
 
             CreateMap<Order, OrderToReturnDto>()
                 .ForMember(d => d.DeliveryMethod, opt => opt.MapFrom(s => s.DeliveryMethod.ShortName))
