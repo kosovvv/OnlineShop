@@ -26,12 +26,17 @@ namespace OnlineShop.WebAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
             [FromQuery] ProductParams productParams)
         {
             var totalItems = await this.productService.GetProductsCountAsync(productParams);
             var products = await this.productService.GetProductsAsync(productParams);
-            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, products));
+
+
+            return products.Any() ? 
+                Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, products))
+                : NotFound();
         }
 
         [HttpGet("{id}")]
@@ -108,20 +113,6 @@ namespace OnlineShop.WebAPI.Controllers
             {
                 return NotFound(new ApiResponse(404, "Product not found."));
             }
-        }
-
-        [HttpGet("brands")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
-        {
-            return Ok(await this.brandService.GetProductBrandsAsync());
-        }
-
-        [HttpGet("types")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
-        {
-            return Ok(await this.typeService.GetProductTypesAsync());
         }
     }
 }

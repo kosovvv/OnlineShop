@@ -18,6 +18,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
         {
             var basket = await basketService.GetBasketAsync(id);
@@ -25,6 +26,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CustomerBasket>> UpdateBasket(CustomerBasketDto basket)
         {
             try
@@ -39,9 +42,11 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpDelete]
-        public async Task DeleteBasketAsync(string id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteBasketAsync(string id)
         {
             await basketService.DeleteBasketAsync(id);
+            return Ok();
         }
 
     }

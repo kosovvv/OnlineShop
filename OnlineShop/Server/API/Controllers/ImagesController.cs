@@ -16,6 +16,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet("products/{imageName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> GetImage(string imageName)
         {
             var imageData = await imageService.GetImageAsync(imageName);
@@ -31,6 +33,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost("upload")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadImage(ImageUploadDto model)
         {
             using var stream = model.Image.OpenReadStream();

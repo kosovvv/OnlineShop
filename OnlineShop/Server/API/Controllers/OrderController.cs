@@ -19,6 +19,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
@@ -37,16 +39,20 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize]
         public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
             var email = User.RetrieveEmailFromPrincipal();
             var orders = await orderService.GetOrdersForUserAsync(email);
 
-            return Ok(orders);
+            return orders.Any() ? Ok(orders) : NotFound();
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize]
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
@@ -63,11 +69,13 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet("deliveryMethods")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ICollection<DeliveryMethod>>> GetDeliveryMethods()
         {
             var methods = await orderService.GetDeliveryMethodsAsync();
 
-            return Ok(methods);
+            return methods.Any() ? Ok(methods) : NotFound();
         }
     }
 }

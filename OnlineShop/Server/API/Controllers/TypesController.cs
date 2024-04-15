@@ -14,11 +14,14 @@ namespace OnlineShop.WebAPI.Controllers
             this.typeService = typeService;
         }
 
-        [HttpGet("types")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<ProductTypeDto>>> GetProductTypes()
         {
-            return Ok(await this.typeService.GetProductTypesAsync());
+            var types = await this.typeService.GetProductTypesAsync();
+            
+            return types.Any() ? Ok(types) : NoContent();
         }
     }
 }

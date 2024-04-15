@@ -15,11 +15,14 @@ namespace OnlineShop.WebAPI.Controllers
             this.brandService = brandService;
         }
 
-        [HttpGet("brands")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<IEnumerable<ProductBrandDto>>> GetProductBrands()
         {
-            return Ok(await this.brandService.GetProductBrandsAsync());
+            var brands = await this.brandService.GetProductBrandsAsync();
+
+            return brands.Any() ? Ok(brands) : NoContent();
         }
     }
 }

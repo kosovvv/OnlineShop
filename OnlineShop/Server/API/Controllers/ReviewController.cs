@@ -21,6 +21,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPost("create")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> CreateReviewForProduct(CreateReviewDto reviewToCreate)
         {
@@ -40,6 +42,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet("{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ICollection<ReturnReviewDto>>> GetReviewsByProduct(int productId)
         {
             try
@@ -55,6 +59,8 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpPut("{reviewId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]
         public async Task<ActionResult<ReturnReviewDto>> EditReview(int reviewId, CreateReviewDto reviewToEdit)
         {
@@ -76,6 +82,8 @@ namespace OnlineShop.WebAPI.Controllers
             
         }
         [HttpDelete("{reviewId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize]
         public async Task<ActionResult> DeleteReview(int reviewId)
         {
@@ -84,6 +92,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpGet("isReviewed/{productId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
         {
             return await this.reviewService.HasUserAlreadyReviewedProduct(User, productId);
