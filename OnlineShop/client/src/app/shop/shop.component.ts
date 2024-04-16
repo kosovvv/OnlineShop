@@ -32,8 +32,8 @@ export class ShopComponent implements OnInit {
 
   ngOnInit(): void {
     this.getProducts();
-    this.getBrands();
-    this.getTypes();
+    this.getBrands(true);
+    this.getTypes(true);
   }
 
   getProducts() {
@@ -46,16 +46,26 @@ export class ShopComponent implements OnInit {
     })
   }
 
-  getBrands() {
+  getBrands(onlyWithProducts = false) {
     this.shopService.getBrands().subscribe({
-      next: response => this.brands = [{id: 0, name: 'All'}, ...response],
+      next: (brands) => {
+        if (onlyWithProducts) {
+          brands = brands.filter(x => x.products?.length! > 0)
+        }
+        this.brands = [{id: 0, name: 'All'}, ...brands]
+      },
       error: error => console.log(error)
     })
   }
 
-  getTypes() {
+  getTypes(onlyWithProducts = false) {
     this.shopService.getTypes().subscribe({
-      next: response => this.types = [{id: 0, name: 'All'}, ...response],
+      next: (types) => {
+        if (onlyWithProducts) {
+          types = types.filter(x => x.products?.length! > 0)
+        }
+        this.types = [{id: 0, name: 'All'}, ...types]
+      },
       error: error => console.log(error)
     })
   }

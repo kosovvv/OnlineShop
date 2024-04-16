@@ -28,7 +28,7 @@ export class ShopService {
 
 
   getProducts(useCache = true): Observable<Pagination<Product[]>> {
-    if (!useCache) {
+    if (useCache) {
       this.productCache = new Map();
     }
   
@@ -177,12 +177,14 @@ export class ShopService {
     if (this.brands.length > 0) {
       return of(this.brands);
     }
+    
     return this.http.get<Brand[]>(this.baseUrl + 'brands').pipe(
       tap(brands => {
         this.brands = brands;
       })
     );
   }
+  
 
   createBrand(brand: any) {
     return this.http.post<Brand>(this.baseUrl + 'brands', brand).pipe(
@@ -222,12 +224,14 @@ export class ShopService {
     if (this.types.length > 0) {
       return of(this.types);
     }
+    
     return this.http.get<Type[]>(this.baseUrl + 'types').pipe(
       tap(types => {
         this.types = types;
       })
     );
   }
+  
 
   createType(type: any) {
     return this.http.post<Type>(this.baseUrl + 'types', type).pipe(
