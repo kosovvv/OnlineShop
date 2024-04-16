@@ -18,7 +18,7 @@ namespace OnlineShop.WebAPI.Controllers
             this.productService = productService;
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [Authorize]

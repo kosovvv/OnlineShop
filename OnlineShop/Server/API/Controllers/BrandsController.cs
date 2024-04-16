@@ -40,6 +40,7 @@ namespace OnlineShop.WebAPI.Controllers
             catch (CreateExistringEntityException ex)
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
+                throw;
             }
         }
 
@@ -61,7 +62,7 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [Authorize]
         public async Task<ActionResult<ReturnProductBrandDto>> DeleteProductBrand(int id)
@@ -69,7 +70,7 @@ namespace OnlineShop.WebAPI.Controllers
             var isDeleted = await this.brandService.DeleteProductBrandAsync(id);
             if (isDeleted)
             {
-                return NoContent();
+                return Ok(isDeleted);
             }
             else
             {

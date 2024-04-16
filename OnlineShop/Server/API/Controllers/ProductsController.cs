@@ -9,7 +9,7 @@ using OnlineShop.Web.ViewModels.Product;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class ProductsController : ControllerBase
+    public class ProductsController : BaseController
     {
         private readonly IProductService productService;
 
@@ -53,12 +53,12 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize(Roles = "Admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ProductToReturnDto>> CreateProduct(ProductToCreateDto product)
+        public async Task<ActionResult<ProductToReturnDto>> AddProduct(ProductToCreateDto product)
         {
             try
             {
                 var createdProduct = await this.productService.CreateProduct(product);
-                return CreatedAtAction(nameof(CreateProduct), new { id = createdProduct.Id }, createdProduct);
+                return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);
             }
             catch (CreateExistringEntityException ex)
             {   

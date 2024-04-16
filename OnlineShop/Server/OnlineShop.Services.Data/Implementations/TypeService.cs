@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Exceptions;
@@ -21,7 +22,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<IEnumerable<ReturnProductTypeDto>> GetProductTypesAsync()
         {
-            var productTypes = await context.ProductTypes.AsNoTracking().ToListAsync();
+            var productTypes = await context.ProductTypes.Include(x => x.Products).AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductType>, IEnumerable<ReturnProductTypeDto>>(productTypes);
         }
 
@@ -50,6 +51,10 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             existingProductType.Name = productType.Name;
+            if (!productType.PictureUrl.IsNullOrEmpty())
+            {
+                existingProductType.PictureUrl = productType.PictureUrl;
+            }
             
             await context.SaveChangesAsync();
             return mapper.Map<ProductType, ReturnProductTypeDto>(existingProductType);

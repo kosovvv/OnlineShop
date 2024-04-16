@@ -61,14 +61,14 @@ namespace OnlineShop.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ReturnProductTypeDto>> DeleteProductType(int id)
         {
             var isDeleted = await this.typeService.DeleteProductTypeAsync(id);
             if (isDeleted)
             {
-                return NoContent();
+                return Ok(isDeleted);
             }
             else
             {

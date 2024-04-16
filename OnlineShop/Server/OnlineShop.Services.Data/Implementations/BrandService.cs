@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Data;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Exceptions;
@@ -22,11 +23,11 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<IEnumerable<ReturnProductBrandDto>> GetProductBrandsAsync()
         {
-            var productBrands = await context.ProductBrands.AsNoTracking().ToListAsync();
+            var productBrands = await context.ProductBrands.Include(x => x.Products).AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ReturnProductBrandDto>>(productBrands);
         }
 
-        public async Task<ProductBrand> CreateProductBrandAsync(CreateProductBrandDto productBrand)
+        public async Task<ReturnProductBrandDto> CreateProductBrandAsync(CreateProductBrandDto productBrand)
         {
             var isBrandExisting = await this.context.ProductBrands.AnyAsync(x => x.Name == productBrand.Name);
 
@@ -39,10 +40,10 @@ namespace OnlineShop.Services.Data.Implementations
             await this.context.ProductBrands.AddAsync(brandToCreate);
             await this.context.SaveChangesAsync();
 
-            return brandToCreate;
+            return this.mapper.Map<ProductBrand, ReturnProductBrandDto>(brandToCreate);
         }
 
-        public async Task<ProductBrand> UpdateProductBrandAsync(int id, CreateProductBrandDto productBrand)
+        public async Task<ReturnProductBrandDto> UpdateProductBrandAsync(int id, CreateProductBrandDto productBrand)
         {
             var existingBrand = await context.ProductBrands.FirstOrDefaultAsync(p => p.Id == id);
 
@@ -52,9 +53,13 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             existingBrand.Name = productBrand.Name;
+            if (!productBrand.PictureUrl.IsNullOrEmpty())
+            {
+                existingBrand.PictureUrl = productBrand.PictureUrl;
+            }
             await context.SaveChangesAsync();
 
-            return existingBrand;
+            return this.mapper.Map<ProductBrand, ReturnProductBrandDto>(existingBrand);
         }
 
         public async Task<bool> DeleteProductBrandAsync(int id)

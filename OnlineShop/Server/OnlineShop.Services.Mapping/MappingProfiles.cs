@@ -40,7 +40,6 @@ namespace OnlineShop.Services.Mapping
 
             CreateMap<Address, ReturnAddressDto>().ReverseMap();
             CreateMap<Address, OrderAddress>().ReverseMap();
-            CreateMap<ProductBrand, ReturnProductBrandDto>().ReverseMap();
             CreateMap<ProductType,  ReturnProductTypeDto>().ReverseMap();
 
             CreateMap<CustomerBasketDto, CustomerBasket>()
@@ -51,10 +50,15 @@ namespace OnlineShop.Services.Mapping
             CreateMap<CreateAddressDto, OrderAddress>();
             CreateMap<ReturnAddressDto, OrderAddress>();
 
-            CreateMap<ProductType, ReturnProductTypeDto>();
+            CreateMap<ProductType, ReturnProductTypeDto>()
+                .ForMember(d => d.Products, o => o.MapFrom(s => s.Products))
+                .ForMember(d => d.PictureUrl, o => o.MapFrom<TypeUrlResolver>());
             CreateMap<CreateProductTypeDto, ProductType>();
 
-            CreateMap<ProductBrand, ReturnProductBrandDto>();
+            CreateMap<ProductBrand, ReturnProductBrandDto>()
+                .ForMember(d => d.Products, o => o.MapFrom(s => s.Products))
+                .ForMember(d => d.PictureUrl, o => o.MapFrom<BrandUrlResolver>());
+
             CreateMap<CreateProductBrandDto, ProductBrand>();
 
             CreateMap<Order, OrderToReturnDto>()

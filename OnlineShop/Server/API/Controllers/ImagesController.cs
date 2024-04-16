@@ -4,6 +4,7 @@ using OnlineShop.Web.ViewModels.Image;
 
 namespace OnlineShop.WebAPI.Controllers
 {
+
     public class ImagesController : BaseController
     {
         private readonly IImageService imageService;
@@ -13,10 +14,10 @@ namespace OnlineShop.WebAPI.Controllers
             this.imageService = imageService;
         }
 
-        [HttpGet("products/{imageName}")]
+        [HttpGet("{folderName}/{imageName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> GetImage(string imageName)
+        public async Task<ActionResult> GetImage(string folderName, string imageName)
         {
             var imageData = await imageService.GetImageAsync(imageName);
 
@@ -30,7 +31,7 @@ namespace OnlineShop.WebAPI.Controllers
             return File(imageData, contentType);
         }
 
-        [HttpPost("upload")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadImage(ImageUploadDto model)
