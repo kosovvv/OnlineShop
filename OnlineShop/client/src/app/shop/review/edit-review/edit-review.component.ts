@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { Review } from 'src/app/shared/models/review';
 
 @Component({

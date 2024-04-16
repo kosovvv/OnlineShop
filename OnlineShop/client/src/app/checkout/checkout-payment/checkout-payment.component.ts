@@ -103,7 +103,6 @@ export class CheckoutPaymentComponent implements OnInit {
         this.toastr.error(paymentResult.error.message)
       }
     } catch (error: any) {
-      console.log(error);
       this.toastr.error(error.message)
     } finally {
       this.loading = false;

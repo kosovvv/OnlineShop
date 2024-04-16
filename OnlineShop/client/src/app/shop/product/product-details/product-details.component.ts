@@ -3,7 +3,7 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { of, switchMap, take } from 'rxjs';
 import { BasketService } from 'src/app/basket/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { Product } from 'src/app/shared/models/products';
 import { AccountService } from 'src/app/account/account.service';
 import { ToastrService } from 'ngx-toastr';

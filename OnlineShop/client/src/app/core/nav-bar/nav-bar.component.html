@@ -34,6 +34,16 @@
                             <i class="fa fa-plus me-3"></i> Create Product
                         </a>
                     </li>
+                    <li *ngIf="user.role == 'Admin'" class="py-1">
+                        <a routerLink="/shop/types" class="dropdown-item">
+                            <i class="fa fa-bars me-3"></i> Manage Types
+                        </a>
+                    </li>
+                    <li *ngIf="user.role == 'Admin'" class="py-1">
+                        <a routerLink="/shop/brands" class="dropdown-item">
+                            <i class="fa fa-bars me-3"></i> Manage Brands
+                        </a>
+                    </li>
                     <li class="py-1">
                         <a routerLink="/basket" class="dropdown-item">
                             <i class="fa fa-shopping-cart me-3"></i> View basket

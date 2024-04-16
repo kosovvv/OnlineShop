@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/shared/models/products';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from 'ngx-bootstrap/rating';
 

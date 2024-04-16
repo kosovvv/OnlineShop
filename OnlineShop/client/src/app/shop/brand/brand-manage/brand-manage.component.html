@@ -1,0 +1,33 @@
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <button type="button" data-bs-toggle="modal" [attr.data-bs-target]="'#createBrandModal'" class="btn btn-success mb-3"><i class="fa fa-plus me-2" aria-hidden="true"></i>Add Brand</button>
+            <app-brand-create></app-brand-create>
+            <table class="table table-hover" style="cursor: pointer;">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Brand Name</th>
+                        <th>Picture</th>
+                        <th>Products</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let brand of brands">
+                        <td>{{brand.name}}</td>
+                        <td>
+                            <img [src]="brand.pictureUrl" alt="Type Image" class="type-image">
+                        </td>
+                        <td>{{brand.products?.length}}</td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-primary me-1" data-bs-toggle="modal"
+                                [attr.data-bs-target]="'#editBrandModal' + brand.id">Edit</button>
+                            <app-brand-edit [brand]="brand"></app-brand-edit>
+                            <button class="btn btn-sm btn-danger" (click)="deleteBrand(brand.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

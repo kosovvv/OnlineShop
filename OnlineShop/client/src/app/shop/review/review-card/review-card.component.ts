@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Review } from 'src/app/shared/models/review';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { Review } from 'src/app/shared/models/review';
 import { Product } from 'src/app/shared/models/products';
 

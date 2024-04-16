@@ -76,11 +76,11 @@ export class ShopService {
   }
 
   createProduct(data: any) {
-    return this.http.post<Product>(this.baseUrl + 'products/create', data)
+    return this.http.post<Product>(this.baseUrl + 'products/', data)
   }
 
   createReview(data: any): Observable<Review> {
-    return this.http.post<Review>(this.baseUrl + 'review/create', data).pipe(
+    return this.http.post<Review>(this.baseUrl + 'review/', data).pipe(
       tap(review => {
         const productId = data.reviewedProduct.id;
         if (productId) {
@@ -183,6 +183,40 @@ export class ShopService {
       })
     );
   }
+
+  createBrand(brand: any) {
+    return this.http.post<Brand>(this.baseUrl + 'brands', brand).pipe(
+      tap(brand => {
+        console.log(brand);
+        this.brands.push(brand)
+      })
+    )
+  }
+
+  
+
+  editBrand(brandId: number, brand: Brand) {
+    return this.http.put<Brand>(this.baseUrl + `brands/${brandId}`, brand).pipe(
+      tap(brand => {
+        const brandToEdit = this.brands.find(x => x.id == brand.id);
+        if (brandToEdit) {
+          brandToEdit.name = brand.name;
+          brandToEdit.pictureUrl = brand.pictureUrl
+          brandToEdit.products = brand.products;
+        }
+      })
+    )
+  }
+  deleteBrand(brandId: number) {
+    return this.http.delete<boolean>(this.baseUrl + `brands/${brandId}`).pipe(
+      tap(isDeleted => {
+        if (isDeleted) {
+          const index = this.brands.findIndex(x => x.id == brandId)
+          this.brands.splice(index, 1);
+        }
+      })
+    )
+  }
   
   getTypes() {
     if (this.types.length > 0) {
@@ -194,9 +228,39 @@ export class ShopService {
       })
     );
   }
+
+  createType(type: any) {
+    return this.http.post<Type>(this.baseUrl + 'types', type).pipe(
+      tap(type => {
+        this.types.push(type)
+      })
+    )
+  }
+
+  editType(typeId: number, type: Type) {
+    return this.http.put<Type>(this.baseUrl + `types/${typeId}`, type).pipe(
+      tap(type => {
+        const typeToEdit = this.types.find(x => x.id == type.id);
+        if (typeToEdit) {
+          typeToEdit.name = type.name;
+          typeToEdit.pictureUrl = type.pictureUrl
+        }
+      })
+    )
+  }
+  deleteType(typeId: number) {
+    return this.http.delete<boolean>(this.baseUrl + `types/${typeId}`).pipe(
+      tap(isDeleted => {
+        if (isDeleted) {
+          const index = this.types.findIndex(x => x.id == typeId)
+          this.types.splice(index, 1);
+        }
+      })
+    )
+  }
   
 
   uploadImage(data: FormData) {
-    return this.http.post<FormData>(this.baseUrl + 'images/upload', data)
+    return this.http.post<FormData>(this.baseUrl + 'images', data)
   }
 }

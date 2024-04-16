@@ -1,0 +1,39 @@
+<div class="modal fade" id="editTypeModal{{type.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="typeForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Category Name</label>
+                        <app-text-input formControlName="name"
+                            [label]="'Category Name'"></app-text-input>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" class="file-input" (change)="onFileSelected($event)" #fileUpload>
+
+                        <div class="file-upload">
+                            {{fileName || "Upload type image."}}
+                            <button mat-mini-fab color="primary" class="upload-btn" (click)="fileUpload.click()">
+                                <mat-icon>attach_file</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <ul class="text-danger list-unstyled" *ngIf="errors">
+                    <li *ngFor="let error of errors">
+                        {{error}}
+                    </li>
+                </ul>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" #closeButton data-bs-dismiss="modal">Close</button>
+                <button [disabled]="!typeForm.valid" (click)="onSubmit()" type="button"
+                    class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>

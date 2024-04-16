@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ShopService } from '../shop.service';
+import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -60,7 +60,6 @@ export class ProductCreateComponent implements OnInit {
         return of(null);
       })).subscribe({
       next: (uploadImageResult) => this.router.navigateByUrl('/shop'),
-      error: (error) => this.toastr.error('An error occurred while uploading image.')
     });
   }
 
