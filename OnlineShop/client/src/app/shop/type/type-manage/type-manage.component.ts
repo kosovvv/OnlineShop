@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Type } from 'src/app/shared/models/type';
+import { TypeService } from 'src/app/shared/services/type-service';
 
 @Component({
   selector: 'app-type-manage',
@@ -22,14 +22,14 @@ export class TypeManageComponent implements OnInit{
     pictureUrl: ['', Validators.required],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,private typeService: TypeService, private router: Router, private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.getTypes();
   }
 
   getTypes() {
-    return this.shopService.getTypes().subscribe({
+    return this.typeService.getTypes().subscribe({
       next: (types) => {
         if (types) {
           this.types = types;
@@ -39,7 +39,7 @@ export class TypeManageComponent implements OnInit{
   }
 
   deleteType(typeId : number) {
-    this.shopService.deleteType(typeId).subscribe({
+    this.typeService.deleteType(typeId).subscribe({
       next: () => {
         this.getTypes();
       }

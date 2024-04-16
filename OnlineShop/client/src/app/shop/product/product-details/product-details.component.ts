@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { of, switchMap, take } from 'rxjs';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from 'src/app/shared/services/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
-import { ShopService } from '../../shop.service';
 import { Product } from 'src/app/shared/models/products';
-import { AccountService } from 'src/app/account/account.service';
+import { AccountService } from 'src/app/shared/services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Review } from 'src/app/shared/models/review';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-product-details',
@@ -21,7 +21,7 @@ export class ProductDetailsComponent implements OnInit {
   isReviewButtonActive = false;
 
 
-  constructor(private shopService: ShopService, private activatedRoute: ActivatedRoute, private router : Router,
+  constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private router : Router,
     private bcService: BreadcrumbService, private basketService: BasketService,
      public accountService: AccountService, private toastr: ToastrService) {
       this.bcService.set('@productDetails', ' ')
@@ -47,7 +47,7 @@ export class ProductDetailsComponent implements OnInit {
       switchMap((params: ParamMap) => {
         const id = params.get('id');
         if (id !== null && id !== undefined) {
-          return this.shopService.getProduct(+id);
+          return this.productService.getProduct(+id);
         } else {
           return of(null);
         }
@@ -80,7 +80,7 @@ export class ProductDetailsComponent implements OnInit {
   
   checkIfIsUserReviewedProduct() {
     if (this.product) {
-      this.shopService.isProductAlreadyReviewdByUser(this.product.id).subscribe({
+      this.productService.isProductAlreadyReviewdByUser(this.product.id).subscribe({
         next: (isReviewed) => {
           console.log(isReviewed)
           this.isReviewButtonActive = !isReviewed
@@ -116,7 +116,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   deleteItem(id : number) {
-    this.shopService.deleteProduct(id).subscribe({
+    this.productService.deleteProduct(id).subscribe({
       next: (response) => {
         this.router.navigateByUrl('/shop')
         this.toastr.success("Product deleted successfully.")

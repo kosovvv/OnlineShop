@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Type } from 'src/app/shared/models/type';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
+import { TypeService } from 'src/app/shared/services/type-service';
+import { ImageService } from 'src/app/shared/services/image.service';
 
 @Component({
   selector: 'app-type-edit',
@@ -23,7 +24,7 @@ export class TypeEditComponent implements OnInit {
     pictureUrl: [''],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,private typeService: TypeService, private imageService: ImageService, private router: Router, private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.loadForm();
@@ -32,10 +33,10 @@ export class TypeEditComponent implements OnInit {
   onSubmit() {
     const formData = this.GenerateFormData();
 
-    this.shopService.editType(this.type.id, this.typeForm.value as any).pipe(
+    this.typeService.editType(this.type.id, this.typeForm.value as any).pipe(
       switchMap((createProductResult) => {
         if (this.fileName && this.image) {
-          return this.shopService.uploadImage(formData)
+          return this.imageService.uploadImage(formData)
         }
         return of(null);
       })).subscribe({

@@ -1,10 +1,11 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Brand } from 'src/app/shared/models/brand';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
+import { BrandService } from 'src/app/shared/services/brand.service';
+import { ImageService } from 'src/app/shared/services/image.service';
 
 @Component({
   selector: 'app-brand-edit',
@@ -23,7 +24,7 @@ export class BrandEditComponent {
     pictureUrl: [''],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,private brandService: BrandService, private imageService: ImageService, private router: Router, private toastr: ToastrService) {}
   
   ngOnInit(): void {
     this.loadForm();
@@ -32,10 +33,10 @@ export class BrandEditComponent {
   onSubmit() {
     const formData = this.GenerateFormData();
 
-    this.shopService.editBrand(this.brand.id, this.brandForm.value as any).pipe(
+    this.brandService.editBrand(this.brand.id, this.brandForm.value as any).pipe(
       switchMap((createProductResult) => {
         if (this.fileName && this.image) {
-          return this.shopService.uploadImage(formData)
+          return this.imageService.uploadImage(formData)
         }
         return of(null);
       })).subscribe({

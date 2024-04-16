@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ShopService } from '../../shop.service';
 import { Review } from 'src/app/shared/models/review';
 import { Product } from 'src/app/shared/models/products';
+import { ReviewService } from 'src/app/shared/services/review.service';
 
 @Component({
   selector: 'app-product-reviews',
@@ -15,7 +15,7 @@ export class ProductReviewsComponent implements OnInit {
   @Output() reviewEdited = new EventEmitter<Review>();
   reviews?: Review[]
 
-  constructor(private shopService: ShopService) {}
+  constructor(private reviewService: ReviewService) {}
 
   ngOnInit(): void {
     this.getReviews(this.productId)
@@ -23,7 +23,7 @@ export class ProductReviewsComponent implements OnInit {
 
   getReviews(productId: number | undefined) {
     if (productId) {
-      this.shopService.getReviewsByProduct(productId).subscribe({
+      this.reviewService.getReviewsByProduct(productId).subscribe({
         next: (reviews) => {
           this.reviews = reviews;
         } 

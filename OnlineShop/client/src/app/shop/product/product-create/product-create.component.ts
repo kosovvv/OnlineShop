@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Type } from 'src/app/shared/models/type';
 import { Brand } from 'src/app/shared/models/brand';
+import { TypeService } from 'src/app/shared/services/type-service';
+import { BrandService } from 'src/app/shared/services/brand.service';
+import { ImageService } from 'src/app/shared/services/image.service';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-product-create',
@@ -28,7 +31,8 @@ export class ProductCreateComponent implements OnInit {
     productBrand: ['', [Validators.required]],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,private typeService: TypeService, private productService: ProductService, private imageService: ImageService,
+    private router: Router, private toastr: ToastrService, private brandService: BrandService) {}
   
   ngOnInit(): void {
     this.getProductsAndTypes();
@@ -36,8 +40,8 @@ export class ProductCreateComponent implements OnInit {
 
   getProductsAndTypes() {
     forkJoin([
-      this.shopService.getTypes(),
-      this.shopService.getBrands()
+      this.typeService.getTypes(),
+      this.brandService.getBrands()
     ]).subscribe({
       next: ([types, brands]) => {
         this.types = types;
@@ -52,10 +56,10 @@ export class ProductCreateComponent implements OnInit {
   onSubmit() {
     const formData = this.GenerateFormData();
 
-    this.shopService.createProduct(this.productForm.value).pipe(
+    this.productService.createProduct(this.productForm.value).pipe(
       switchMap((createProductResult) => {
         if (this.fileName && this.image) {
-          return this.shopService.uploadImage(formData)
+          return this.imageService.uploadImage(formData)
         }
         return of(null);
       })).subscribe({

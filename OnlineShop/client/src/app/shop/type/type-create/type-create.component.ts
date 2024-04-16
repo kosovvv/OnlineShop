@@ -1,9 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
+import { TypeService } from 'src/app/shared/services/type-service';
+import { ImageService } from 'src/app/shared/services/image.service';
 
 @Component({
   selector: 'app-type-create',
@@ -21,15 +22,15 @@ export class TypeCreateComponent {
     pictureUrl: ['', Validators.required],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder, private imageService: ImageService ,private typeService: TypeService, private router: Router, private toastr: ToastrService) {}
 
   onSubmit() {
     const formData = this.GenerateFormData();
 
-    this.shopService.createType(this.typeForm.value as any).pipe(
+    this.typeService.createType(this.typeForm.value as any).pipe(
       switchMap((type) => {
         if (this.fileName && this.image) {
-          return this.shopService.uploadImage(formData)
+          return this.imageService.uploadImage(formData)
         }
         return of(null);
       })).subscribe({

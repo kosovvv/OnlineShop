@@ -1,10 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Brand } from 'src/app/shared/models/brand';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
+import { BrandService } from 'src/app/shared/services/brand.service';
+import { ImageService } from 'src/app/shared/services/image.service';
 
 @Component({
   selector: 'app-brand-create',
@@ -22,15 +22,15 @@ export class BrandCreateComponent {
     pictureUrl: ['', Validators.required],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder, private imageService: ImageService, private brandService: BrandService,private router: Router, private toastr: ToastrService) {}
 
   onSubmit() {
     const formData = this.GenerateFormData();
 
-    this.shopService.createBrand(this.brandForm.value as any).pipe(
+    this.brandService.createBrand(this.brandForm.value as any).pipe(
       switchMap((brand) => {
         if (this.fileName && this.image) {
-          return this.shopService.uploadImage(formData)
+          return this.imageService.uploadImage(formData)
         }
         return of(null);
       })).subscribe({

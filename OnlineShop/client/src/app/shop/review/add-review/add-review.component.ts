@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/shared/models/products';
-import { ShopService } from '../../shop.service';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from 'ngx-bootstrap/rating';
+import { ReviewService } from 'src/app/shared/services/review.service';
 
 @Component({
   selector: 'app-add-review',
@@ -11,7 +11,7 @@ import { RatingComponent } from 'ngx-bootstrap/rating';
   styleUrls: ['./add-review.component.scss']
 })
 export class AddReviewComponent  {
-  constructor(private fb: FormBuilder, private shopService: ShopService, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder, private reviewService: ReviewService, private toastr: ToastrService) {}
 
 
   reviewForm!: FormGroup;
@@ -29,7 +29,7 @@ export class AddReviewComponent  {
 
 
   submitReview() {
-    this.shopService.createReview(this.reviewForm.value).subscribe({
+    this.reviewService.createReview(this.reviewForm.value).subscribe({
       next: (review) => {
         this.toastr.success("Successfully created review!")
         this.closeButton.nativeElement.click();

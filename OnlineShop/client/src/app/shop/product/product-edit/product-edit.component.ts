@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { ShopService } from '../../shop.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
-import { BasketService } from 'src/app/basket/basket.service';
+import { BasketService } from 'src/app/shared/services/basket.service';
 import { forkJoin, of, switchMap, take } from 'rxjs';
 import { Basket, BasketItem } from 'src/app/shared/models/basket';
 import { Type } from 'src/app/shared/models/type';
 import { Brand } from 'src/app/shared/models/brand';
+import { TypeService } from 'src/app/shared/services/type-service';
+import { BrandService } from 'src/app/shared/services/brand.service';
+import { ProductService } from 'src/app/shared/services/product.service';
 
 @Component({
   selector: 'app-product-edit',
@@ -31,9 +33,10 @@ export class ProductEditComponent implements OnInit {
     productBrand: ['', [Validators.required]],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, 
+  constructor(private fb: FormBuilder,private typeService: TypeService,private productService: ProductService, 
     private router: Router, private toastr: ToastrService,
-    private bcService: BreadcrumbService, private activatedRoute : ActivatedRoute, private basketService: BasketService) {
+    private bcService: BreadcrumbService, private activatedRoute : ActivatedRoute, private basketService: BasketService,
+  private brandService: BrandService) {
       this.bcService.set('@editProduct', ' ')
     }
   
@@ -44,8 +47,8 @@ export class ProductEditComponent implements OnInit {
 
   getProductsAndTypes() {
     forkJoin([
-      this.shopService.getTypes(),
-      this.shopService.getBrands()
+      this.typeService.getTypes(),
+      this.brandService.getBrands()
     ]).subscribe({
       next: ([types, brands]) => {
         this.types = types;
@@ -63,7 +66,7 @@ export class ProductEditComponent implements OnInit {
         const id = params.get('id');
         console.log(id);
         if (id !== null && id !== undefined) {
-          return this.shopService.getProduct(+id);
+          return this.productService.getProduct(+id);
         } else {
           return of(null);
         }
@@ -86,7 +89,7 @@ export class ProductEditComponent implements OnInit {
   
 
   onSubmit() {
-    this.shopService.editProduct(this.productForm.value as Product).subscribe({
+    this.productService.editProduct(this.productForm.value as Product).subscribe({
       next: (product : Product) => {
         this.basketService.basketSource$.pipe(take(1)).subscribe({
           next: basket => {

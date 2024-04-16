@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { ShopService } from '../../shop.service';
 import { Review } from 'src/app/shared/models/review';
+import { ReviewService } from 'src/app/shared/services/review.service';
 
 @Component({
   selector: 'app-edit-review',
@@ -16,7 +16,7 @@ export class EditReviewComponent {
   reviewForm!: FormGroup;
   @ViewChild("closeButton") closeButton!: ElementRef
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder, private reviewService: ReviewService, private toastr: ToastrService) {}
 
   ngOnInit() {
     this.reviewForm = this.fb.group({
@@ -29,7 +29,7 @@ export class EditReviewComponent {
   
 
   editReview() {
-    this.shopService.editReview(this.review.id,this.reviewForm.value).subscribe({
+    this.reviewService.editReview(this.review.id,this.reviewForm.value).subscribe({
       next: (updatedReview) => {
         this.toastr.success("Successfully edited review!")
         this.closeButton.nativeElement.click();

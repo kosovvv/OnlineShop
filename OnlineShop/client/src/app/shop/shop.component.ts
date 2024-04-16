@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Product } from '../shared/models/products';
-import { ShopService } from './shop.service';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
+import { TypeService } from '../shared/services/type-service';
+import { BrandService } from '../shared/services/brand.service';
+import { ProductService } from '../shared/services/product.service';
 
 @Component({
   selector: 'app-shop',
@@ -26,8 +28,8 @@ export class ShopComponent implements OnInit {
   ]
 
 
-  constructor(private shopService: ShopService) {
-    this.shopParams = shopService.getShopParams();
+  constructor(private productService: ProductService, private typeService: TypeService, private brandService: BrandService) {
+    this.shopParams = productService.getShopParams();
   }
 
   ngOnInit(): void {
@@ -37,7 +39,7 @@ export class ShopComponent implements OnInit {
   }
 
   getProducts() {
-    this.shopService.getProducts().subscribe({
+    this.productService.getProducts().subscribe({
       next: response => {
         this.products = response.data,
         this.totalCount = response.count;
@@ -47,7 +49,7 @@ export class ShopComponent implements OnInit {
   }
 
   getBrands(onlyWithProducts = false) {
-    this.shopService.getBrands().subscribe({
+    this.brandService.getBrands().subscribe({
       next: (brands) => {
         if (onlyWithProducts) {
           brands = brands.filter(x => x.products?.length! > 0)
@@ -59,7 +61,7 @@ export class ShopComponent implements OnInit {
   }
 
   getTypes(onlyWithProducts = false) {
-    this.shopService.getTypes().subscribe({
+    this.typeService.getTypes().subscribe({
       next: (types) => {
         if (onlyWithProducts) {
           types = types.filter(x => x.products?.length! > 0)
@@ -71,35 +73,35 @@ export class ShopComponent implements OnInit {
   }
 
   onBrandSelected(brandId: number) {
-    const params = this.shopService.getShopParams();
+    const params = this.productService.getShopParams();
     params.brandId = brandId;
     params.pageNumber = 1;
-    this.shopService.setShopParams(params);
+    this.productService.setShopParams(params);
     this.shopParams = params;
     this.getProducts();
   }
   onTypeSelected(typeId: number) {
-    const params = this.shopService.getShopParams();
+    const params = this.productService.getShopParams();
     params.typeId = typeId;
     params.pageNumber = 1;
-    this.shopService.setShopParams(params);
+    this.productService.setShopParams(params);
     this.shopParams = params;
     this.getProducts();
   }
 
   onSortSelected(event: any) {
-    const params = this.shopService.getShopParams();
+    const params = this.productService.getShopParams();
     params.sort = event.target.value;
-    this.shopService.setShopParams(params);
+    this.productService.setShopParams(params);
     this.shopParams = params;
     this.getProducts();
   }
 
   onPageChanged(event:any) {
-    const params = this.shopService.getShopParams();
+    const params = this.productService.getShopParams();
     if (params.pageNumber != event) {
       params.pageNumber = event;
-      this.shopService.setShopParams(params);
+      this.productService.setShopParams(params);
       this.shopParams = params;
       this.getProducts();
     }
@@ -107,10 +109,10 @@ export class ShopComponent implements OnInit {
   }
 
   onSearch() {
-    const params = this.shopService.getShopParams();
+    const params = this.productService.getShopParams();
     params.search = this.searchTerm?.nativeElement.value
     params.pageNumber = 1;
-    this.shopService.setShopParams(params);
+    this.productService.setShopParams(params);
     this.shopParams = params;
     this.getProducts();
   }
@@ -120,7 +122,7 @@ export class ShopComponent implements OnInit {
       this.searchTerm.nativeElement.value = '';
     }
     const params = new ShopParams();
-    this.shopService.setShopParams(params);
+    this.productService.setShopParams(params);
     this.shopParams = params;
     this.getProducts();
   }

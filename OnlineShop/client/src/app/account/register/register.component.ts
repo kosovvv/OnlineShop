@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, Validators } from '@angular/forms';
-import { AccountService } from '../account.service';
+import { AccountService } from '../../shared/services/account.service';
 import { Router } from '@angular/router';
 import { debounceTime, finalize, map, switchMap, take } from 'rxjs';
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Order } from '../shared/models/order';
+import { Order } from '../models/order';
 import { enviroment } from 'src/environments/environment';
 
 @Injectable({

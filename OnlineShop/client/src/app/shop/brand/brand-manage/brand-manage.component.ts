@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ShopService } from '../../shop.service';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
 import { Brand } from 'src/app/shared/models/brand';
+import { BrandService } from 'src/app/shared/services/brand.service';
 
 @Component({
   selector: 'app-brand-manage',
@@ -23,14 +23,14 @@ export class BrandManageComponent implements OnInit {
     pictureUrl: ['', Validators.required],
   })
 
-  constructor(private fb: FormBuilder, private shopService: ShopService, private router: Router, private toastr: ToastrService) {}
+  constructor(private fb: FormBuilder,private brandService: BrandService, private router: Router, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.getBrands();
   }
 
   getBrands() {
-    return this.shopService.getBrands().subscribe({
+    return this.brandService.getBrands().subscribe({
       next: (brands) => {
         if (brands) {
           this.brands = brands;
@@ -40,7 +40,7 @@ export class BrandManageComponent implements OnInit {
   }
 
   deleteBrand(brandId : number) {
-    this.shopService.deleteBrand(brandId).subscribe({
+    this.brandService.deleteBrand(brandId).subscribe({
       next: () => {
         this.getBrands();
       }

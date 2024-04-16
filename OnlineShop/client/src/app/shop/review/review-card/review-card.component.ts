@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Review } from 'src/app/shared/models/review';
-import { ShopService } from '../../shop.service';
 import { ToastrService } from 'ngx-toastr';
+import { ReviewService } from 'src/app/shared/services/review.service';
 
 @Component({
   selector: 'app-review-card',
@@ -13,10 +13,10 @@ export class ReviewCardComponent {
  @Output() reviewDeletedEvent = new EventEmitter<boolean>();
  @Output() reviewEdittedEvent = new EventEmitter<Review>();
 
-  constructor(private shopService: ShopService, private toastr: ToastrService) {}
+  constructor(private reviewService: ReviewService, private toastr: ToastrService) {}
 
  deleteReview(reviewId : number) {
-  this.shopService.deleteReview(reviewId).subscribe({
+  this.reviewService.deleteReview(reviewId).subscribe({
     next: () => {
       this.toastr.success('Successfully deleted review');
       this.reviewDeletedEvent.emit(true);
