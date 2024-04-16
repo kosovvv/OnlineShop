@@ -8,8 +8,6 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class OrderController : BaseController
     {
         private readonly IOrderService orderService;

@@ -9,8 +9,6 @@ using Stripe;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class PaymentsController : BaseController
     {
         private const string WhSecret = "";

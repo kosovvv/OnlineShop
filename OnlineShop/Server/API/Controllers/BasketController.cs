@@ -6,8 +6,6 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class BasketController : BaseController
     {
 

@@ -4,8 +4,6 @@ using OnlineShop.Web.ViewModels.Image;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class ImagesController : BaseController
     {
         private readonly IImageService imageService;

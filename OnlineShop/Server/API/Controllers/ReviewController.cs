@@ -7,8 +7,6 @@ using OnlineShop.Web.ViewModels.Review;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class ReviewController : BaseController
     {
         private readonly IReviewService reviewService;

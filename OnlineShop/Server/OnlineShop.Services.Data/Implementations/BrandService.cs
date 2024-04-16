@@ -26,7 +26,7 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ReturnProductBrandDto>>(productBrands);
         }
 
-        public async Task<ProductBrand> CreateProductBrandAsync(ReturnProductBrandDto productBrand)
+        public async Task<ProductBrand> CreateProductBrandAsync(CreateProductBrandDto productBrand)
         {
             var isBrandExisting = await this.context.ProductBrands.AnyAsync(x => x.Name == productBrand.Name);
 
@@ -35,14 +35,14 @@ namespace OnlineShop.Services.Data.Implementations
                 throw new CreateExistringEntityException("This product brand already exists");
             }
 
-            var brandToCreate = mapper.Map<ReturnProductBrandDto, ProductBrand>(productBrand);
+            var brandToCreate = mapper.Map<CreateProductBrandDto, ProductBrand>(productBrand);
             await this.context.ProductBrands.AddAsync(brandToCreate);
             await this.context.SaveChangesAsync();
 
             return brandToCreate;
         }
 
-        public async Task<ProductBrand> UpdateProductBrandAsync(int id, ReturnProductBrandDto productBrand)
+        public async Task<ProductBrand> UpdateProductBrandAsync(int id, CreateProductBrandDto productBrand)
         {
             var existingBrand = await context.ProductBrands.FirstOrDefaultAsync(p => p.Id == id);
 
