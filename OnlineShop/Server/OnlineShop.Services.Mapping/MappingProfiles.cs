@@ -5,6 +5,7 @@ using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
 using OnlineShop.Services.Mapping.Resolvers;
 using OnlineShop.Web.ViewModels;
+using OnlineShop.Web.ViewModels.Account;
 using OnlineShop.Web.ViewModels.Address;
 using OnlineShop.Web.ViewModels.Brand;
 using OnlineShop.Web.ViewModels.Order;
@@ -73,6 +74,8 @@ namespace OnlineShop.Services.Mapping
                 .ForMember(d => d.ProductName, opt => opt.MapFrom(s => s.ItemOrdered.ProductName))
                 .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ItemOrdered.PictureUrl))
                 .ForMember(d => d.PictureUrl, opt => opt.MapFrom<OrderItemUrlResolver>());
+
+            CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
 
         }
     }

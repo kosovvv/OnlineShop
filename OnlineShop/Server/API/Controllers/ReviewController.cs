@@ -4,6 +4,7 @@ using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Review;
+using System.Security.Claims;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var createdReview = await this.reviewService.CreateReview(User, reviewToCreate);
+                var createdReview = await this.reviewService.CreateReview(GetUserId, reviewToCreate);
                 return Ok(createdReview);
             }
             catch (InvalidReviewException ex)
@@ -94,7 +95,9 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
         {
-            return await this.reviewService.HasUserAlreadyReviewedProduct(User, productId);
+            return await this.reviewService.HasUserAlreadyReviewedProduct(GetUserId, productId);
         }
+
+        public string GetUserId => User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
 }

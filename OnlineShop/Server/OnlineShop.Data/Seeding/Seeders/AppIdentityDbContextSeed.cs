@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OnlineShop.Data.Models.Identity;
 
-namespace OnlineShop.Data.Config.SeedData
+namespace OnlineShop.Data.Seeding.Seeders
 {
     public class AppIdentityDbContextSeed
     {
@@ -14,7 +14,7 @@ namespace OnlineShop.Data.Config.SeedData
                     DisplayName = "Bob",
                     Email = "bob@test.com",
                     UserName = "bob@test.com",
-                    Address = new Address 
+                    Address = new Address
                     {
                         FirstName = "Bob",
                         LastName = "Bobbity",

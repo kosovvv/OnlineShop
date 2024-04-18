@@ -2,7 +2,7 @@
 using MongoDB.Driver;
 using OnlineShop.Data.Models;
 
-namespace OnlineShop.Data.Config.Seeders
+namespace OnlineShop.Data.Seeding.Seeders
 {
     public static class ImageSeeder
     {

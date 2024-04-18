@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Models.Identity;
 using System.Security.Claims;
 
-namespace OnlineShop.Services.Data.Helpers
+namespace OnlineShop.Web.Infrastructure.Extensions
 {
     public static class UserManagerExtensions
     {
@@ -22,5 +22,6 @@ namespace OnlineShop.Services.Data.Helpers
             return await userManager.Users
                 .SingleOrDefaultAsync(x => x.Email == user.FindFirstValue(ClaimTypes.Email));
         }
+
     }
 }

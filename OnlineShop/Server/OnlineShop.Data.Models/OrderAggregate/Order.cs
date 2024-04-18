@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Data.Models.Enumerations;
+using OnlineShop.Data.Models.Identity;
 using OnlineShop.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,9 +11,9 @@ namespace OnlineShop.Data.Models.OrderAggregate
         {
             
         }
-        public Order(ICollection<OrderItem> orderItems, string buyerEmail, OrderAddress shipToAddress, DeliveryMethod deliveryMethod, decimal subTotal, string paymentIntentId)
+        public Order(ICollection<OrderItem> orderItems, string buyerId, OrderAddress shipToAddress, DeliveryMethod deliveryMethod, decimal subTotal, string paymentIntentId)
         {
-            BuyerEmail = buyerEmail;    
+            BuyerId = buyerId;    
             ShipToAddress = shipToAddress;
             DeliveryMethod = deliveryMethod;
             OrderItems = orderItems;
@@ -20,7 +21,8 @@ namespace OnlineShop.Data.Models.OrderAggregate
             PaymentIntentId = paymentIntentId;
         }
 
-        public string BuyerEmail { get; set; }
+        public string BuyerId { get; set; }
+        public ApplicationUser Buyer { get; set; }
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         public OrderAddress ShipToAddress { get; set; }

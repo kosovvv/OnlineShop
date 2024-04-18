@@ -2,7 +2,7 @@
 using OnlineShop.Models;
 using System.Text.Json;
 
-namespace OnlineShop.Data.Config.SeedData
+namespace OnlineShop.Data.Seeding.Seeders
 {
     public class StoreContextSeed
     {

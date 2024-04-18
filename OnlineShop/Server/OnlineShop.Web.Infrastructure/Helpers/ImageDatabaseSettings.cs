@@ -1,4 +1,4 @@
-﻿namespace OnlineShop.Services.Data.Helpers
+﻿namespace OnlineShop.Web.Infrasctucture.Helpers
 {
     public class ImageDatabaseSettings
     {

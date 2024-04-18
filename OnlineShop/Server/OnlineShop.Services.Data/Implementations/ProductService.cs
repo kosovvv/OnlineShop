@@ -109,9 +109,10 @@ namespace OnlineShop.Services.Data.Implementations
         }
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
         {
-            return query.Where(x =>
+            return query
+                .Where(x =>
                 (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
-                (!productParams.BrandId.HasValue || x.ProductBrand.Id == productParams.BrandId) &&
+                (!productParams.BrandId.HasValue ||x.ProductBrand.Id == productParams.BrandId) &&
                 (!productParams.TypeId.HasValue || x.ProductType.Id == productParams.TypeId)
             );
         }

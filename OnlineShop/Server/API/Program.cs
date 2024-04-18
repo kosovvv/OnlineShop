@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
-using OnlineShop.Data.Config.SeedData;
-using OnlineShop.Data.Config.Seeders;
 using OnlineShop.Data.Models.Identity;
+using OnlineShop.Data.Seeding.Seeders;
 using OnlineShop.Web.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);

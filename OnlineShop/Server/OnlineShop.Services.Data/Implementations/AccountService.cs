@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Exceptions;
-using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
-using System.Security.Claims;
 
 namespace OnlineShop.Services.Data.Implementations
 {
@@ -27,18 +25,17 @@ namespace OnlineShop.Services.Data.Implementations
             this.tokenService = tokenService;
             this.mapper = mapper;
         }
-
         public async Task<bool> CheckEmailExistsAsync(string email)
         {
             return await userManager.FindByEmailAsync(email) != null;
         }
 
-        public async Task<UserDto> GetCurrentUser(ClaimsPrincipal User)
+        public async Task<ReturnUserDto> GetCurrentUser(string userId)
         {
-            var user = await userManager.FindByEmailFromClaimsPrincipal(User);
+            var user = await userManager.FindByIdAsync(userId);
             var roles = await userManager.GetRolesAsync(user);
 
-            return new UserDto
+            return new ReturnUserDto
             {
                 Email = user.Email,
                 Token = tokenService.CreateToken(user, roles.First()),
@@ -47,14 +44,14 @@ namespace OnlineShop.Services.Data.Implementations
             };
         }
 
-        public async Task<ReturnAddressDto> GetUserAddress(ClaimsPrincipal User)
+        public async Task<ReturnAddressDto> GetUserAddress(string userId)
         {
-            var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
+            var user = await userManager.FindByIdAsync(userId);
 
             return mapper.Map<Address, ReturnAddressDto>(user.Address);
         }
 
-        public async Task<UserDto> Login(LoginDto loginDto)
+        public async Task<ReturnUserDto> Login(LoginDto loginDto)
         {
             var user = await userManager.FindByEmailAsync(loginDto.Email);
             var roles = await userManager.GetRolesAsync(user);
@@ -71,7 +68,7 @@ namespace OnlineShop.Services.Data.Implementations
                 throw new LoginFailedException("Error logging in.");
             }
 
-            return new UserDto
+            return new ReturnUserDto
             {
                 Email = user.Email,
                 Token = tokenService.CreateToken(user, roles.First()),
@@ -80,7 +77,7 @@ namespace OnlineShop.Services.Data.Implementations
             };
         }
 
-        public async Task<UserDto> Register(RegisterDto registerDto)
+        public async Task<ReturnUserDto> Register(RegisterDto registerDto)
         {
             var user = new ApplicationUser
             {
@@ -100,7 +97,7 @@ namespace OnlineShop.Services.Data.Implementations
             await userManager.AddToRoleAsync(user, Roles.User);
             var roles = await userManager.GetRolesAsync(user);
 
-            return new UserDto
+            return new ReturnUserDto
             {
                 Email = user.DisplayName,
                 Token = tokenService.CreateToken(user, roles.First()),
@@ -109,9 +106,9 @@ namespace OnlineShop.Services.Data.Implementations
             };
         }
 
-        public async Task<ReturnAddressDto> UpdateUserAdresss(ClaimsPrincipal User, ReturnAddressDto address)
+        public async Task<ReturnAddressDto> UpdateUserAdresss(string userId, ReturnAddressDto address)
         {
-            var user = await userManager.FindUserByClaimsPrincipleWithAddress(User);
+            var user = await userManager.FindByIdAsync(userId);
 
             user.Address = mapper.Map<ReturnAddressDto, Address>(address);
 

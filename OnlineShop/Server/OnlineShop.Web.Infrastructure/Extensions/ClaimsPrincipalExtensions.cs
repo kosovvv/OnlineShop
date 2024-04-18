@@ -4,9 +4,13 @@ namespace OnlineShop.Web.Infrastructure
 {
     public static class ClaimsPrincipalExtensions
     {
-        public static string RetrieveEmailFromPrincipal(this ClaimsPrincipal user) 
+        public static string GetEmail(this ClaimsPrincipal user) 
         {
             return user.FindFirstValue(ClaimTypes.Email);
+        }
+        public static string GetId(this ClaimsPrincipal user)
+        {
+            return user.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

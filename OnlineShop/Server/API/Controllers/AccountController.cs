@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
 
@@ -17,9 +18,9 @@ namespace OnlineShop.WebAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        public async Task<ActionResult<ReturnUserDto>> GetCurrentUser()
         {
-            return await this.accountService.GetCurrentUser(User);
+            return await this.accountService.GetCurrentUser(User.GetId());
         }
 
         [HttpGet("emailexists")]
@@ -33,7 +34,7 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ReturnAddressDto>> GetUserAddress()
         {
-            return Ok(await this.accountService.GetUserAddress(User));
+            return Ok(await this.accountService.GetUserAddress(User.GetId()));
         }
 
         [HttpPut("address")]
@@ -44,7 +45,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var updatedUser = await this.accountService.UpdateUserAdresss(User, address);
+                var updatedUser = await this.accountService.UpdateUserAdresss(User.GetId(), address);
                 return Ok(updatedUser);
             }
             catch (SavingUserAddressException ex)
@@ -57,7 +58,7 @@ namespace OnlineShop.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<ReturnUserDto>> Login(LoginDto loginDto)
         {
             try
             {
@@ -79,7 +80,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<ReturnUserDto>> Register(RegisterDto registerDto)
         {
             if (await this.accountService.CheckEmailExistsAsync(registerDto.Email))
             {

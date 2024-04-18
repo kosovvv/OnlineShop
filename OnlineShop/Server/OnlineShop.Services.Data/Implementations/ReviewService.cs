@@ -5,10 +5,8 @@ using OnlineShop.Data;
 using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Exceptions;
-using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels.Review;
-using System.Security.Claims;
 
 namespace OnlineShop.Services.Data.Implementations
 {
@@ -17,37 +15,33 @@ namespace OnlineShop.Services.Data.Implementations
         private readonly StoreContext context;
         private readonly IOrderService orderService;
         private readonly IMapper mapper;
-        private readonly UserManager<ApplicationUser> userManager;
 
-        public ReviewService(StoreContext context, IMapper mapper, IOrderService orderService, UserManager<ApplicationUser> userManager)
+        public ReviewService(StoreContext context, IMapper mapper, IOrderService orderService)
         {
             this.context = context;
             this.mapper = mapper;
             this.orderService = orderService;
-            this.userManager = userManager;
         }
 
-        public async Task<ReturnReviewDto> CreateReview(ClaimsPrincipal user, CreateReviewDto review)
+        public async Task<ReturnReviewDto> CreateReview(string userId, CreateReviewDto review)
         {
             var reviewToCreate = this.mapper.Map<CreateReviewDto, Review>(review);
-            //to fix later
             var product = await this.context.Products.FirstOrDefaultAsync(x => x.Id == review.ReviewedProduct.Id);
-            var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
 
-            if (product == null || author == null)
+            if (product == null || userId == null)
             {
                 throw new InvalidReviewException("Error creating review");
             }
-            var hasUserAlreadyReviewed = await this.HasUserAlreadyReviewedProduct(user, (int)product.Id);
+            var hasUserAlreadyReviewed = await this.HasUserAlreadyReviewedProduct(userId, (int)product.Id);
 
             if (hasUserAlreadyReviewed)
             {
                 throw new ReviewAlreadyExistsException("The user already reviewed this product");
             }
 
-            reviewToCreate.Author = author;
+            reviewToCreate.AuthorId = userId;
             reviewToCreate.ReviewedProduct = product;
-            reviewToCreate.IsVerified = await this.orderService.HasUserBoughtProduct(author.Email, review.ReviewedProduct.Id);
+            reviewToCreate.IsVerified = await this.orderService.HasUserBoughtProduct(userId, review.ReviewedProduct.Id);
 
             await this.context.AddAsync(reviewToCreate);
             await this.context.SaveChangesAsync();
@@ -96,11 +90,10 @@ namespace OnlineShop.Services.Data.Implementations
             return this.mapper.Map<ICollection<Review>, ICollection<ReturnReviewDto>>(reviews);
         }
 
-        public async Task<bool> HasUserAlreadyReviewedProduct(ClaimsPrincipal user, int productId)
+        public async Task<bool> HasUserAlreadyReviewedProduct(string userId, int productId)
         {
-            var author = await this.userManager.FindByEmailFromClaimsPrincipal(user);
             var result = await context.Reviews.Include(x => x.Author).Include(x => x.ReviewedProduct)
-                .Where(x => x.ReviewedProduct.Id == productId && x.Author.Email == author.Email).AnyAsync();
+                .Where(x => x.ReviewedProduct.Id == productId && x.Author.Id == userId).AnyAsync();
             return result;
         }
     }

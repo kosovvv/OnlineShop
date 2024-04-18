@@ -8,6 +8,7 @@ using OnlineShop.Web.ViewModels.Address;
 using AutoMapper;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Exceptions;
+using Microsoft.AspNetCore.Identity;
 
 namespace OnlineShop.Services.Data.Implementations
 {
@@ -22,7 +23,7 @@ namespace OnlineShop.Services.Data.Implementations
             this.context = context;
             this.mapper = mapper;
         }
-        public async Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, int deliveryMethodId, string basketId, ReturnAddressDto shippingAddress)
+        public async Task<OrderToReturnDto> CreateOrderAsync(string userId, int deliveryMethodId, string basketId, ReturnAddressDto shippingAddress)
         {
             // get basket from repo
             var basket = await basketRepo.GetBasketAsync(basketId);
@@ -63,7 +64,7 @@ namespace OnlineShop.Services.Data.Implementations
             }
             else
             {
-                order = new Order(items, buyerEmail, addressToSet,
+                order = new Order(items, userId, addressToSet,
                     deliveryMethod, subTotal, basket.PaymentIntentId);
 
                 await context.Orders.AddAsync(order);
@@ -85,11 +86,11 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<ICollection<DeliveryMethod>, ICollection<ReturnDeliveryMethodDto>>(methods);
         }
 
-        public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string buyerEmail)
+        public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userId)
         {
             var order = await context.Orders
                 .AsNoTracking()
-               .Where(x => x.BuyerEmail == buyerEmail && x.Id == id)
+               .Where(x => x.Buyer.Id == userId && x.Id == id)
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)
                .OrderByDescending(x => x.OrderDate)
@@ -98,10 +99,10 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<Order, OrderToReturnDto>(order);
         }
 
-        public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail)
+        public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string userId)
         {
             var orders = await context.Orders
-                .Where(x => x.BuyerEmail == buyerEmail)
+                .Where(x => x.Buyer.Id == userId)
                 .Include(x => x.DeliveryMethod)
                 .Include(x => x.OrderItems)
                 .OrderByDescending(x => x.OrderDate)
@@ -110,10 +111,10 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<ICollection<Order>, ICollection<OrderToReturnDto>>(orders);
         }
 
-        public async Task<bool> HasUserBoughtProduct(string buyerEmail, int productId)
+        public async Task<bool> HasUserBoughtProduct(string userId, int productId)
         {
             return await context.Orders
-                .Where(x => x.BuyerEmail == buyerEmail && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
+                .Where(x => x.Buyer.Id == userId && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
                 .AnyAsync();
         }
     }

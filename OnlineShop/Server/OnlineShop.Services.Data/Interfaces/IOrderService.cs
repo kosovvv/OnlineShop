@@ -6,16 +6,16 @@ namespace OnlineShop.Services.Data.Interfaces
 {
     public interface IOrderService
     {
-        Task<OrderToReturnDto> CreateOrderAsync(string buyerEmail, int deliveryMethod, string basketId,
+        Task<OrderToReturnDto> CreateOrderAsync(string userEmail, int deliveryMethod, string basketId,
             ReturnAddressDto shippingAddress);
 
-        Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string buyerEmail);
+        Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string userEmail);
 
-        Task<OrderToReturnDto> GetOrderByIdAsync(int id, string buyerEmail);
+        Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userEmail);
 
         Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync();
 
-        Task<bool> HasUserBoughtProduct(string buyerEmail, int productId);
+        Task<bool> HasUserBoughtProduct(string userId, int productId);
 
     } 
 }

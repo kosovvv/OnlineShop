@@ -5,6 +5,7 @@ namespace OnlineShop.Data.Models
 {
     public class Review : BaseEntity
     {
+        public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
         public int Score { get; set; }
         public Product ReviewedProduct { get; set; }

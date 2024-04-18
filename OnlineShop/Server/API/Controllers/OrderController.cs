@@ -5,6 +5,7 @@ using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
+using System.Security.Claims;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -22,11 +23,10 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<Order>> CreateOrder(OrderDto orderDto)
         {
-            var email = User.RetrieveEmailFromPrincipal();
             try
             {
                 var order = await orderService.
-                CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
+                CreateOrderAsync(GetUserId, orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
                 return Ok(order);
             }
             catch (CreateOrderFailedException ex)
@@ -42,8 +42,7 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
-            var email = User.RetrieveEmailFromPrincipal();
-            var orders = await orderService.GetOrdersForUserAsync(email);
+            var orders = await orderService.GetOrdersForUserAsync(GetUserId);
 
             return orders.Any() ? Ok(orders) : NotFound();
         }
@@ -54,9 +53,8 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
-            var email = User.RetrieveEmailFromPrincipal();
 
-            var order = await orderService.GetOrderByIdAsync(id, email);
+            var order = await orderService.GetOrderByIdAsync(id, GetUserId);
 
             if (order == null)
             {
@@ -72,8 +70,10 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<ICollection<DeliveryMethod>>> GetDeliveryMethods()
         {
             var methods = await orderService.GetDeliveryMethodsAsync();
-
             return methods.Any() ? Ok(methods) : NotFound();
         }
+
+        public string GetUserId => User.FindFirst(ClaimTypes.NameIdentifier).Value; 
+        
     }
 }

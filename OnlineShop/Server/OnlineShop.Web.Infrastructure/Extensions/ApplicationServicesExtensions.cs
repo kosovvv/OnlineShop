@@ -4,10 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using OnlineShop.Data;
-using OnlineShop.Services.Data.Helpers;
 using OnlineShop.Services.Data.Implementations;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Services.Mapping;
+using OnlineShop.Web.Infrasctucture.Helpers;
 using OnlineShop.Web.ViewModels;
 using StackExchange.Redis;
 

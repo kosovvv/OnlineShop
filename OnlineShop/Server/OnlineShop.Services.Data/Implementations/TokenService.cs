@@ -24,9 +24,10 @@ namespace OnlineShop.Services.Data.Implementations
 
             var claims = new List<Claim>()
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.DisplayName),
-                new Claim(ClaimTypes.Role,role)
+                new(ClaimTypes.NameIdentifier, user.Id),
+                new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.GivenName, user.DisplayName),
+                new(ClaimTypes.Role,role)
             };
 
 
