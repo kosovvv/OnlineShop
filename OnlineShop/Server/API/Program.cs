@@ -35,8 +35,8 @@ try
 {
     await context.Database.MigrateAsync();
     await StoreContextSeed.SeedAsync(context);
-    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
     await AppIdentityDbContextSeed.SeedRolesAsync(roleManager);
+    await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
     await ImageSeeder.SeedImagesAsync();
 }
 catch (Exception ex)

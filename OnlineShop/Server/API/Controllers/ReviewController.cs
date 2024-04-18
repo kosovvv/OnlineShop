@@ -91,6 +91,7 @@ namespace OnlineShop.WebAPI.Controllers
 
         [HttpGet("isReviewed/{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
         {
             return await this.reviewService.HasUserAlreadyReviewedProduct(User, productId);
