@@ -1,20 +1,46 @@
 [
   {
-    "Name": "Angular"
+    "Name": "Acer",
+    "PictureUrl": "api/images/brands/acer_logo.png"
   },
   {
-    "Name": "NetCore"
+    "Name": "Asus",
+    "PictureUrl": "api/images/brands/asus_logo.png"
   },
   {
-    "Name": "VS Code"
+    "Name": "Apple",
+    "PictureUrl": "api/images/brands/apple_logo.png"
   },
   {
-    "Name": "React"
+    "Name": "Bosch",
+    "PictureUrl": "api/images/brands/bosch_logo.png"
   },
   {
-    "Name": "Typescript"
+    "Name": "Dell",
+    "PictureUrl": "api/images/brands/dell_logo.png"
   },
   {
-    "Name": "Redis"
+    "Name": "Huawei",
+    "PictureUrl": "api/images/brands/huawei_logo.png"
+  },
+  {
+    "Name": "Lenovo",
+    "PictureUrl": "api/images/brands/lenovo_logo.png"
+  },
+  {
+    "Name": "LG",
+    "PictureUrl": "api/images/brands/lg_logo.png"
+  },
+  {
+    "Name": "Sony",
+    "PictureUrl": "api/images/brands/sony_logo.png"
+  },
+  {
+    "Name": "Samsung",
+    "PictureUrl": "api/images/brands/samsung_logo.png"
+  },
+  {
+    "Name": "Xiaomi",
+    "PictureUrl": "api/images/brands/xiaomi_logo.png"
   }
 ]

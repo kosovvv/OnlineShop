@@ -26,6 +26,7 @@ namespace OnlineShop.Data.Config.SeedData
                 };
 
                 await userManager.CreateAsync(user, "Pa$$w0rd");
+                await userManager.AddToRolesAsync(user, [Roles.Admin]);
 
             }
         }

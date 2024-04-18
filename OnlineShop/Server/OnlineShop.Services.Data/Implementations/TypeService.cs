@@ -22,7 +22,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<IEnumerable<ReturnProductTypeDto>> GetProductTypesAsync()
         {
-            var productTypes = await context.ProductTypes.Include(x => x.Products).AsNoTracking().ToListAsync();
+            var productTypes = await context.ProductTypes.Include(x => x.Products).ThenInclude(x => x.ProductBrand).AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductType>, IEnumerable<ReturnProductTypeDto>>(productTypes);
         }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineShop.Data;
 
@@ -11,9 +12,11 @@ using OnlineShop.Data;
 namespace OnlineShop.Data.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    [Migration("20240417090443_RemoveProductId")]
+    partial class RemoveProductId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,6 +241,9 @@ namespace OnlineShop.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -257,6 +263,8 @@ namespace OnlineShop.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -518,6 +526,13 @@ namespace OnlineShop.Data.Migrations
                     b.Navigation("ApplicationUser");
                 });
 
+            modelBuilder.Entity("OnlineShop.Data.Models.Identity.ApplicationUser", b =>
+                {
+                    b.HasOne("OnlineShop.Models.Product", null)
+                        .WithMany("UsersFavouringTheProduct")
+                        .HasForeignKey("ProductId");
+                });
+
             modelBuilder.Entity("OnlineShop.Data.Models.OrderAggregate.Order", b =>
                 {
                     b.HasOne("OnlineShop.Data.Models.OrderAggregate.DeliveryMethod", "DeliveryMethod")
@@ -636,6 +651,8 @@ namespace OnlineShop.Data.Migrations
             modelBuilder.Entity("OnlineShop.Models.Product", b =>
                 {
                     b.Navigation("Reviews");
+
+                    b.Navigation("UsersFavouringTheProduct");
                 });
 
             modelBuilder.Entity("OnlineShop.Models.ProductBrand", b =>

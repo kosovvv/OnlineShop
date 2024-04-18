@@ -1,14 +1,22 @@
 [
   {
-    "Name": "Boards"
+    "Name": "Gaming",
+    "PictureUrl": "api/images/types/gaming_logo.png"
   },
   {
-    "Name": "Hats"
+    "Name": "Laptop",
+    "PictureUrl": "api/images/types/laptop_logo.png"
   },
   {
-    "Name": "Boots"
+    "Name": "Large Appliances",
+    "PictureUrl": "api/images/types/largeappliances_logo.png"
   },
   {
-    "Name": "Gloves"
+    "Name": "Smart Phone",
+    "PictureUrl": "api/images/types/gaming_logo.png"
+  },
+  {
+    "Name": "TV",
+    "PictureUrl": "api/images/types/tv_logo.png"
   }
 ]

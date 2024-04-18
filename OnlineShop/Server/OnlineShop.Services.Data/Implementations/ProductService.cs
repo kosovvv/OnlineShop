@@ -100,16 +100,16 @@ namespace OnlineShop.Services.Data.Implementations
         public async Task<ICollection<ProductToReturnDto>> GetProductsAsync(ProductParams productParams)
         {
             var query = ApplyProductFilters(context.Products, productParams);
+            query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
             query = ApplyPaging(query, productParams);
             query = ApplySorting(query, productParams);
-            query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
 
-            var products = await query.ToListAsync();
-            return mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(products);
+            var allProducts = await query.ToListAsync();
+            return mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(allProducts);
         }
         private static IQueryable<Product> ApplyProductFilters(IQueryable<Product> query, ProductParams productParams)
         {
-            return query.AsNoTracking().Where(x =>
+            return query.Where(x =>
                 (string.IsNullOrEmpty(productParams.Search) || x.Name.ToLower().Contains(productParams.Search)) &&
                 (!productParams.BrandId.HasValue || x.ProductBrand.Id == productParams.BrandId) &&
                 (!productParams.TypeId.HasValue || x.ProductType.Id == productParams.TypeId)
