@@ -4,6 +4,7 @@ import { Pagination } from '../models/pagination';
 import { ShopParams } from '../models/shopParams';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ProductService {
   shopParams = new ShopParams();
   productCache = new Map<string,Pagination<Product[]>>();
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private accountService: AccountService) { }
 
 
   getProducts(useCache = true): Observable<Pagination<Product[]>> {
@@ -100,10 +101,7 @@ export class ProductService {
       })
     );
   }
-  
-  isProductAlreadyReviewdByUser(productId : number) {
-    return this.http.get<boolean>(this.baseUrl + `review/isReviewed/${productId}`)
-  }
+
 
   deleteProduct(id : number) {
     return this.http.delete(this.baseUrl + 'products/' + id).pipe();

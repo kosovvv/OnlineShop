@@ -6,6 +6,7 @@ export interface Product {
     pictureUrl: string
     productType: string
     productBrand: string
+    productBrandPictureUrl: string;
     averageScore: number
     reviewsCount: number;
 } 

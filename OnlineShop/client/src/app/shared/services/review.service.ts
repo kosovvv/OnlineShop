@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of, switchMap, tap } from 'rxjs';
 import { Review } from '../models/review';
 import { HttpClient } from '@angular/common/http';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class ReviewService {
   baseUrl = 'https://localhost:5001/api/'
   reviewCache = new Map<number, Review[]>();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private accountService: AccountService) { }
 
   createReview(data: any): Observable<Review> {
     return this.http.post<Review>(this.baseUrl + 'review/', data).pipe(
@@ -63,5 +64,16 @@ export class ReviewService {
         });
       })
     );
+  }
+
+  isProductAlreadyReviewdByUser(productId : number) {
+    return this.accountService.currentUser$.pipe(
+      switchMap(user => {
+        if (user) {
+          return this.http.get<boolean>(this.baseUrl + `review/isReviewed/${productId}`)    
+        }
+        return of(true)
+      }),
+    )
   }
 }
