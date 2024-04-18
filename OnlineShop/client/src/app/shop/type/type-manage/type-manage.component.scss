@@ -1,6 +1,5 @@
 .type-image {
-  width: 100px;
-  height: auto;
-  max-height: 80px; 
-  object-fit: cover;
+  width: 60px; /* Fixed width */
+  height: 60px; /* Fixed height */
+  object-fit: contain; /* Maintain aspect ratio and fit within the dimensions */
 }
