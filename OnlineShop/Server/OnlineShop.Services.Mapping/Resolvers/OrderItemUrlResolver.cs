@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Web.ViewModels;
 
-namespace OnlineShop.Services.Mapping
+namespace OnlineShop.Services.Mapping.Resolvers
 {
     public class OrderItemUrlResolver : IValueResolver<OrderItem, OrderItemDto, string>
     {

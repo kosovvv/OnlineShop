@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using OnlineShop.Models;
-using OnlineShop.Web.ViewModels.Type;
+using OnlineShop.Web.ViewModels;
 
-namespace OnlineShop.Services.Mapping
+namespace OnlineShop.Services.Mapping.Resolvers
 {
-    public class TypeUrlResolver : IValueResolver<ProductType, ReturnProductTypeDto, string>
+    public class ProductUrlResolver : IValueResolver<Product, ProductToReturnDto, string>
     {
         private readonly IConfiguration config;
-        public TypeUrlResolver(IConfiguration config)
+        public ProductUrlResolver(IConfiguration config)
         {
             this.config = config;
         }
-        public string Resolve(ProductType source, ReturnProductTypeDto destination, string destMember, ResolutionContext context)
+        public string Resolve(Product source, ProductToReturnDto destination, string destMember, ResolutionContext context)
         {
             if (!string.IsNullOrEmpty(source.PictureUrl))
             {

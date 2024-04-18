@@ -3,6 +3,7 @@ using OnlineShop.Data.Models;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
+using OnlineShop.Services.Mapping.Resolvers;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
 using OnlineShop.Web.ViewModels.Brand;
@@ -21,7 +22,9 @@ namespace OnlineShop.Services.Mapping
                 .ForMember(d => d.ProductBrand, o => o.MapFrom(s => s.ProductBrand.Name))
                 .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
                 .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>())
-                .ForMember(d => d.ReviewsCount, o => o.MapFrom(s => s.Reviews.Count()));
+                .ForMember(d => d.ReviewsCount, o => o.MapFrom(s => s.Reviews.Count()))
+                .ForMember(d => d.ProductBrandPictureUrl, o => o.MapFrom<ProductBrandUrlResolver>());
+                
 
             CreateMap<ProductToCreateDto, Product>()
                 .ForMember(dest => dest.PictureUrl, opt =>
