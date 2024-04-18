@@ -4,10 +4,11 @@ import { of, switchMap, take } from 'rxjs';
 import { BasketService } from 'src/app/shared/services/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
-import { AccountService } from 'src/app/shared/services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Review } from 'src/app/shared/models/review';
 import { ProductService } from 'src/app/shared/services/product.service';
+import { ReviewService } from 'src/app/shared/services/review.service';
+import { AccountService } from 'src/app/shared/services/account.service';
 
 @Component({
   selector: 'app-product-details',
@@ -23,7 +24,7 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(private productService: ProductService, private activatedRoute: ActivatedRoute, private router : Router,
     private bcService: BreadcrumbService, private basketService: BasketService,
-     public accountService: AccountService, private toastr: ToastrService) {
+     public reviewService: ReviewService, private toastr: ToastrService, public accountService: AccountService) {
       this.bcService.set('@productDetails', ' ')
     }
 
@@ -80,7 +81,7 @@ export class ProductDetailsComponent implements OnInit {
   
   checkIfIsUserReviewedProduct() {
     if (this.product) {
-      this.productService.isProductAlreadyReviewdByUser(this.product.id).subscribe({
+      this.reviewService.isProductAlreadyReviewdByUser(this.product.id).subscribe({
         next: (isReviewed) => {
           console.log(isReviewed)
           this.isReviewButtonActive = !isReviewed

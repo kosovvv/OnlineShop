@@ -89,7 +89,7 @@ export class ProductEditComponent implements OnInit {
   
 
   onSubmit() {
-    this.productService.editProduct(this.productForm.value as Product).subscribe({
+    this.productService.editProduct(this.productForm.value as any).subscribe({
       next: (product : Product) => {
         this.basketService.basketSource$.pipe(take(1)).subscribe({
           next: basket => {

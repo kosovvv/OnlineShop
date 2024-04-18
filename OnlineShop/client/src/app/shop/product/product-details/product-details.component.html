@@ -1,38 +1,56 @@
-<ng-container *ngIf="(accountService.currentUser$ | async) as user">
+<ng-container>
     <div class="container">
         <div class="row" *ngIf="product">
-            <div class="col-6">
-                <img src="{{product.pictureUrl}}" alt="{{product.name}}" class="w-100">
+            <div class="col-6 position-relative">
+                <img src="{{product.pictureUrl}}" alt="{{product.name}}" class="w-100"
+                    style="max-width: 600px; max-height: 500px;">
             </div>
             <div class="col-6 mt-5">
                 <h2>{{product.name}}</h2>
                 <p class="card-block card-header" style="margin:10px 0;">
-                    <b><i>Average rating:</i> {{ product.averageScore | number:'1.2-2' }} <i>({{product.reviewsCount}} reviews)</i></b>
-                  </p>
+                    <b><i>Average rating:</i> {{ product.averageScore | number:'1.2-2' }} <i>({{product.reviewsCount}}
+                            reviews)</i></b>
+                </p>
                 <app-rating [isReadonly]="true" [score]="product.averageScore"></app-rating>
                 <p style="font-size: 2em;">{{product.price | currency}}</p>
                 <h5 class="text-primary mb-3" *ngIf="quantityInBasket > 0">
                     You have {{quantityInBasket}} of this item in your basket
                 </h5>
                 <div class="d-flex justify-content-start align-items-center">
-                    <i (click)="decrementQuantity()" class="fa fa-minus-circle text-warning me-2" style="cursor: pointer; font-size: 2em;"></i>
+                    <i (click)="decrementQuantity()" class="fa fa-minus-circle text-warning me-2"
+                        style="cursor: pointer; font-size: 2em;"></i>
                     <span class="font-weight-bold" style="font-size: 1.5em;">{{quantity}}</span>
-                    <i (click)="incrementQuantity()" class="fa fa-plus-circle text-warning ms-2" style="cursor: pointer; font-size: 2em;"></i>
-                    <button class="btn btn-outline-primary ms-4" (click)="updateBasket()" [disabled]="quantity === quantityInBasket">{{buttonText}}</button>
-                    <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}" class="btn btn-outline-primary ms-2">Edit</button>
-                    <button *ngIf="user.role == 'Admin'" (click)="deleteItem(product.id)" class="btn btn-outline-primary ms-2">Delete</button>
-                    <button *ngIf="isReviewButtonActive" type="button" class="btn btn-outline-primary ms-2" data-bs-toggle="modal" data-bs-target="#reviewModal">Add Review</button>
+                    <i (click)="incrementQuantity()" class="fa fa-plus-circle text-warning ms-2"
+                        style="cursor: pointer; font-size: 2em;"></i>
+                    <button class="btn btn-outline-primary ms-4" (click)="updateBasket()"
+                        [disabled]="quantity === quantityInBasket">{{buttonText}}</button>
+                    <ng-container *ngIf="(accountService.currentUser$ | async) as user">
+                        <button *ngIf="user.role == 'Admin'" routerLink="/shop/edit/{{product.id}}"
+                            class="btn btn-outline-primary ms-2">Edit</button>
+                        <button *ngIf="user.role == 'Admin'" (click)="deleteItem(product.id)"
+                            class="btn btn-outline-primary ms-2">Delete</button>
+                    </ng-container>
+                    <button *ngIf="isReviewButtonActive" type="button" class="btn btn-outline-primary ms-2"
+                        data-bs-toggle="modal" data-bs-target="#reviewModal">Add Review</button>
                 </div>
                 <div class="row mt-4">
                     <h4>Description</h4>
                     <p>{{product.description}}</p>
                 </div>
             </div>
+            <div class="title-and-brand-container visible-xs" style="margin-top: 20px;">
+                <div class="title-and-brand">
+                    <a class="product-brand-link gtm_hthnmeetnc" href="/brands/brand/apple?ref=brand-pd">
+                        <img src="{{product.productBrandPictureUrl}}"
+                            alt="Apple">
+                    </a>
+                </div>
+            </div>
             <app-add-review (addReviewEvent)="updateButton($event)" [product]="product"></app-add-review>
         </div>
     </div>
     <ng-container *ngIf="product">
-        <app-product-reviews (reviewEdited)="updateProduct($event)" (reviewDeleted)="updateButton($event)" [productId]="product.id"></app-product-reviews>
+        <app-product-reviews (reviewEdited)="updateProduct($event)" (reviewDeleted)="updateButton($event)"
+            [productId]="product.id"></app-product-reviews>
     </ng-container>
 </ng-container>
-
