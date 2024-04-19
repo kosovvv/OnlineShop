@@ -2,21 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Review;
-using System.Security.Claims;
 
 namespace OnlineShop.WebAPI.Controllers
 {
     public class ReviewController : BaseController
     {
         private readonly IReviewService reviewService;
-        private readonly IProductService productService;
 
-        public ReviewController(IReviewService reviewService, IProductService productService)
+        public ReviewController(IReviewService reviewService)
         {
             this.reviewService = reviewService;
-            this.productService = productService;
         }
 
         [HttpPost]
@@ -27,7 +25,7 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var createdReview = await this.reviewService.CreateReview(GetUserId, reviewToCreate);
+                var createdReview = await this.reviewService.CreateReview(User.GetId(), reviewToCreate);
                 return Ok(createdReview);
             }
             catch (InvalidReviewException ex)
@@ -47,7 +45,6 @@ namespace OnlineShop.WebAPI.Controllers
         {
             try
             {
-                var product = await this.productService.GetProductByIdAsync(productId);
                 var reviews = await this.reviewService.GetReviewsByProduct(productId);
                 return Ok(reviews);
             }
@@ -95,9 +92,7 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<bool>> IsProductAlreadyReviewdByUser(int productId)
         {
-            return await this.reviewService.HasUserAlreadyReviewedProduct(GetUserId, productId);
+            return await this.reviewService.HasUserAlreadyReviewedProduct(User.GetId(), productId);
         }
-
-        public string GetUserId => User.FindFirst(ClaimTypes.NameIdentifier).Value;
     }
 }

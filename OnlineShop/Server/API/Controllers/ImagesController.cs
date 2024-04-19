@@ -4,7 +4,6 @@ using OnlineShop.Web.ViewModels.Image;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-
     public class ImagesController : BaseController
     {
         private readonly IImageService imageService;

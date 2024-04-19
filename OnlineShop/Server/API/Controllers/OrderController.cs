@@ -5,7 +5,6 @@ using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
-using System.Security.Claims;
 
 namespace OnlineShop.WebAPI.Controllers
 {
@@ -26,7 +25,7 @@ namespace OnlineShop.WebAPI.Controllers
             try
             {
                 var order = await orderService.
-                CreateOrderAsync(GetUserId, orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
+                CreateOrderAsync(User.GetId(), orderDto.DeliveryMethodId, orderDto.BasketId, orderDto.ShipToAddress);
                 return Ok(order);
             }
             catch (CreateOrderFailedException ex)
@@ -42,7 +41,7 @@ namespace OnlineShop.WebAPI.Controllers
         [Authorize]
         public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
-            var orders = await orderService.GetOrdersForUserAsync(GetUserId);
+            var orders = await orderService.GetOrdersForUserAsync(User.GetId());
 
             return orders.Any() ? Ok(orders) : NotFound();
         }
@@ -54,7 +53,7 @@ namespace OnlineShop.WebAPI.Controllers
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
 
-            var order = await orderService.GetOrderByIdAsync(id, GetUserId);
+            var order = await orderService.GetOrderByIdAsync(id, User.GetId());
 
             if (order == null)
             {
@@ -73,7 +72,5 @@ namespace OnlineShop.WebAPI.Controllers
             return methods.Any() ? Ok(methods) : NotFound();
         }
 
-        public string GetUserId => User.FindFirst(ClaimTypes.NameIdentifier).Value; 
-        
     }
 }
