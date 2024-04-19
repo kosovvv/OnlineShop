@@ -72,8 +72,7 @@ namespace OnlineShop.Services.Mapping
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(d => d.ProductId, opt => opt.MapFrom(s => s.ItemOrdered.ProductItemId))
                 .ForMember(d => d.ProductName, opt => opt.MapFrom(s => s.ItemOrdered.ProductName))
-                .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ItemOrdered.PictureUrl))
-                .ForMember(d => d.PictureUrl, opt => opt.MapFrom<OrderItemUrlResolver>());
+                .ForMember(d => d.PictureUrl, opt => opt.MapFrom(s => s.ItemOrdered.PictureUrl));
 
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
 
