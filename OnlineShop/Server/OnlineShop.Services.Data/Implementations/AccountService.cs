@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
@@ -46,7 +47,9 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<ReturnAddressDto> GetUserAddress(string userId)
         {
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.Users
+               .Include(u => u.Address)
+               .FirstOrDefaultAsync(u => u.Id == userId);
 
             return mapper.Map<Address, ReturnAddressDto>(user.Address);
         }

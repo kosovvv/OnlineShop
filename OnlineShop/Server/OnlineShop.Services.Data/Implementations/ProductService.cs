@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data;
+using OnlineShop.Data.Common;
+using OnlineShop.Data.Common.Repositories;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
@@ -11,17 +13,26 @@ namespace OnlineShop.Services.Data.Implementations
 {
     public class ProductService : IProductService
     {
-        private readonly StoreContext context;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        public ProductService(StoreContext context, IMapper mapper)
+        private readonly IDeletableEntityRepository<Product> productRepository;
+        private readonly IDeletableEntityRepository<ProductBrand> productBrandRepository;
+        private readonly IDeletableEntityRepository<ProductType> productTypeRepository;
+
+        public ProductService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.context = context;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.productRepository = (IDeletableEntityRepository<Product>)unitOfWork.GetRepository<Product>();
+            this.productBrandRepository = (IDeletableEntityRepository<ProductBrand>)unitOfWork.GetRepository<ProductBrand>();
+            this.productTypeRepository = (IDeletableEntityRepository<ProductType>)unitOfWork.GetRepository<ProductType>();
         }
 
         public async Task<ProductToReturnDto> CreateProduct(ProductToCreateDto product)
         {
-            var isProductExisting = await context.Products.FirstOrDefaultAsync(p => p.Name == product.Name);
+            var isProductExisting = await productRepository
+                .All()
+                .FirstOrDefaultAsync(p => p.Name == product.Name);
 
             if (isProductExisting != null)
             {
@@ -30,25 +41,33 @@ namespace OnlineShop.Services.Data.Implementations
 
             var productToCreate = mapper.Map<ProductToCreateDto, Product>(product);
 
-            var productType = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
-            var productBrand = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.ProductType);
+            var productType = await productTypeRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Name == product.ProductType);
+
+            var productBrand = await productBrandRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
 
             if (productType == null || productBrand == null)
             {
                 throw new InvalidProductException("Invalid type or brand.");
             }
 
-            productToCreate.ProductBrand = productType;
-            productToCreate.ProductType = productBrand;
+            productToCreate.ProductBrand = productBrand;
+            productToCreate.ProductType = productType;
 
-            await context.Products.AddAsync(productToCreate);
-            await context.SaveChangesAsync();
+            await productRepository.AddAsync(productToCreate);
+
+            await unitOfWork.Save();
             return mapper.Map<Product, ProductToReturnDto>(productToCreate);
         }
 
         public async Task<ProductToReturnDto> EditProduct(int id, ProductToCreateDto product)
         {
-            var existingProduct = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var existingProduct = await productRepository
+                .All()
+                .FirstOrDefaultAsync(p => p.Name == product.Name);
 
             if (existingProduct == null)
             {
@@ -58,35 +77,43 @@ namespace OnlineShop.Services.Data.Implementations
             existingProduct.Name = product.Name;
             existingProduct.Description = product.Description;
             existingProduct.Price = product.Price;
-            existingProduct.ProductBrand = await context.ProductBrands.FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
-            existingProduct.ProductType = await context.ProductTypes.FirstOrDefaultAsync(x => x.Name == product.ProductType);
+            existingProduct.ProductBrand = await productBrandRepository 
+                .All()
+                .FirstOrDefaultAsync(x => x.Name == product.ProductBrand);
 
-            await context.SaveChangesAsync();
+            existingProduct.ProductType = await productTypeRepository
+                .All()
+                .FirstOrDefaultAsync(x => x.Name == product.ProductType);
+
+            this.productRepository.Update(existingProduct);
+            await unitOfWork.Save();
             return mapper.Map<Product, ProductToReturnDto>(existingProduct);
         }
 
         public async Task<bool> DeleteProduct(int id)
         {
-            var productToDelete = await context.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var productToDelete = await productRepository
+                .All()
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (productToDelete == null)
             {
                 return false;
             }
 
-            context.Products.Remove(productToDelete);
-            await context.SaveChangesAsync();
+            unitOfWork.GetRepository<Product>().Delete(productToDelete);
+            await unitOfWork.Save();
             return true;
         }
         public async Task<int> GetProductsCountAsync(ProductParams productParams)
         {
-            var query = ApplyProductFilters(context.Products, productParams);
+            var query = ApplyProductFilters(productRepository.All(), productParams);
             return await query.CountAsync();
         }
 
         public async Task<ProductToReturnDto> GetProductByIdAsync(int id)
         {
-            var product = await context.Products.Include(x => x.ProductBrand)
+            var product = await productRepository.All().Include(x => x.ProductBrand)
                 .Include(x => x.ProductType).Include(x => x.Reviews).FirstOrDefaultAsync(x => x.Id == id);
 
             if (product == null)
@@ -99,7 +126,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<ICollection<ProductToReturnDto>> GetProductsAsync(ProductParams productParams)
         {
-            var query = ApplyProductFilters(context.Products, productParams);
+            var query = ApplyProductFilters(productRepository.All(), productParams);
             query = query.Include(x => x.ProductBrand).Include(x => x.ProductType).Include(x => x.Reviews);
             query = ApplyPaging(query, productParams);
             query = ApplySorting(query, productParams);

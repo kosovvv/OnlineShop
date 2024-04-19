@@ -9,6 +9,7 @@ namespace OnlineShop.Data.Models
         public string AuthorId { get; set; }
         public ApplicationUser Author { get; set; }
         public int Score { get; set; }
+        public int ReviewedProductId { get; set; }
         public Product ReviewedProduct { get; set; }
         public string Description { get; set; }
         public bool IsVerified { get; set; }

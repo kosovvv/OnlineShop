@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using OnlineShop.Data;
+using OnlineShop.Data.Common;
 using OnlineShop.Services.Data.Implementations;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Services.Mapping;
@@ -43,6 +44,7 @@ namespace OnlineShop.Web.Infrastructure
 
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddSingleton<IImageService, ImageService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ITokenService, TokenService>();
@@ -52,6 +54,7 @@ namespace OnlineShop.Web.Infrastructure
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IBrandService, BrandService>();
             services.AddScoped<ITypeService, TypeService>();
+            services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

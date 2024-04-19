@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Data;
+using OnlineShop.Data.Common;
+using OnlineShop.Data.Common.Repositories;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
@@ -13,23 +15,25 @@ namespace OnlineShop.Services.Data.Implementations
     public class BrandService : IBrandService
     {
         private readonly IMapper mapper;
-        private readonly StoreContext context;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IDeletableEntityRepository<ProductBrand> brandRepository;
 
-        public BrandService(IMapper mapper, StoreContext context)
+        public BrandService(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            this.context = context;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.brandRepository = (IDeletableEntityRepository<ProductBrand>)unitOfWork.GetRepository<ProductBrand>();
         }
 
         public async Task<IEnumerable<ReturnProductBrandDto>> GetProductBrandsAsync()
         {
-            var productBrands = await context.ProductBrands.Include(x => x.Products).AsNoTracking().ToListAsync();
+            var productBrands = await brandRepository.All().Include(x => x.Products).AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductBrand>, IEnumerable<ReturnProductBrandDto>>(productBrands);
         }
 
         public async Task<ReturnProductBrandDto> CreateProductBrandAsync(CreateProductBrandDto productBrand)
         {
-            var isBrandExisting = await this.context.ProductBrands.AnyAsync(x => x.Name == productBrand.Name);
+            var isBrandExisting = await this.brandRepository.All().AnyAsync(x => x.Name == productBrand.Name);
 
             if (isBrandExisting)
             {
@@ -37,15 +41,15 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             var brandToCreate = mapper.Map<CreateProductBrandDto, ProductBrand>(productBrand);
-            await this.context.ProductBrands.AddAsync(brandToCreate);
-            await this.context.SaveChangesAsync();
+            await this.brandRepository.AddAsync(brandToCreate);
+            await unitOfWork.Save();
 
             return this.mapper.Map<ProductBrand, ReturnProductBrandDto>(brandToCreate);
         }
 
         public async Task<ReturnProductBrandDto> UpdateProductBrandAsync(int id, CreateProductBrandDto productBrand)
         {
-            var existingBrand = await context.ProductBrands.FirstOrDefaultAsync(p => p.Id == id);
+            var existingBrand = await brandRepository.All().FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingBrand == null)
             {
@@ -57,29 +61,30 @@ namespace OnlineShop.Services.Data.Implementations
             {
                 existingBrand.PictureUrl = productBrand.PictureUrl;
             }
-            await context.SaveChangesAsync();
+            brandRepository.Update(existingBrand);
+            await unitOfWork.Save();
 
             return this.mapper.Map<ProductBrand, ReturnProductBrandDto>(existingBrand);
         }
 
         public async Task<bool> DeleteProductBrandAsync(int id)
         {
-            var productBrandToDelete = await context.ProductBrands.FirstOrDefaultAsync(p => p.Id == id);
+            var productBrandToDelete = await brandRepository.All().FirstOrDefaultAsync(p => p.Id == id);
 
             if (productBrandToDelete == null)
             {
                 return false;
             }
 
-            context.ProductBrands.Remove(productBrandToDelete);
-            await context.SaveChangesAsync();
+            brandRepository.Delete(productBrandToDelete);
+            await unitOfWork.Save();
 
             return true;
         }
 
         public async Task<ICollection<ProductToReturnDto>> GetProductsByProductBrandIdAsync(int productBrandId)
         {
-            var productBrand = await context.ProductBrands
+            var productBrand = await brandRepository.All()
                 .Include(x => x.Products)
                 .FirstOrDefaultAsync(x => x.Id == productBrandId);
 

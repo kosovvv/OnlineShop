@@ -11,9 +11,12 @@ namespace OnlineShop.WebAPI.Controllers
     public class OrderController : BaseController
     {
         private readonly IOrderService orderService;
-        public OrderController(IOrderService orderService)
+        private readonly IDeliveryMethodService dmService;
+        public OrderController(IOrderService orderService, IDeliveryMethodService dmService)
         {
             this.orderService = orderService;
+            this.dmService = dmService;
+
         }
 
         [HttpPost]
@@ -68,7 +71,7 @@ namespace OnlineShop.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ICollection<DeliveryMethod>>> GetDeliveryMethods()
         {
-            var methods = await orderService.GetDeliveryMethodsAsync();
+            var methods = await dmService.GetDeliveryMethodsAsync();
             return methods.Any() ? Ok(methods) : NotFound();
         }
 

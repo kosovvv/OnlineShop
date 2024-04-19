@@ -11,11 +11,11 @@ namespace OnlineShop.Data.Models.OrderAggregate
         {
             
         }
-        public Order(ICollection<OrderItem> orderItems, string buyerId, OrderAddress shipToAddress, DeliveryMethod deliveryMethod, decimal subTotal, string paymentIntentId)
+        public Order(ICollection<OrderItem> orderItems, string buyerId, OrderAddress shipToAddress, int deliveryMethodId, decimal subTotal, string paymentIntentId)
         {
             BuyerId = buyerId;    
             ShipToAddress = shipToAddress;
-            DeliveryMethod = deliveryMethod;
+            DeliveryMethodId = deliveryMethodId;
             OrderItems = orderItems;
             SubTotal = subTotal;
             PaymentIntentId = paymentIntentId;
@@ -26,6 +26,7 @@ namespace OnlineShop.Data.Models.OrderAggregate
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
         public OrderAddress ShipToAddress { get; set; }
+        public int DeliveryMethodId { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
         public decimal SubTotal { get; set; }

@@ -1,6 +1,5 @@
 ﻿using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Address;
-using OnlineShop.Web.ViewModels.Order;
 
 namespace OnlineShop.Services.Data.Interfaces
 {
@@ -12,8 +11,6 @@ namespace OnlineShop.Services.Data.Interfaces
         Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string userEmail);
 
         Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userEmail);
-
-        Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync();
 
         Task<bool> HasUserBoughtProduct(string userId, int productId);
 

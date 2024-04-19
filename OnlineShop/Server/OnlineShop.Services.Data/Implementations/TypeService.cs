@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineShop.Data;
+using OnlineShop.Data.Common;
+using OnlineShop.Data.Common.Repositories;
 using OnlineShop.Models;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
@@ -13,22 +15,24 @@ namespace OnlineShop.Services.Data.Implementations
     public class TypeService : ITypeService
     {
         private readonly IMapper mapper;
-        private readonly StoreContext context;
-        public TypeService(StoreContext context, IMapper mapper)
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IDeletableEntityRepository<ProductType> typeRepository;
+        public TypeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            this.context= context;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.typeRepository = (IDeletableEntityRepository<ProductType>)this.unitOfWork.GetRepository<ProductType>();
         }
 
         public async Task<IEnumerable<ReturnProductTypeDto>> GetProductTypesAsync()
         {
-            var productTypes = await context.ProductTypes.Include(x => x.Products).ThenInclude(x => x.ProductBrand).AsNoTracking().ToListAsync();
+            var productTypes = await typeRepository.All().Include(x => x.Products).ThenInclude(x => x.ProductBrand).AsNoTracking().ToListAsync();
             return mapper.Map<IEnumerable<ProductType>, IEnumerable<ReturnProductTypeDto>>(productTypes);
         }
 
         public async Task<ReturnProductTypeDto> CreateProductTypeAsync(CreateProductTypeDto productType)
         {
-            var isProductTypeExisting = await this.context.ProductTypes.AnyAsync(x => x.Name == productType.Name);
+            var isProductTypeExisting = await this.typeRepository.All().AnyAsync(x => x.Name == productType.Name);
 
             if (isProductTypeExisting)
             {
@@ -36,14 +40,14 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             var typeToCreate = this.mapper.Map<CreateProductTypeDto,ProductType>(productType);
-            await this.context.ProductTypes.AddAsync(typeToCreate);
-            await this.context.SaveChangesAsync();
+            await this.typeRepository.AddAsync(typeToCreate);
+            await unitOfWork.Save();
             return mapper.Map<ProductType, ReturnProductTypeDto>(typeToCreate);
         }
 
         public async Task<ReturnProductTypeDto> UpdateProductTypeAsync(int id, CreateProductTypeDto productType)
         {
-            var existingProductType = await context.ProductTypes.FirstOrDefaultAsync(p => p.Id == id);
+            var existingProductType = await typeRepository.All().FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingProductType == null)
             {
@@ -55,28 +59,28 @@ namespace OnlineShop.Services.Data.Implementations
             {
                 existingProductType.PictureUrl = productType.PictureUrl;
             }
-            
-            await context.SaveChangesAsync();
+
+            await unitOfWork.Save();
             return mapper.Map<ProductType, ReturnProductTypeDto>(existingProductType);
         }
 
         public async Task<bool> DeleteProductTypeAsync(int id)
         {
-            var productTypeToDelete = await context.ProductTypes.FirstOrDefaultAsync(p => p.Id == id);
+            var productTypeToDelete = await typeRepository.All().FirstOrDefaultAsync(p => p.Id == id);
 
             if (productTypeToDelete == null)
             {
                 return false;
             }
 
-            context.ProductTypes.Remove(productTypeToDelete);
-            await context.SaveChangesAsync();
+            typeRepository.Delete(productTypeToDelete);
+            await unitOfWork.Save();
             return true;
         }
 
         public async Task<ICollection<ProductToReturnDto>> GetProductsByProductTypeIdAsync(int productTypeId)
         {
-            var productType = await this.context.ProductTypes
+            var productType = await this.typeRepository.All()
                 .Include(x => x.Products)
                 .FirstOrDefaultAsync(x => x.Id == productTypeId);
 

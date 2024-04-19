@@ -1,47 +1,52 @@
-﻿using OnlineShop.Data;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Services.Data.Interfaces;
 using OnlineShop.Web.ViewModels;
-using OnlineShop.Web.ViewModels.Order;
 using OnlineShop.Web.ViewModels.Address;
 using AutoMapper;
 using OnlineShop.Data.Models.Identity;
-using OnlineShop.Services.Data.Exceptions;
-using Microsoft.AspNetCore.Identity;
+using OnlineShop.Data.Common;
+using OnlineShop.Data.Common.Repositories;
 
 namespace OnlineShop.Services.Data.Implementations
 {
     public class OrderService : IOrderService
     {
-        private readonly IBasketService basketRepo;
-        private readonly StoreContext context;
+        private readonly IBasketService basketService;
+        private readonly IProductService productService;
+        private readonly IDeliveryMethodService deliveryMethodService;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IRepository<Order> orderRepository;
         private readonly IMapper mapper;
-        public OrderService(IBasketService basketRepo, StoreContext context, IMapper mapper)
+        public OrderService(IBasketService basketService,IProductService productService,
+            IUnitOfWork unitOfWork, IMapper mapper, IDeliveryMethodService deliveryMethodService)
         {
-            this.basketRepo = basketRepo;
-            this.context = context;
+            this.basketService = basketService;
+            this.productService = productService;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
+            this.deliveryMethodService = deliveryMethodService;
+            this.orderRepository = unitOfWork.GetRepository<Order>();
         }
         public async Task<OrderToReturnDto> CreateOrderAsync(string userId, int deliveryMethodId, string basketId, ReturnAddressDto shippingAddress)
         {
             // get basket from repo
-            var basket = await basketRepo.GetBasketAsync(basketId);
+            var basket = await basketService.GetBasketAsync(basketId);
             // get items from product repo
             var items = new List<OrderItem>();
 
             foreach (var item in basket.Items)
             {
-                var productItem = await context.Products.FirstOrDefaultAsync(x => x.Id == item.Id);
+                var productItem = await productService.GetProductByIdAsync(item.Id);
                 var itemOrdered =
-                    new ProductItemOrdered((int)productItem.Id, productItem.Name, productItem.PictureUrl);
+                    new ProductItemOrdered(productItem.Id, productItem.Name, productItem.PictureUrl);
 
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
             // get deliverymethods
 
-            var deliveryMethod = await context.DeliveryMethods.FirstOrDefaultAsync(x => x.Id == deliveryMethodId);
+            var deliveryMethod = await this.deliveryMethodService.GetDeliveryMethodByIdAsync(deliveryMethodId);
 
             // calc subtotal
 
@@ -49,47 +54,37 @@ namespace OnlineShop.Services.Data.Implementations
             // create order
 
 
-            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == basket.PaymentIntentId);
+            var order = await orderRepository.All().FirstOrDefaultAsync(x => x.PaymentIntentId == basket.PaymentIntentId);
 
             var addressToSet = mapper.Map<Address, OrderAddress>
-                (await context.Address.FirstOrDefaultAsync(x => x.Id == shippingAddress.Id));
+                (await unitOfWork.GetRepository<Address>()
+                .All()
+                .FirstOrDefaultAsync(x => x.Id == shippingAddress.Id));
 
             if (order != null)
             {
                 order.ShipToAddress = addressToSet;
-                order.DeliveryMethod = deliveryMethod;
+                order.DeliveryMethodId = deliveryMethodId;
                 order.SubTotal = subTotal;
 
-                await context.SaveChangesAsync();
+                await unitOfWork.Save();
             }
             else
             {
                 order = new Order(items, userId, addressToSet,
-                    deliveryMethod, subTotal, basket.PaymentIntentId);
+                    deliveryMethodId, subTotal, basket.PaymentIntentId);
 
-                await context.Orders.AddAsync(order);
+                await orderRepository.AddAsync(order);
             }
 
-            var result = await context.SaveChangesAsync();
-
-            if (result <= 0)
-            {
-                throw new CreateOrderFailedException("Error creating order.");
-            }
-
+            await unitOfWork.Save();
             return mapper.Map<Order, OrderToReturnDto>(order);
-        }
-
-        public async Task<IEnumerable<ReturnDeliveryMethodDto>> GetDeliveryMethodsAsync()
-        {
-            var methods = await context.DeliveryMethods.AsNoTracking().ToListAsync();
-            return mapper.Map<ICollection<DeliveryMethod>, ICollection<ReturnDeliveryMethodDto>>(methods);
         }
 
         public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userId)
         {
-            var order = await context.Orders
-                .AsNoTracking()
+            var order = await orderRepository
+                .AllAsNoTracking()
                .Where(x => x.Buyer.Id == userId && x.Id == id)
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)
@@ -101,7 +96,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<IEnumerable<OrderToReturnDto>> GetOrdersForUserAsync(string userId)
         {
-            var orders = await context.Orders
+            var orders = await orderRepository.All()
                 .Where(x => x.Buyer.Id == userId)
                 .Include(x => x.DeliveryMethod)
                 .Include(x => x.OrderItems)
@@ -113,7 +108,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<bool> HasUserBoughtProduct(string userId, int productId)
         {
-            return await context.Orders
+            return await orderRepository.All()
                 .Where(x => x.Buyer.Id == userId && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
                 .AnyAsync();
         }
