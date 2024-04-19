@@ -1,6 +1,8 @@
-﻿namespace OnlineShop.Models
+﻿using OnlineShop.Data.Common.Models;
+
+namespace OnlineShop.Models
 {
-    public class ProductType : BaseEntity
+    public class ProductType : BaseDeletableModel<int>
     {
         public string Name { get; set; }
         public string PictureUrl { get; set; }

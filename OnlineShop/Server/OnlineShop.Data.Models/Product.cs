@@ -1,10 +1,10 @@
-﻿using OnlineShop.Data.Models;
-using OnlineShop.Data.Models.Identity;
+﻿using OnlineShop.Data.Common.Models;
+using OnlineShop.Data.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShop.Models
 {
-    public class Product : BaseEntity
+    public class Product : BaseDeletableModel<int>
     {
         public string Name { get; set; }
         public string Description { get; set; }

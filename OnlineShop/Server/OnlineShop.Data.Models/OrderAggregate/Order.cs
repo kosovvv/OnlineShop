@@ -1,11 +1,11 @@
-﻿using OnlineShop.Data.Models.Enumerations;
+﻿using OnlineShop.Data.Common.Models;
+using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.Identity;
-using OnlineShop.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShop.Data.Models.OrderAggregate
 {
-    public class Order : BaseEntity
+    public class Order : BaseModel<int>
     {
         public Order()
         {

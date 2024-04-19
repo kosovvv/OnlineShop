@@ -5,7 +5,7 @@ namespace OnlineShop.Data.Common.Models
     public abstract class BaseModel<TKey> : IAuditInfo
     {
         [Key]
-        public TKey Id { get; set; }
+        public TKey? Id { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

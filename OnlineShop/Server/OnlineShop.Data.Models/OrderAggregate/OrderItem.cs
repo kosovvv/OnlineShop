@@ -1,8 +1,8 @@
-﻿using OnlineShop.Models;
+﻿using OnlineShop.Data.Common.Models;
 
 namespace OnlineShop.Data.Models.OrderAggregate
 {
-    public class OrderItem : BaseEntity
+    public class OrderItem : BaseModel<int>
     {
 
         public OrderItem()

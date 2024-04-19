@@ -1,9 +1,10 @@
-﻿using OnlineShop.Models;
+﻿using OnlineShop.Data.Common.Models;
+using OnlineShop.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Data.Models.Identity
 {
-    public class Address : BaseEntity
+    public class Address : BaseDeletableModel<int>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
