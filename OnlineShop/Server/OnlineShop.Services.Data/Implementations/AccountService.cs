@@ -94,7 +94,7 @@ namespace OnlineShop.Services.Data.Implementations
                 throw new SignUpFailedException("Error signing up: " + string.Join(", ", errorMessages));
             }
 
-            await userManager.AddToRoleAsync(user, Roles.User);
+            await userManager.AddToRoleAsync(user, "User");
             var roles = await userManager.GetRolesAsync(user);
 
             return new ReturnUserDto
