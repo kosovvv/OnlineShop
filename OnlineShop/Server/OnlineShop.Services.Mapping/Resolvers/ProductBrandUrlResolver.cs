@@ -14,6 +14,7 @@ namespace OnlineShop.Services.Mapping.Resolvers
         }
         public string Resolve(Product source, ProductToReturnDto destination, string destMember, ResolutionContext context)
         {
+
             if (!string.IsNullOrEmpty(source.ProductBrand.PictureUrl))
             {
                 return config["ApiUrl"] + source.ProductBrand.PictureUrl;

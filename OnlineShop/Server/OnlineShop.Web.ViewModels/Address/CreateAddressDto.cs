@@ -4,17 +4,22 @@ namespace OnlineShop.Web.ViewModels
 {
     public class CreateAddressDto
     {
-        [Required]
+        [Required(ErrorMessage = "First name is required")]
         public string FirstName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Last name is required")]
         public string LastName { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Street address is required")]
         public string Street { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "State is required")]
         public string State { get; set; }
-        [Required]
+
+        [Required(ErrorMessage = "Zip code is required")]
         public string ZipCode { get; set; }
     }
 }

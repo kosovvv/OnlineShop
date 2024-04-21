@@ -7,7 +7,7 @@ namespace OnlineShop.Data.Common.Models
         [Key]
         public TKey? Id { get; set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
 
         public DateTime? ModifiedOn { get; set; }
     }

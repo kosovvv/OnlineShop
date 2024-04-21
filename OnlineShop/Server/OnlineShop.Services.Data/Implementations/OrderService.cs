@@ -61,6 +61,10 @@ namespace OnlineShop.Services.Data.Implementations
                 .All()
                 .FirstOrDefaultAsync(x => x.Id == shippingAddress.Id));
 
+            var dm = await unitOfWork.GetRepository<DeliveryMethod>()
+                .All()
+                .FirstOrDefaultAsync(x => x.Id==deliveryMethodId);
+
             if (order != null)
             {
                 order.ShipToAddress = addressToSet;
@@ -71,7 +75,7 @@ namespace OnlineShop.Services.Data.Implementations
             }
             else
             {
-                order = new Order(items, userId, addressToSet,
+                order = new Order(items, userId, addressToSet,dm,
                     deliveryMethodId, subTotal, basket.PaymentIntentId);
 
                 await orderRepository.AddAsync(order);

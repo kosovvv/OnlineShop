@@ -67,7 +67,7 @@ namespace OnlineShop.Services.Data.Implementations
         {
             var existingProduct = await productRepository
                 .All()
-                .FirstOrDefaultAsync(p => p.Name == product.Name);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (existingProduct == null)
             {
