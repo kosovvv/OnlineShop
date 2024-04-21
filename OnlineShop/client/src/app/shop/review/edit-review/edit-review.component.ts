@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Review } from 'src/app/shared/models/review';
-import { ReviewService } from 'src/app/shared/services/review.service';
+import { ReviewService } from 'src/app/core/services/review.service';
 
 @Component({
   selector: 'app-edit-review',

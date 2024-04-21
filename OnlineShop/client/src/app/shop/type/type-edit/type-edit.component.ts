@@ -4,8 +4,8 @@ import { Type } from 'src/app/shared/models/type';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
-import { TypeService } from 'src/app/shared/services/type-service';
-import { ImageService } from 'src/app/shared/services/image.service';
+import { TypeService } from 'src/app/core/services/type-service';
+import { ImageService } from 'src/app/core/services/image.service';
 
 @Component({
   selector: 'app-type-edit',

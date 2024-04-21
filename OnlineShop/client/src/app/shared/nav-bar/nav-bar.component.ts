@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AccountService } from 'src/app/shared/services/account.service';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { AccountService } from 'src/app/core/services/account.service';
+import { BasketService } from 'src/app/core/services/basket.service';
 import { BasketItem } from 'src/app/shared/models/basket';
 
 @Component({

@@ -3,9 +3,9 @@ import { Product } from '../shared/models/products';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
-import { TypeService } from '../shared/services/type-service';
-import { BrandService } from '../shared/services/brand.service';
-import { ProductService } from '../shared/services/product.service';
+import { TypeService } from '../core/services/type-service';
+import { BrandService } from '../core/services/brand.service';
+import { ProductService } from '../core/services/product.service';
 
 @Component({
   selector: 'app-shop',

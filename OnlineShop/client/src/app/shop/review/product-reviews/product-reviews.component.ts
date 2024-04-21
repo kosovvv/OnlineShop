@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Review } from 'src/app/shared/models/review';
 import { Product } from 'src/app/shared/models/products';
-import { ReviewService } from 'src/app/shared/services/review.service';
+import { ReviewService } from 'src/app/core/services/review.service';
 
 @Component({
   selector: 'app-product-reviews',

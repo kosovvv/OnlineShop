@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { BasketItem } from '../models/basket';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { BasketService } from 'src/app/core/services/basket.service';
 
 @Component({
   selector: 'app-basket-summary',

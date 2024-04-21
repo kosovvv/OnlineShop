@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Brand } from '../models/brand';
+import { Brand } from '../../shared/models/brand';
 import { HttpClient } from '@angular/common/http';
 import { of, tap } from 'rxjs';
 

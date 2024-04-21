@@ -1,7 +1,7 @@
 import { CdkStep, CdkStepper } from '@angular/cdk/stepper';
 import { Component, Input } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { BasketService } from 'src/app/core/services/basket.service';
 
 @Component({
   selector: 'app-checkout-review',

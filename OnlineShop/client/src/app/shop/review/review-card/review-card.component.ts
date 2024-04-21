@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Review } from 'src/app/shared/models/review';
 import { ToastrService } from 'ngx-toastr';
-import { ReviewService } from 'src/app/shared/services/review.service';
+import { ReviewService } from 'src/app/core/services/review.service';
 
 @Component({
   selector: 'app-review-card',

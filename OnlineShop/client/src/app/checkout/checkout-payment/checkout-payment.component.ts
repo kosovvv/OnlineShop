@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BasketService } from 'src/app/shared/services/basket.service';
-import { CheckoutService } from '../../shared/services/checkout.service';
+import { BasketService } from 'src/app/core/services/basket.service';
+import { CheckoutService } from '../../core/services/checkout.service';
 import { ToastrService } from 'ngx-toastr';
 import { Basket } from 'src/app/shared/models/basket';
 import { Address } from 'src/app/shared/models/user';

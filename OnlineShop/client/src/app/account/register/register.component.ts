@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { AccountService } from '../../shared/services/account.service';
+import { AccountService } from '../../core/services/account.service';
 import { Router } from '@angular/router';
-import { validateEmailNotTaken } from 'src/app/shared/validators/check-email-validator';
+import { validateEmailNotTaken } from 'src/app/core/validators/check-email-validator';
 
 @Component({
   selector: 'app-register',

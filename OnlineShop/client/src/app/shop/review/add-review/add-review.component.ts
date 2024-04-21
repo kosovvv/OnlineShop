@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/shared/models/products';
 import { ToastrService } from 'ngx-toastr';
 import { RatingComponent } from 'ngx-bootstrap/rating';
-import { ReviewService } from 'src/app/shared/services/review.service';
+import { ReviewService } from 'src/app/core/services/review.service';
 
 @Component({
   selector: 'app-add-review',

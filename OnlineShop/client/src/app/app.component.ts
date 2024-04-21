@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BasketService } from './shared/services/basket.service';
-import { AccountService } from './shared/services/account.service';
+import { BasketService } from './core/services/basket.service';
+import { AccountService } from './core/services/account.service';
 
 @Component({
   selector: 'app-root',

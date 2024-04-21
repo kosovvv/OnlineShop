@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
 import { Brand } from 'src/app/shared/models/brand';
-import { BrandService } from 'src/app/shared/services/brand.service';
+import { BrandService } from 'src/app/core/services/brand.service';
 
 @Component({
   selector: 'app-brand-manage',

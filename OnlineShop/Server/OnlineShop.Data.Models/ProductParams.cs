@@ -15,6 +15,8 @@
         {
             get => search;
             set => search = value.ToLower();
+
+
         }
 
         public int PageIndex { get; set; } = 1;

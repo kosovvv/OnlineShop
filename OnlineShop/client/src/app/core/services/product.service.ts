@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Product } from '../models/products';
-import { Pagination } from '../models/pagination';
-import { ShopParams } from '../models/shopParams';
+import { Product } from '../../shared/models/products';
+import { Pagination } from '../../shared/models/pagination';
+import { ShopParams } from '../../shared/models/shopParams';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
 import { AccountService } from './account.service';

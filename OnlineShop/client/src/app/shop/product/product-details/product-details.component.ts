@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { of, switchMap, take } from 'rxjs';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { BasketService } from 'src/app/core/services/basket.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
 import { ToastrService } from 'ngx-toastr';
 import { Review } from 'src/app/shared/models/review';
-import { ProductService } from 'src/app/shared/services/product.service';
-import { ReviewService } from 'src/app/shared/services/review.service';
-import { AccountService } from 'src/app/shared/services/account.service';
+import { ProductService } from 'src/app/core/services/product.service';
+import { ReviewService } from 'src/app/core/services/review.service';
+import { AccountService } from 'src/app/core/services/account.service';
 
 @Component({
   selector: 'app-product-details',

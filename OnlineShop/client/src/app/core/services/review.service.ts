@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, switchMap, tap } from 'rxjs';
-import { Review } from '../models/review';
+import { Review } from '../../shared/models/review';
 import { HttpClient } from '@angular/common/http';
 import { AccountService } from './account.service';
 

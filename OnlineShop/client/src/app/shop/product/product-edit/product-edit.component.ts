@@ -4,14 +4,14 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { BreadcrumbService } from 'xng-breadcrumb';
 import { Product } from 'src/app/shared/models/products';
-import { BasketService } from 'src/app/shared/services/basket.service';
+import { BasketService } from 'src/app/core/services/basket.service';
 import { forkJoin, of, switchMap, take } from 'rxjs';
 import { Basket, BasketItem } from 'src/app/shared/models/basket';
 import { Type } from 'src/app/shared/models/type';
 import { Brand } from 'src/app/shared/models/brand';
-import { TypeService } from 'src/app/shared/services/type-service';
-import { BrandService } from 'src/app/shared/services/brand.service';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { TypeService } from 'src/app/core/services/type-service';
+import { BrandService } from 'src/app/core/services/brand.service';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
   selector: 'app-product-edit',

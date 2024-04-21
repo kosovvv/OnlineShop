@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Type } from 'src/app/shared/models/type';
-import { TypeService } from 'src/app/shared/services/type-service';
+import { TypeService } from 'src/app/core/services/type-service';
 
 @Component({
   selector: 'app-type-manage',

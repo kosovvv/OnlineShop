@@ -5,10 +5,10 @@ import { forkJoin, of, switchMap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { Type } from 'src/app/shared/models/type';
 import { Brand } from 'src/app/shared/models/brand';
-import { TypeService } from 'src/app/shared/services/type-service';
-import { BrandService } from 'src/app/shared/services/brand.service';
-import { ImageService } from 'src/app/shared/services/image.service';
-import { ProductService } from 'src/app/shared/services/product.service';
+import { TypeService } from 'src/app/core/services/type-service';
+import { BrandService } from 'src/app/core/services/brand.service';
+import { ImageService } from 'src/app/core/services/image.service';
+import { ProductService } from 'src/app/core/services/product.service';
 
 @Component({
   selector: 'app-product-create',

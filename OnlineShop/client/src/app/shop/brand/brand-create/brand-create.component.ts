@@ -3,8 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { of, switchMap } from 'rxjs';
-import { BrandService } from 'src/app/shared/services/brand.service';
-import { ImageService } from 'src/app/shared/services/image.service';
+import { BrandService } from 'src/app/core/services/brand.service';
+import { ImageService } from 'src/app/core/services/image.service';
 
 @Component({
   selector: 'app-brand-create',
