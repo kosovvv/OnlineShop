@@ -51,7 +51,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (productType == null || productBrand == null)
             {
-                throw new InvalidProductException("Invalid type or brand.");
+                throw new InvalidEntityException();
             }
 
             productToCreate.ProductBrand = productBrand;

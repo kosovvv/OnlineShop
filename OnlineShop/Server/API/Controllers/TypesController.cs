@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Type;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class TypesController : BaseController
+    public class TypesController : BaseApiController
     {
         private readonly ITypeService typeService;
         public TypesController(ITypeService typeService) 
@@ -18,6 +19,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Cached(600)]
         public async Task<ActionResult<IEnumerable<ReturnProductTypeDto>>> GetProductTypes()
         {
             var types = await this.typeService.GetProductTypesAsync();

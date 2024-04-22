@@ -6,5 +6,9 @@
         {
             
         }
+        public CreateExistringEntityException(Type type) : base($"This {type.GetType().Name} already exists")
+        {
+            
+        }
     }
 }

@@ -6,5 +6,10 @@
         {
             
         }
+
+        public EntityNotExistingException(Type type) : base ($"{type.GetType().Name} not found.")
+        {
+            
+        }
     }
 }

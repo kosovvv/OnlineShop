@@ -5,7 +5,5 @@ namespace OnlineShop.WebAPI.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    public class BaseController : ControllerBase
-    {
-    }
+    public abstract class BaseApiController : ControllerBase { }
 }

@@ -95,7 +95,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (order == null)
             {
-                throw new UpdateOrderFailedException("Order to update not found.");
+                throw new UpdateOrderFailedException();
             }
 
             order.Status = OrderStatus.PaymentFailed;
@@ -109,7 +109,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (order == null)
             {
-                throw new UpdateOrderFailedException("Order to update not found.");
+                throw new UpdateOrderFailedException();
             }
 
             order.Status = OrderStatus.PaymentRecieved;

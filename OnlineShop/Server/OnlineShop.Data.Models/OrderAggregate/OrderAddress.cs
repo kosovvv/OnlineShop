@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.OrderAddressConstants;
 
 namespace OnlineShop.Data.Models.OrderAggregate
 {
@@ -19,22 +20,22 @@ namespace OnlineShop.Data.Models.OrderAggregate
             ZipCode = zipCode;
         }
 
-        [Required(ErrorMessage = "First name is required")]
+        [Required(ErrorMessage = FirstNameRequiredMessage)]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last name is required")]
+        [Required(ErrorMessage = LastNameRequiredMessage)]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Street address is required")]
+        [Required(ErrorMessage = StreetRequiredMessage)]
         public string Street { get; set; }
 
-        [Required(ErrorMessage = "City is required")]
+        [Required(ErrorMessage = CityRequiredMessage)]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "State is required")]
+        [Required(ErrorMessage = StateRequiredMessage)]
         public string State { get; set; }
 
-        [Required(ErrorMessage = "Zip code is required")]
+        [Required(ErrorMessage = ZipCodeRequiredMessage)]
         public string ZipCode { get; set; }
     }
 }

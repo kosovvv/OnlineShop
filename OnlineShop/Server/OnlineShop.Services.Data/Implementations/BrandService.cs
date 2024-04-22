@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OnlineShop.Data;
 using OnlineShop.Data.Common;
 using OnlineShop.Data.Common.Repositories;
 using OnlineShop.Models;
@@ -37,7 +36,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (isBrandExisting)
             {
-                throw new CreateExistringEntityException("This product brand already exists");
+                throw new CreateExistringEntityException(typeof(ProductBrand));
             }
 
             var brandToCreate = mapper.Map<CreateProductBrandDto, ProductBrand>(productBrand);
@@ -53,7 +52,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (existingBrand == null)
             {
-                throw new EntityNotExistingException("Product brand not found.");
+                throw new EntityNotExistingException(typeof(ProductBrand));
             }
 
             existingBrand.Name = productBrand.Name;
@@ -90,7 +89,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (productBrand == null)
             {
-                throw new EntityNotExistingException("This product brand is not existring.");
+                throw new EntityNotExistingException(typeof(ProductBrand));
             }
 
             return mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(productBrand.Products);

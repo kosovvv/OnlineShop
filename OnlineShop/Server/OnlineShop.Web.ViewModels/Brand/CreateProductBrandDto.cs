@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.ProductBrandConstants;
 
 namespace OnlineShop.Web.ViewModels.Brand
 {
     public class CreateProductBrandDto
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = NameRequiredMessage)]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Picture URL is required")]
+        [Required(ErrorMessage = PictureUrlInvalidFormatMessage)]
         public string PictureUrl { get; set; }
     }
 }

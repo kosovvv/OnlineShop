@@ -6,7 +6,7 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class BasketController : BaseController
+    public class BasketController : BaseApiController
     {
 
         private readonly IBasketService basketService;

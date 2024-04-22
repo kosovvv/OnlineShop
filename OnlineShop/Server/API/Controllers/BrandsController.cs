@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Exceptions;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels;
 using OnlineShop.Web.ViewModels.Brand;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class BrandsController : BaseController
+    public class BrandsController : BaseApiController
     {
         private readonly IBrandService brandService;
 
@@ -19,6 +20,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [Cached(600)]
         public async Task<ActionResult<IEnumerable<ReturnProductBrandDto>>> GetProductBrands()
         {
             var brands = await this.brandService.GetProductBrandsAsync();

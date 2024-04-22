@@ -9,5 +9,7 @@ namespace OnlineShop.Services.Data.Exceptions
     public class UserNotFoundException : Exception
     {
         public UserNotFoundException(string message) : base(message) { }
+
+        public UserNotFoundException() : base ("User not found") { }
     }
 }

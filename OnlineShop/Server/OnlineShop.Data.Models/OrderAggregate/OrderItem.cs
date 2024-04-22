@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.OrderItemConstants;
 using OnlineShop.Data.Common.Models;
 
 namespace OnlineShop.Data.Models.OrderAggregate
@@ -17,15 +18,15 @@ namespace OnlineShop.Data.Models.OrderAggregate
             Quantity = quantity;
         }
 
-        [Required(ErrorMessage = "Item ordered is required")]
+        [Required(ErrorMessage = ItemOrderedRequiredMessage)]
         public ProductItemOrdered ItemOrdered { get; set; }
 
-        [Required(ErrorMessage = "Price is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Price must be greater than or equal to 0")]
+        [Required(ErrorMessage = PriceRequiredMessage)]
+        [Range(0, double.MaxValue, ErrorMessage = PriceRangeMessage)]
         public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Quantity is required")]
-        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be at least 1")]
+        [Required(ErrorMessage = QuantityRequiredMessage)]
+        [Range(1, int.MaxValue, ErrorMessage = QuantityRangeMessage)]
         public int Quantity { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class BuggyController : BaseController
+    public class BuggyController : BaseApiController
     {
         public readonly StoreContext context;
         public BuggyController(StoreContext context)

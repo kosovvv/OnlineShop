@@ -61,14 +61,14 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (user == null)
             {
-                throw new UserNotFoundException("User not found.");
+                throw new UserNotFoundException();
             }
 
             var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
             if (!result.Succeeded)
             {
-                throw new LoginFailedException("Error logging in.");
+                throw new LoginFailedException();
             }
 
             return new ReturnUserDto
@@ -119,7 +119,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (!result.Succeeded)
             {
-                throw new SavingUserAddressException("Error saving email address");
+                throw new SavingUserAddressException();
             }
 
             return mapper.Map<Address, ReturnAddressDto>(user.Address);

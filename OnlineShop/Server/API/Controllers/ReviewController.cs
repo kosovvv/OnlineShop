@@ -8,7 +8,7 @@ using OnlineShop.Web.ViewModels.Review;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class ReviewController : BaseController
+    public class ReviewController : BaseApiController
     {
         private readonly IReviewService reviewService;
 
@@ -41,6 +41,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{productId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cached(600)]
         public async Task<ActionResult<ICollection<ReturnReviewDto>>> GetReviewsByProduct(int productId)
         {
             try

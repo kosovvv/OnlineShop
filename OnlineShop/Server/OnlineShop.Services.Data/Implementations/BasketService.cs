@@ -38,7 +38,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (!created)
             {
-                throw new CreateBasketException("Error creating basket.");
+                throw new CreateBasketException();
             }
 
             return await this.GetBasketAsync(basket.Id);

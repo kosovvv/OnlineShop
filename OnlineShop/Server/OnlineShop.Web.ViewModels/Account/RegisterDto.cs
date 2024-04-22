@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnlineShop.Common.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace OnlineShop.Web.ViewModels
 {
@@ -10,7 +11,7 @@ namespace OnlineShop.Web.ViewModels
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [RegularExpression("(?=^.{6,10}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*\\s).*$",
+        [RegularExpression(UserConstants.PasswordRegex,
             ErrorMessage = "Password must have 1 uppercase, 1 lowercase, 1 number and 1 non alpha-numeric and" +
             "at least 6 characters")]
         public string Password { get; set; }

@@ -9,7 +9,7 @@ using OnlineShop.Web.ViewModels.Product;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class ProductsController : BaseController
+    public class ProductsController : BaseApiController
     {
         private readonly IProductService productService;
 
@@ -21,6 +21,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cached(600)]
         public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts(
             [FromQuery] ProductParams productParams)
         {
@@ -36,6 +37,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [Cached(600)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             try
@@ -64,7 +66,7 @@ namespace OnlineShop.WebAPI.Controllers
             {   
                 return BadRequest(new ApiResponse(400, ex.Message));
             }
-            catch (InvalidProductException ex)
+            catch (InvalidEntityException ex)
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
             }
@@ -86,7 +88,7 @@ namespace OnlineShop.WebAPI.Controllers
             {
                 return NotFound(new ApiResponse(404, ex.Message));
             }
-            catch (InvalidProductException ex)
+            catch (InvalidEntityException ex)
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
             }

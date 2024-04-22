@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.BasketConstants;
 
 namespace OnlineShop.Web.ViewModels
 {
@@ -11,11 +12,11 @@ namespace OnlineShop.Web.ViewModels
         public string ProductName { get; set; }
 
         [Required]
-        [Range(0.1, double.MaxValue, ErrorMessage = "Price must be greater than zero")]
+        [Range(MinPrice, double.MaxValue, ErrorMessage = PriceRangeMessage)]
         public decimal Price { get; set; }
 
         [Required]
-        [Range(1, double.MaxValue, ErrorMessage = "Quantity must be at least 1")]
+        [Range(MinQuantity, double.MaxValue, ErrorMessage = QuantityRangeMessage)]
         public int Quantity { get; set; }
 
         [Required]

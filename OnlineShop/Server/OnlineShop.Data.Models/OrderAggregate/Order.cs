@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static OnlineShop.Common.Entities.OrderConstants;
 using OnlineShop.Data.Common.Models;
 using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.Identity;
@@ -29,21 +28,21 @@ namespace OnlineShop.Data.Models.OrderAggregate
         public string BuyerId { get; set; }
         public ApplicationUser Buyer { get; set; }
 
-        [Required(ErrorMessage = "Order date is required")]
+        [Required(ErrorMessage = OrderDateRequiredMessage)]
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
 
-        [Required(ErrorMessage = "Ship-to address is required")]
+        [Required(ErrorMessage = ShipToAddressRequiredMessage)]
         public OrderAddress ShipToAddress { get; set; }
 
-        [Required(ErrorMessage = "Delivery method ID is required")]
+        [Required(ErrorMessage = DeliveryMethodIdRequiredMessage)]
         public int DeliveryMethodId { get; set; }
         public DeliveryMethod DeliveryMethod { get; set; }
 
-        [Required(ErrorMessage = "Order items are required")]
+        [Required(ErrorMessage = OrderItemsRequiredMessage)]
         public ICollection<OrderItem> OrderItems { get; set; }
 
-        [Required(ErrorMessage = "Subtotal is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Subtotal must be greater than or equal to 0")]
+        [Required(ErrorMessage = SubTotalRequiredMessage)]
+        [Range(0, double.MaxValue, ErrorMessage = SubTotalRangeMessage)]
         public decimal SubTotal { get; set; }
 
         public OrderStatus Status { get; set; } = OrderStatus.Pending;

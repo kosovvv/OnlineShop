@@ -40,12 +40,10 @@ namespace OnlineShop.Data.Seeding.Seeders
                 await context.SaveChangesAsync();
             }
 
-
-
-            if (context.ChangeTracker.HasChanges())
-            {
-                await context.SaveChangesAsync();
-            }
+            //if (context.ChangeTracker.HasChanges())
+            //{
+            //    await context.SaveChangesAsync();
+            //}
         }
     }
 }

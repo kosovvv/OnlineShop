@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.CustomerBasketConstants;
 
 namespace OnlineShop.Models
 {
@@ -9,6 +10,7 @@ namespace OnlineShop.Models
         {
 
         }
+
         public CustomerBasket(string id)
         {
             this.Id = id;
@@ -16,7 +18,7 @@ namespace OnlineShop.Models
 
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "Items are required")]
+        [Required(ErrorMessage = ItemsRequiredMessage)]
         public List<BasketItem> Items { get; set; } = new List<BasketItem>();
 
         public int? DeliveryMethodId { get; set; }
@@ -24,8 +26,8 @@ namespace OnlineShop.Models
         public string ClientSecret { get; set; }
         public string PaymentIntentId { get; set; }
 
-        [Required(ErrorMessage = "Shipping price is required")]
-        [Range(0, double.MaxValue, ErrorMessage = "Shipping price must be greater than or equal to 0")]
+        [Required(ErrorMessage = ShippingPriceRequiredMessage)]
+        [Range(0, double.MaxValue, ErrorMessage = ShippingPriceRangeMessage)]
         public decimal ShippingPrice { get; set; }
     }
 }

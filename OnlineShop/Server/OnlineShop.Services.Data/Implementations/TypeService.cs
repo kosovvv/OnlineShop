@@ -36,7 +36,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (isProductTypeExisting)
             {
-                throw new CreateExistringEntityException("This product type already exists");
+                throw new CreateExistringEntityException(typeof(ProductType));
             }
 
             var typeToCreate = this.mapper.Map<CreateProductTypeDto,ProductType>(productType);
@@ -51,7 +51,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (existingProductType == null)
             {
-                throw new EntityNotExistingException("Product type not found.");
+                throw new EntityNotExistingException(typeof(ProductType));
             }
 
             existingProductType.Name = productType.Name;
@@ -86,7 +86,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (productType == null)
             {
-                throw new EntityNotExistingException("This product type does not exists");
+                throw new EntityNotExistingException(typeof(ProductType));
             }
 
             return this.mapper.Map<ICollection<Product>, ICollection<ProductToReturnDto>>(productType.Products);

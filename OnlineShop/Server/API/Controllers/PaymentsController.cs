@@ -8,7 +8,7 @@ using Stripe;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class PaymentsController : BaseController
+    public class PaymentsController : BaseApiController
     {
         private const string WhSecret = "";
         private readonly IPaymentService paymentService;

@@ -8,15 +8,12 @@ using OnlineShop.Web.ViewModels;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class OrderController : BaseController
+    public class OrderController : BaseApiController
     {
         private readonly IOrderService orderService;
-        private readonly IDeliveryMethodService dmService;
-        public OrderController(IOrderService orderService, IDeliveryMethodService dmService)
+        public OrderController(IOrderService orderService)
         {
             this.orderService = orderService;
-            this.dmService = dmService;
-
         }
 
         [HttpPost]
@@ -35,13 +32,13 @@ namespace OnlineShop.WebAPI.Controllers
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
             }
-            
         }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize]
+        [Cached(600)]
         public async Task<ActionResult<ICollection<OrderToReturnDto>>> GetOrdersForUser()
         {
             var orders = await orderService.GetOrdersForUserAsync(User.GetId());
@@ -53,9 +50,9 @@ namespace OnlineShop.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize]
+        [Cached(600)]
         public async Task<ActionResult<OrderToReturnDto>> GetOrderByIdForUser(int id)
         {
-
             var order = await orderService.GetOrderByIdAsync(id, User.GetId());
 
             if (order == null)
@@ -65,15 +62,5 @@ namespace OnlineShop.WebAPI.Controllers
 
             return Ok(order);
         }
-
-        [HttpGet("deliveryMethods")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ICollection<DeliveryMethod>>> GetDeliveryMethods()
-        {
-            var methods = await dmService.GetDeliveryMethodsAsync();
-            return methods.Any() ? Ok(methods) : NotFound();
-        }
-
     }
 }

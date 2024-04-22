@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.ProductItemOrderedConstants;
 
 namespace OnlineShop.Data.Models.OrderAggregate
 {
@@ -16,14 +17,14 @@ namespace OnlineShop.Data.Models.OrderAggregate
             PictureUrl = pictureUrl;
         }
 
-        [Required(ErrorMessage = "Product item ID is required")]
+        [Required(ErrorMessage = ProductItemIdRequiredMessage)]
         public int ProductItemId { get; set; }
 
-        [Required(ErrorMessage = "Product name is required")]
+        [Required(ErrorMessage = ProductNameRequiredMessage)]
         public string ProductName { get; set; }
 
-        [Required(ErrorMessage = "Picture URL is required")]
-        [Url(ErrorMessage = "Invalid URL format")]
+        [Required(ErrorMessage = PictureUrlRequiredMessage)]
+        [Url(ErrorMessage = PictureUrlInvalidFormatMessage)]
         public string PictureUrl { get; set; }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Services.Data.Interfaces;
+using OnlineShop.Web.Infrastructure;
 using OnlineShop.Web.ViewModels.Image;
 
 namespace OnlineShop.WebAPI.Controllers
 {
-    public class ImagesController : BaseController
+    public class ImagesController : BaseApiController
     {
         private readonly IImageService imageService;
 
@@ -16,6 +17,7 @@ namespace OnlineShop.WebAPI.Controllers
         [HttpGet("{folderName}/{imageName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cached(600)]
         public async Task<ActionResult> GetImage(string folderName, string imageName)
         {
             var imageData = await imageService.GetImageAsync(imageName);

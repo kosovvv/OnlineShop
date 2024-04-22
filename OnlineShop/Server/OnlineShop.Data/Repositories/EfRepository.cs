@@ -35,8 +35,6 @@ namespace OnlineShop.Data.Repositories
 
         public virtual void Delete(TEntity entity) => this.DbSet.Remove(entity);
 
-        public Task<int> SaveChangesAsync() => this.Context.SaveChangesAsync();
-
         public void Dispose()
         {
             this.Dispose(true);

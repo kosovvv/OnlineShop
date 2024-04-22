@@ -6,5 +6,9 @@
         {
             
         }
+        public CreateBasketException() : base("Error creating basket.")
+        {
+            
+        }
     }
 }

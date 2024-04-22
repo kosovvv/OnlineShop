@@ -33,7 +33,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (product == null || userId == null)
             {
-                throw new InvalidReviewException("Error creating review");
+                throw new InvalidEntityException(typeof(Review));
             }
             var hasUserAlreadyReviewed = await this.HasUserAlreadyReviewedProduct(userId, (int)product.Id);
 
@@ -75,7 +75,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (reviewToEdit == null) 
             {
-                throw new InvalidReviewException("Invalid review to edit.");
+                throw new EntityNotExistingException(typeof(Review));
             }
 
             reviewToEdit.Description = review.Description;

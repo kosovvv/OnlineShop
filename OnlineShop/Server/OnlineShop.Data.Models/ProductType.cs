@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using static OnlineShop.Common.Entities.ProductTypeConstants;
 using OnlineShop.Data.Common.Models;
 
 namespace OnlineShop.Models
 {
     public class ProductType : BaseDeletableModel<int>
     {
-        [Required(ErrorMessage = "Name is required")]
+        [Required(ErrorMessage = NameRequiredMessage)]
         public string Name { get; set; }
 
-        [Url(ErrorMessage = "Invalid URL format")]
+        [Url(ErrorMessage = PictureUrlInvalidFormatMessage)]
         public string PictureUrl { get; set; }
 
         public ICollection<Product> Products { get; set; } = new List<Product>();
