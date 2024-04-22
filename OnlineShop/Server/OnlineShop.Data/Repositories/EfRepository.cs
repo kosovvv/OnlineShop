@@ -6,8 +6,8 @@ namespace OnlineShop.Data.Repositories
     public class EfRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
-        protected DbSet<TEntity> DbSet { get; set; }
-        protected StoreContext Context { get; set; }
+        private DbSet<TEntity> DbSet { get; set; }
+        private StoreContext Context { get; set; }
         public EfRepository(StoreContext context)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));

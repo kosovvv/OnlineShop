@@ -7,7 +7,7 @@ namespace OnlineShop.Data.Common
     public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreContext context;
-        private readonly Dictionary<Type, object> repositories = new Dictionary<Type, object>();
+        private readonly IDictionary<Type, object> repositories = new Dictionary<Type, object>();
 
         public UnitOfWork(StoreContext context)
         {
