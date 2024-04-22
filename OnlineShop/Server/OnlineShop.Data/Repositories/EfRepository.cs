@@ -6,15 +6,13 @@ namespace OnlineShop.Data.Repositories
     public class EfRepository<TEntity> : IRepository<TEntity>
         where TEntity : class
     {
+        protected DbSet<TEntity> DbSet { get; set; }
+        protected StoreContext Context { get; set; }
         public EfRepository(StoreContext context)
         {
             this.Context = context ?? throw new ArgumentNullException(nameof(context));
             this.DbSet = this.Context.Set<TEntity>();
         }
-
-        protected DbSet<TEntity> DbSet { get; set; }
-
-        protected StoreContext Context { get; set; }
 
         public virtual IQueryable<TEntity> All() => this.DbSet;
 

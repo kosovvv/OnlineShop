@@ -51,7 +51,7 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (productType == null || productBrand == null)
             {
-                throw new InvalidEntityException();
+                throw new InvalidEntityException(typeof(Product));
             }
 
             productToCreate.ProductBrand = productBrand;
@@ -101,7 +101,7 @@ namespace OnlineShop.Services.Data.Implementations
                 return false;
             }
 
-            unitOfWork.GetRepository<Product>().Delete(productToDelete);
+            productRepository.Delete(productToDelete);
             await unitOfWork.Save();
             return true;
         }

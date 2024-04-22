@@ -10,4 +10,4 @@
         public const string SubTotalRangeMessage = "Subtotal must be greater than or equal to 0.";
     }
 }
-}
+

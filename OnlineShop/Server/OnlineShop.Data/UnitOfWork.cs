@@ -7,7 +7,7 @@ namespace OnlineShop.Data.Common
     public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreContext context;
-        private Dictionary<Type, object> repositories = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> repositories = new Dictionary<Type, object>();
 
         public UnitOfWork(StoreContext context)
         {
@@ -19,20 +19,21 @@ namespace OnlineShop.Data.Common
             var type = typeof(T);
             if (!repositories.ContainsKey(type))
             {
+                IRepository<T> repository;
                 if (typeof(IDeletableEntity).IsAssignableFrom(type))
                 {
-                    repositories[type] = typeof(EfDeletableEntityRepository<>)
-                        .MakeGenericType(type)
-                        .GetConstructor(new[] { typeof(StoreContext) })
-                        .Invoke(new object[] { context });
+                    repository = (IRepository<T>)Activator.CreateInstance(typeof(EfDeletableEntityRepository<>).MakeGenericType(type), context);
                 }
                 else
                 {
-                    repositories[type] = new EfRepository<T>(context);
+                    repository = new EfRepository<T>(context);
                 }
+
+                repositories[type] = repository;
             }
             return (IRepository<T>)repositories[type];
         }
+
 
         public async Task Save()
         {

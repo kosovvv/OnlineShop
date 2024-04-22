@@ -28,7 +28,7 @@ namespace OnlineShop.WebAPI.Controllers
                 var createdReview = await this.reviewService.CreateReview(User.GetId(), reviewToCreate);
                 return Ok(createdReview);
             }
-            catch (InvalidReviewException ex)
+            catch (InvalidEntityException ex)
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
             }
@@ -72,7 +72,7 @@ namespace OnlineShop.WebAPI.Controllers
 
                 return Ok(editedReview);
             }
-            catch (InvalidReviewException ex)
+            catch (InvalidEntityException ex)
             {
                 return BadRequest(new ApiResponse(400, ex.Message));
             }
