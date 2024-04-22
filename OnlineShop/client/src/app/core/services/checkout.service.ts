@@ -10,16 +10,16 @@ import { Order, OrderToCreate } from '../../shared/models/order';
 })
 export class CheckoutService {
 
-  baseUrl = enviroment.apiUrl;
+  baseUrl = enviroment.apiUrl + 'order/';
 
   constructor(private http: HttpClient) { }
 
   createOrder(order : OrderToCreate) {
-    return this.http.post<Order>(this.baseUrl + 'order', order)
+    return this.http.post<Order>(this.baseUrl, order)
   }
 
   getDeliveryMethods() {
-    return this.http.get<DeliveryMethod[]>(this.baseUrl + 'order/deliveryMethods').pipe(
+    return this.http.get<DeliveryMethod[]>(this.baseUrl + '/deliveryMethods').pipe(
       map((dm : DeliveryMethod[]) => {
         return dm.sort((a, b) => b.price - a.price);
       })

@@ -4,28 +4,23 @@ import { Pagination } from '../../shared/models/pagination';
 import { ShopParams } from '../../shared/models/shopParams';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of, tap } from 'rxjs';
-import { AccountService } from './account.service';
+import { enviroment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  baseUrl = 'https://localhost:5001/api/'
-  //cache
+  baseUrl = enviroment.apiUrl + 'products/'
   products: Product[] = [];
   pagination?: Pagination<Product[]>;
   shopParams = new ShopParams();
   productCache = new Map<string,Pagination<Product[]>>();
 
-  constructor(private http:HttpClient, private accountService: AccountService) { }
+  constructor(private http:HttpClient) { }
 
 
-  getProducts(useCache = true): Observable<Pagination<Product[]>> {
-    if (useCache) {
-      this.productCache = new Map();
-    }
-  
+  getProducts(useCache = true): Observable<Pagination<Product[]>> {  
     if (this.productCache.size > 0 && useCache) {
       if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
         this.pagination = this.productCache.get(Object.values(this.shopParams).join('-'));
@@ -51,7 +46,7 @@ export class ProductService {
       params = params.append("search", this.shopParams.search);
     }    
   
-    return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products', { params }).pipe(
+    return this.http.get<Pagination<Product[]>>(this.baseUrl, { params }).pipe(
       tap(response => {
         this.productCache.set(Object.values(this.shopParams).join('-'), response);
         this.pagination = response;
@@ -70,7 +65,7 @@ export class ProductService {
   }
 
   createProduct(data: any) {
-    return this.http.post<Product>(this.baseUrl + 'products/', data)
+    return this.http.post<Product>(this.baseUrl, data)
   }
 
   getProduct(id :number) { 
@@ -84,11 +79,11 @@ export class ProductService {
       return of(product);  
     }
 
-    return this.http.get<Product>(this.baseUrl + 'products/' + id);
+    return this.http.get<Product>(this.baseUrl + id);
   }
 
   editProduct(product: Product) {
-    return this.http.put<Product>(this.baseUrl + 'products/' + product.id, product).pipe(
+    return this.http.put<Product>(this.baseUrl + product.id, product).pipe(
       tap(response => {
         const cache = this.productCache.get(Object.values(this.shopParams).join('-'));
         if (cache) {
@@ -104,6 +99,6 @@ export class ProductService {
 
 
   deleteProduct(id : number) {
-    return this.http.delete(this.baseUrl + 'products/' + id).pipe();
+    return this.http.delete(this.baseUrl + id).pipe();
   }
 }

@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { Brand } from '../../shared/models/brand';
 import { HttpClient } from '@angular/common/http';
 import { of, tap } from 'rxjs';
+import { enviroment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BrandService {
 
-  baseUrl = 'https://localhost:5001/api/'
+  baseUrl = enviroment.apiUrl + 'brands/'
   brands: Brand[] = [];
 
   constructor(private http: HttpClient) { }
@@ -18,16 +19,15 @@ export class BrandService {
       return of(this.brands);
     }
     
-    return this.http.get<Brand[]>(this.baseUrl + 'brands').pipe(
+    return this.http.get<Brand[]>(this.baseUrl).pipe(
       tap(brands => {
         this.brands = brands;
       })
     );
   }
   
-
   createBrand(brand: any) {
-    return this.http.post<Brand>(this.baseUrl + 'brands', brand).pipe(
+    return this.http.post<Brand>(this.baseUrl, brand).pipe(
       tap(brand => {
         console.log(brand);
         this.brands.push(brand)
@@ -35,10 +35,8 @@ export class BrandService {
     )
   }
 
-  
-
   editBrand(brandId: number, brand: Brand) {
-    return this.http.put<Brand>(this.baseUrl + `brands/${brandId}`, brand).pipe(
+    return this.http.put<Brand>(this.baseUrl + brandId, brand).pipe(
       tap(brand => {
         const brandToEdit = this.brands.find(x => x.id == brand.id);
         if (brandToEdit) {
@@ -50,7 +48,7 @@ export class BrandService {
     )
   }
   deleteBrand(brandId: number) {
-    return this.http.delete<boolean>(this.baseUrl + `brands/${brandId}`).pipe(
+    return this.http.delete<boolean>(this.baseUrl + brandId).pipe(
       tap(isDeleted => {
         if (isDeleted) {
           const index = this.brands.findIndex(x => x.id == brandId)

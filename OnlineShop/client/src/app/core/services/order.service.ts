@@ -8,15 +8,15 @@ import { enviroment } from 'src/environments/environment';
 })
 export class OrderService {
 
-  baseUrl = enviroment.apiUrl;
+  baseUrl = enviroment.apiUrl + 'order/';
 
   constructor(private http: HttpClient) { }
 
   getOrderByIdForUser(id : number) {
-    return this.http.get<Order>(this.baseUrl + 'order/' + id);
+    return this.http.get<Order>(this.baseUrl + id);
   }
 
   getAllOrdersForUser() {
-    return this.http.get<Order[]>(this.baseUrl + 'order');
+    return this.http.get<Order[]>(this.baseUrl);
   }
 }

@@ -2,13 +2,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of, tap } from 'rxjs';
 import { Type } from '../../shared/models/type';
+import { enviroment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TypeService {
+
+  baseUrl = enviroment.apiUrl + 'types/'
+
   types: Type[] = [];
-  baseUrl = 'https://localhost:5001/api/'
+
   constructor(private http: HttpClient) { }
 
   getTypes() {
@@ -16,7 +20,7 @@ export class TypeService {
       return of(this.types);
     }
     
-    return this.http.get<Type[]>(this.baseUrl + 'types').pipe(
+    return this.http.get<Type[]>(this.baseUrl).pipe(
       tap(types => {
         this.types = types;
       })

@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class AccountService {
 
-  baseUrl = enviroment.apiUrl;
+  baseUrl = enviroment.apiUrl + 'account/'
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
 
@@ -27,7 +27,7 @@ export class AccountService {
 
     headers = headers.set('Authorization', `Bearer ${token}`);
 
-    return this.http.get<User>(this.baseUrl + 'account', {headers}).pipe(
+    return this.http.get<User>(this.baseUrl, {headers}).pipe(
       map(user => {
         if (user) {
           localStorage.setItem('token', user.token);
@@ -42,7 +42,7 @@ export class AccountService {
   }
 
   login(values: any) {
-    return this.http.post<User>(this.baseUrl + 'account/login', values).pipe(
+    return this.http.post<User>(this.baseUrl + 'login', values).pipe(
       map(user => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
@@ -51,7 +51,7 @@ export class AccountService {
   }
 
   register(values:any) {
-    return this.http.post<User>(this.baseUrl + 'account/register', values).pipe(
+    return this.http.post<User>(this.baseUrl + 'register', values).pipe(
       map(user => {
         localStorage.setItem('token', user.token);
         this.currentUserSource.next(user);
@@ -66,14 +66,14 @@ export class AccountService {
   }
 
   checkEmailExists(email:string) {
-    return this.http.get<boolean>(this.baseUrl + 'account/emailExists?email=' + email)
+    return this.http.get<boolean>(this.baseUrl + 'emailExists?email=' + email)
   }
 
   getUserAddress() {
-    return this.http.get<Address>(this.baseUrl + 'account/address')
+    return this.http.get<Address>(this.baseUrl + 'address')
   }
 
   updateUserAddress(address: Address) {
-    return this.http.put<Address>(this.baseUrl + 'account/address', address)
+    return this.http.put<Address>(this.baseUrl + 'address', address)
   }
 }

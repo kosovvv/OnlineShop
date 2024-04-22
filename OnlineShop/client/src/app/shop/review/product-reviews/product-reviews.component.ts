@@ -23,7 +23,7 @@ export class ProductReviewsComponent implements OnInit {
 
   getReviews(productId: number | undefined) {
     if (productId) {
-      this.reviewService.getReviewsByProduct(productId).subscribe({
+      this.reviewService.getReviewsByProduct(productId, true).subscribe({
         next: (reviews) => {
           this.reviews = reviews;
         } 
