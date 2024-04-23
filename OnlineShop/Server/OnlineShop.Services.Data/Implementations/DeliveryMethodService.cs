@@ -27,7 +27,7 @@ namespace OnlineShop.Services.Data.Implementations
         }
         public async Task<ReturnDeliveryMethodDto> GetDeliveryMethodByIdAsync(int id)
         {
-            var method = await dmRepository.All().FirstOrDefaultAsync(x => x.Id == id);
+            var method = await dmRepository.GetById(id);
             return this.mapper.Map<DeliveryMethod, ReturnDeliveryMethodDto>(method);
         }
     }

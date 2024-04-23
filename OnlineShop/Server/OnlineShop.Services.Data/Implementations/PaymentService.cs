@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using OnlineShop.Data;
+using OnlineShop.Data.Common;
 using OnlineShop.Data.Models.Enumerations;
 using OnlineShop.Data.Models.OrderAggregate;
 using OnlineShop.Models;
@@ -14,16 +14,17 @@ namespace OnlineShop.Services.Data.Implementations
 {
     public class PaymentService : IPaymentService
     {
-        private readonly StoreContext context;
+        private readonly IUnitOfWork unitOfWork;
         private readonly IBasketService basketService;
         private readonly IConfiguration configuration;
         private readonly IMapper mapper;
 
-        public PaymentService(IBasketService basketRepository, IConfiguration config, StoreContext context, IMapper mapper)
+        public PaymentService(IBasketService basketRepository, IConfiguration config,
+            IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.basketService = basketRepository;
             this.configuration = config;
-            this.context = context;
+            this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
 
@@ -42,15 +43,14 @@ namespace OnlineShop.Services.Data.Implementations
 
             if (basket.DeliveryMethodId.HasValue)
             {
-                var deliveryMethod = await context.DeliveryMethods
-                    .FirstOrDefaultAsync(x => x.Id == basket.DeliveryMethodId);
+                var deliveryMethod = await unitOfWork.GetRepository<DeliveryMethod>().GetById((int)basket.DeliveryMethodId);
 
                 shippingPrice = deliveryMethod.Price;
             }
 
             foreach (var item in basket.Items)
             {
-                var productItem = await context.Products.FirstOrDefaultAsync(x => x.Id == item.Id);
+                var productItem = await unitOfWork.GetRepository<Models.Product>().GetById(item.Id);
 
                 if (item.Price != productItem.Price)
                 {
@@ -91,7 +91,8 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<Order> UpdateOrderPaymentFailed(string paymentIntentId)
         {
-            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
+            var order = await unitOfWork.GetRepository<Order>().All().
+                FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
 
             if (order == null)
             {
@@ -99,13 +100,14 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             order.Status = OrderStatus.PaymentFailed;
-            await context.SaveChangesAsync();
+            await unitOfWork.Save();
             return order;
         }
 
         public async Task<Order> UpdateOrderPaymentSucceded(string paymentIntentId)
         {
-            var order = await context.Orders.FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
+            var order = await unitOfWork.GetRepository<Order>().All().
+                FirstOrDefaultAsync(x => x.PaymentIntentId == paymentIntentId);
 
             if (order == null)
             {
@@ -113,7 +115,7 @@ namespace OnlineShop.Services.Data.Implementations
             }
 
             order.Status = OrderStatus.PaymentRecieved;
-            await context.SaveChangesAsync();
+            await unitOfWork.Save();
             return order;
         }
     }

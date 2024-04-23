@@ -48,7 +48,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<ReturnProductBrandDto> UpdateProductBrandAsync(int id, CreateProductBrandDto productBrand)
         {
-            var existingBrand = await brandRepository.All().FirstOrDefaultAsync(p => p.Id == id);
+            var existingBrand = await brandRepository.GetById(id);
 
             if (existingBrand == null)
             {
@@ -68,7 +68,7 @@ namespace OnlineShop.Services.Data.Implementations
 
         public async Task<bool> DeleteProductBrandAsync(int id)
         {
-            var productBrandToDelete = await brandRepository.All().FirstOrDefaultAsync(p => p.Id == id);
+            var productBrandToDelete = await brandRepository.GetById(id);
 
             if (productBrandToDelete == null)
             {

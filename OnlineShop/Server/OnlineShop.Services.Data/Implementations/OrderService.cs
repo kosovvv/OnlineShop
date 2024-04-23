@@ -7,6 +7,7 @@ using AutoMapper;
 using OnlineShop.Data.Models.Identity;
 using OnlineShop.Data.Common;
 using OnlineShop.Data.Common.Repositories;
+using Microsoft.IdentityModel.Tokens;
 
 namespace OnlineShop.Services.Data.Implementations
 {
@@ -57,13 +58,9 @@ namespace OnlineShop.Services.Data.Implementations
             var order = await orderRepository.All().FirstOrDefaultAsync(x => x.PaymentIntentId == basket.PaymentIntentId);
 
             var addressToSet = mapper.Map<Address, OrderAddress>
-                (await unitOfWork.GetRepository<Address>()
-                .All()
-                .FirstOrDefaultAsync(x => x.Id == shippingAddress.Id));
+                (await unitOfWork.GetRepository<Address>().GetById(shippingAddress.Id));
 
-            var dm = await unitOfWork.GetRepository<DeliveryMethod>()
-                .All()
-                .FirstOrDefaultAsync(x => x.Id==deliveryMethodId);
+            var dm = await unitOfWork.GetRepository<DeliveryMethod>().GetById(deliveryMethodId);
 
             if (order != null)
             {
@@ -85,15 +82,14 @@ namespace OnlineShop.Services.Data.Implementations
             return mapper.Map<Order, OrderToReturnDto>(order);
         }
 
-        public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userId)
+        public async Task<OrderToReturnDto> GetOrderByIdAsync(int id, string userId = null)
         {
             var order = await orderRepository
                 .AllAsNoTracking()
-               .Where(x => x.Buyer.Id == userId && x.Id == id)
                .Include(x => x.DeliveryMethod)
                .Include(x => x.OrderItems)
                .OrderByDescending(x => x.OrderDate)
-               .FirstOrDefaultAsync();
+               .FirstOrDefaultAsync(x => x.Id == id && (userId.IsNullOrEmpty() || x.BuyerId == userId));
 
             return mapper.Map<Order, OrderToReturnDto>(order);
         }
@@ -109,12 +105,10 @@ namespace OnlineShop.Services.Data.Implementations
 
             return mapper.Map<ICollection<Order>, ICollection<OrderToReturnDto>>(orders);
         }
-
         public async Task<bool> HasUserBoughtProduct(string userId, int productId)
         {
             return await orderRepository.All()
-                .Where(x => x.Buyer.Id == userId && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId))
-                .AnyAsync();
+                .AnyAsync(x => x.Buyer.Id == userId && x.OrderItems.Any(p => p.ItemOrdered.ProductItemId == productId));
         }
     }
 }

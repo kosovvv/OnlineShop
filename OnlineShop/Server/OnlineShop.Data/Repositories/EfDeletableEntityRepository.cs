@@ -7,8 +7,7 @@ namespace OnlineShop.Data.Repositories
     public class EfDeletableEntityRepository<TEntity> : EfRepository<TEntity>, IDeletableEntityRepository<TEntity>
         where TEntity : class, IDeletableEntity
     {
-        public EfDeletableEntityRepository(StoreContext context): base(context) { } 
-
+        public EfDeletableEntityRepository(StoreContext context): base(context) { }
         public override IQueryable<TEntity> All() => base.All().Where(x => !x.IsDeleted);
 
         public override IQueryable<TEntity> AllAsNoTracking() => base.AllAsNoTracking().Where(x => !x.IsDeleted);

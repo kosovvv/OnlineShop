@@ -2,6 +2,7 @@
 {
     public interface IRepository<TEntity> : IDisposable where TEntity : class
     {
+        Task<TEntity> GetById(object id);
         IQueryable<TEntity> All();
 
         IQueryable<TEntity> AllAsNoTracking();
